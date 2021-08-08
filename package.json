@@ -4,8 +4,32 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node -r dotenv/config src/index.ts",
+    "build": "tsc",
+    "test": "jest",
+    "test:cov": "jest --coverage",
+    "test:watch": "jest --watch"
   },
-  "author": "",
-  "license": "UNLICENSED"
+  "author": "Cap <treble.snake@gmail.com>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/cookie": "^0.4.1",
+    "@types/html-escaper": "^3.0.0",
+    "@types/jest": "^26.0.24",
+    "@types/jsdom": "^16.2.13",
+    "@types/node": "^16.4.13",
+    "@types/ramda": "^0.27.44",
+    "dotenv": "^10.0.0",
+    "jest": "^27.0.6",
+    "ts-jest": "^27.0.4",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "cookie": "^0.4.1",
+    "html-escaper": "^3.0.3",
+    "jsdom": "^16.7.0",
+    "ramda": "^0.27.1",
+    "undici": "^4.3.1"
+  }
 }

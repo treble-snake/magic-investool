@@ -1,0 +1,239 @@
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        JQueryAjaxForm("#page", "form");
+
+        // prevent copy paste
+        $('#page').bind('cut copy', function (e) {
+            e.preventDefault();
+        });
+    });
+</script>
+
+<div id="page">
+    <div id="content" style="vertical-align: top; width: 800px">
+        <div>
+        <!--START RIGHT DIV-->
+        <div style="width: 35%; float: right; padding-top: 60px; ">
+            <!DOCTYPE html>
+<html>
+   <head></head>
+   <body>
+<table style="width: 330px; ; border-collapse: collapse;" cellspacing="0" cellpadding="0">
+<tbody>
+<tr style="background-color: #5180b4;">
+<td><a title="Invest5" href="https://invest5.com" target="_blank" rel="noopener"> <img src="../Images/mfi-mockup-3-01.png" alt="Invest5" width="330" height="350" /> </a></td>
+</tr>
+<tr style="height: 19px;">
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td style="padding: 0px;"><a title="Common Sense" href="https://www.amazon.com/Common-Sense-Investors-Equality-Opportunity/dp/0231198906/ref=sr_1_3?dchild=1&amp;keywords=joel+greenblatt&amp;qid=1596474331&amp;sr=8-3" target="_blank" rel="noopener"> <img style="display: block; margin-left: auto; margin-right: auto;" src="../Images/CommonSense.png" alt="Common Sense" width="214px" height="370px" /> </a></td>
+</tr>
+<tr>
+<td>
+<p>In <strong>Joel Greenblatt's</strong> new book, <strong><em>Common Sense, The New York Times</em></strong>, best-selling author of <strong><em>The Little Book that Beats the Market,</em></strong> explains what we can do to address inequality and growth right now - all from an investor's perspective. <a href="https://www.amazon.com/Common-Sense-Investors-Equality-Opportunity/dp/0231198906/ref=sr_1_3?dchild=1&amp;keywords=joel+greenblatt&amp;qid=1596474331&amp;sr=8-3">Click here to order today</a>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+</body>
+</html>
+        </div>
+        <!-- END RIGHT DIV-->
+            <!-- START LEFT DIV  -->
+            <div style="width: 64%; float: left;">
+                <div class="nav-text">
+                    <h1>Magic Formula Investing Stock Screener</h1>
+                </div>
+                <div class="topColumn">
+                    <div class="bottomColumn">
+                        <div class="leftColumn">
+                            <div class="rightColumn">
+                                <div class="bottomleftColumn">
+                                    <div class="bottomrightColumn">
+                                        <div class="topleftColumn">
+                                            <div class="toprightColumn">
+<form action="/Screening/StockScreening" method="post">                                                    <table border="0" cellspacing="0" cellpadding="0" style="border-right: 0px; border-top: 0px;">
+                                                        <col width="35%" align="left" />
+                                                        <col width="55%" align="left" />
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                Enter two simple stock selection criteria and MagicFormula will select top stocks
+                                                                for your investment portfolio.
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <b>Minimum Market Cap</b>
+                                                                <img class="cluetip" src="/images/icon_Q.png" title='For a list of companies larger than $50 million in size, enter "50", enter "83" for $83 million and larger, or "1000" for companies over $1 billion in market cap. <br/><br/>Entering an unusual minimum such as "83" or "178" may provide a unique list of attractive stocks for each user' style="position:relative;top:2px" />
+                                                            </td>
+                                                            <td valign="bottom">
+                                                                <table border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div class="display_holder">
+                                                                                <h5>
+                                                                                    <input class="value_display" data-val="true" data-val-number="The field Minimum Market Cap must be a number." data-val-range="The field Minimum Market Cap must be between 50 and 5000000." data-val-range-max="5000000" data-val-range-min="50" data-val-required="The Minimum Market Cap field is required." id="MinimumMarketCap" name="MinimumMarketCap" size="4" type="text" value="50" />
+                                                                                </h5>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td style="font-size: 12px;">
+                                                                            <b>(million)</b>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td colspan="2">
+                                                                <div>
+                                                                    <span class="field-validation-valid" data-valmsg-for="MinimumMarketCap" data-valmsg-replace="true"></span>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <b>Number of Stocks</b>
+                                                            </td>
+                                                            <td>
+                                                                <table>
+                                                                    <tr>
+                                                                        <td style="vertical-align:bottom">
+                                                                            <span style="vertical-align: middle; font-weight: bold;">
+                                                                                <input checked="checked" data-val="true" data-val-required="The Number of Stocks field is required." id="Select30" name="Select30" type="radio" value="true" />
+                                                                            </span>
+                                                                            <span class="field-validation-valid" data-valmsg-for="Select30" data-valmsg-replace="true"></span>
+                                                                        </td>
+                                                                        <td style="vertical-align:bottom">
+                                                                            30
+                                                                        </td>
+                                                                        <td style="vertical-align:bottom">
+                                                                            <span style="vertical-align: middle; font-weight: bold;">
+                                                                                <input id="Select30" name="Select30" type="radio" value="false" />
+                                                                            </span>
+                                                                        </td>
+                                                                        <td style="vertical-align:bottom">
+                                                                            50
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td colspan="2">
+                                                                            <span class="field-validation-valid" data-valmsg-for="Select30" data-valmsg-replace="true"></span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                &nbsp;
+                                                            </td>
+                                                            <td>
+                                                                <div class="button_left">
+                                                                    <input class="button" id="stocks" name="stocks" type="submit" value="Get Stocks" />
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <div class="ErrorMsg" id="Exception" style="display: none">
+                                                                    <img style="vertical-align: middle" height="15" src="/images/notice-error.png" width="13" border="0">
+
+                                                                    <span>Unknown error occurred</span>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+</form>                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="report" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
+                        <h1>Top 30 companies with a minimum market cap. of 50 million</h1>
+                        <br>
+                        <div class="topColumn">
+                            <div class="bottomColumn">
+                                <div class="leftColumn">
+                                    <div class="rightColumn">
+                                        <div class="bottomleftColumn">
+                                            <div class="bottomrightColumn">
+                                                <div class="topleftColumn">
+                                                    <div class="toprightColumn">
+                                                        <div id="tableform">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" class="divheight screeningdata" style="width: 100%;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  min-height: 10px; max-height: 500px; overflow: auto; background-color: white;">
+                                                                <colgroup>
+                                                                    <col width="30%">
+                                                                    <col width="20%">
+                                                                    <col width="10%">
+                                                                    <col width="15%">
+                                                                    <col width="13%">
+                                                                </colgroup>
+                                                                <thead>
+                                                                <tr>
+                                                                    <th align="left">
+                                                                        <h2>Company Name (in alphabetical order)</h2>
+                                                                    </th>
+                                                                    <th align="center">
+                                                                        <h2>Ticker</h2>
+                                                                    </th>
+                                                                    <th align="center">
+                                                                        <h2>Market Cap ($ Millions)</h2>
+                                                                    </th>
+                                                                    <th align="center">
+                                                                        <h2>Price&nbsp;From</h2>
+                                                                    </th>
+                                                                    <th align="center">
+                                                                        <h2>Most Recent Quarter Data</h2>
+                                                                    </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                        <tr class="altrow">
+                                                                            <td align="left">Test 1</td>
+                                                                            <td align="center">TSO</td>
+                                                                            <td align="center">3,309.52</td>
+                                                                            <td align="center">08/06</td>
+                                                                            <td align="center">04/30</td>
+                                                                        </tr>
+                                                                        <tr class="altrow">
+                                                                            <td align="left">Test 2&amp;2</td>
+                                                                            <td align="center">TST</td>
+                                                                            <td align="center">4,587.46</td>
+                                                                            <td align="center">08/06</td>
+                                                                            <td align="center">04/30</td>
+                                                                        </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="copyRight">
+                        Copyright 2020, Standard &amp; Poor's all rights reserved.
+                    </div>
+                </div>
+
+            </div>
+            <!-- END LEFT DIV-->
+        </div>
+        <div style="clear: both;">
+        </div>
+    </div>
+</div>
