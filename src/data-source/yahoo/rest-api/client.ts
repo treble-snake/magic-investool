@@ -1,5 +1,6 @@
 import {request} from 'undici';
 import {YAHOO_API_KEY} from '../env.config';
+import {YahooResponse} from './types/client';
 const HEADERS = Object.freeze({
   'x-api-key': YAHOO_API_KEY
 });
@@ -14,5 +15,10 @@ export const askYahoo = async (url: string) => {
     throw new Error(`Status code: ${statusCode}`);
   }
 
-  return body.json();
+  const data: YahooResponse<any> = await body.json();
+  if (data.error) {
+    throw new Error(`Yahoo error(${data.error.code}): ${data.error.description}`)
+  }
+
+  return data;
 }

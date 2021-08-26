@@ -1,4 +1,5 @@
 import {askYahoo} from './client';
+import {QuoteSummaryResponse} from './types/ticker';
 
 const COMPANY_DATA_ENDPOINT = 'https://yfapi.net/v11/finance/quoteSummary/';
 
@@ -11,5 +12,5 @@ const PARAMS = new URLSearchParams({
 export const getCompanyData = (ticker: string) => {
   return askYahoo(
     `${new URL(ticker, COMPANY_DATA_ENDPOINT).toString()}?${PARAMS}`
-  );
+  ) as Promise<QuoteSummaryResponse>;
 };

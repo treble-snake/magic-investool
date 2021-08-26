@@ -2,9 +2,10 @@ import {getCompanyData} from './rest-api/getCompanyData';
 import {writeFileSync} from 'fs';
 import {getInsightData} from './rest-api/getInsightData';
 
-// getCompanyData('AMCX')
-  getInsightData('AMCX')
+// getCompanyData('qweqweqwea')
+  getInsightData('qweqweqwea')
   .then(data => {
     console.warn(data);
-    writeFileSync('./reports/state/amc-insight.json', JSON.stringify(data));
+    console.warn(JSON.stringify(data));
+    writeFileSync('./reports/state/error.json', JSON.stringify(data));
   });
