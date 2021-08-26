@@ -18,10 +18,5 @@ export const getCompanies = async (token: string) => {
     throw new Error(`Status code: ${statusCode}`);
   }
 
-  let chunks = [];
-  for await (const data of body) {
-    chunks.push(data.toString());
-  }
-
-  return chunks.join('');
+  return body.text();
 };

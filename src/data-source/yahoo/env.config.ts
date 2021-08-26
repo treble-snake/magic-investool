@@ -1,0 +1,1 @@
+export const YAHOO_API_KEY = process.env.YAHOO_API_KEY || '';

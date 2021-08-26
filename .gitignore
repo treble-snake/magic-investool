@@ -5,3 +5,7 @@ coverage
 *.log
 .env
 reports
+
+# TODO: remove
+cron.sh
+cron_log.txt

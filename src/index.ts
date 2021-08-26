@@ -1,7 +1,7 @@
-import {parseHtml} from './data-source/parseHtml';
-import {login} from './data-source/rest-methods/login';
-import {getCompanies} from './data-source/rest-methods/getCompanies';
-import {AUTH_EMAIL, AUTH_PASSWORD} from './config/env';
+import {parseHtml} from './data-source/magic-formula/parseHtml';
+import {login} from './data-source/magic-formula/rest-api/login';
+import {getCompanies} from './data-source/magic-formula/rest-api/getCompanies';
+import {AUTH_EMAIL, AUTH_PASSWORD} from './data-source/magic-formula/env.config';
 import {readState, writeState} from './storage/state';
 import {compareState} from './magic-formula/compareState';
 import {creatReport} from './magic-formula/creatReport';
