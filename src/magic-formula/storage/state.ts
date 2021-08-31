@@ -1,6 +1,6 @@
 import {readFile, writeFile} from 'fs/promises';
-import {MagicCompany} from '../common/companies';
-import {logger} from '../common/logging/logger';
+import {MagicCompany} from '../../common/companies';
+import {logger} from '../../common/logging/logger';
 
 export const STORAGE = process.env.STORAGE;
 export const STORAGE_FILE = process.env.STORAGE_FILE;

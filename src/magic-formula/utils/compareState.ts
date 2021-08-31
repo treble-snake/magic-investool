@@ -1,4 +1,4 @@
-import {MagicCompany} from '../common/companies';
+import {MagicCompany} from '../../common/companies';
 import {differenceWith} from 'ramda';
 
 export type StateComparison = {

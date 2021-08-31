@@ -1,5 +1,5 @@
 import {compareState} from './compareState';
-import {MagicCompany} from '../common/companies';
+import {MagicCompany} from '../../common/companies';
 
 const OLD_STATE: MagicCompany[] = [{
   name: 'Old 1',

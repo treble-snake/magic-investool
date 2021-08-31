@@ -3,6 +3,7 @@ import {writeFileSync} from 'fs';
 import {getInsightData} from './methods/getInsightData';
 import {logger} from '../../common/logging/logger';
 
+// TODO remove
 // getCompanyData('qweqweqwea')
   getInsightData('qweqweqwea')
   .then(data => {
