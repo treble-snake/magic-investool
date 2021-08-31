@@ -1,7 +1,7 @@
 import {request} from 'undici';
 import cookie from 'cookie';
 import {AUTH_COOKIE} from '../constants';
-import {makeHeaders} from '../makeHeaders';
+import {makeHeaders} from '../helpers/makeHeaders';
 
 const LOGIN_URL = 'https://www.magicformulainvesting.com/Account/Logon';
 

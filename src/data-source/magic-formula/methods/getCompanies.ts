@@ -1,5 +1,5 @@
 import {request} from 'undici';
-import {makeHeaders} from '../makeHeaders';
+import {makeHeaders} from '../helpers/makeHeaders';
 
 const GET_COMPANIES_URL = 'https://www.magicformulainvesting.com/Screening/StockScreening';
 

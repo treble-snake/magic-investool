@@ -1,33 +1,30 @@
-import {parseHtml} from './data-source/magic-formula/parseHtml';
-import {login} from './data-source/magic-formula/rest-api/login';
-import {getCompanies} from './data-source/magic-formula/rest-api/getCompanies';
 import {AUTH_EMAIL, AUTH_PASSWORD} from './data-source/magic-formula/env.config';
 import {readState, writeState} from './storage/state';
 import {compareState} from './magic-formula/compareState';
 import {creatReport} from './magic-formula/creatReport';
+import {login} from './data-source/magic-formula/methods/login';
+import {getCompanies} from './data-source/magic-formula/methods/getCompanies';
+import {parseHtml} from './data-source/magic-formula/helpers/parseHtml';
+import {logger} from './common/logging/logger';
 
 export const run = () => login(AUTH_EMAIL, AUTH_PASSWORD)
   .then(token => getCompanies(token))
   .then(html => parseHtml(html))
   .then(async (items) => {
     const state = await readState();
-    // console.log('Current state', state);
-
-    // console.log('New items:', items);
     const changes = compareState(state, items);
-    // console.log(changes);
 
     if (changes.removed.length + changes.added.length === 0) {
-      console.log('Nothing changed');
+      logger.log('Nothing changed');
     } else {
-      console.log('Changes detected, updating state');
+      logger.log('Changes detected, updating state');
       await creatReport(changes);
       return writeState(items);
     }
   })
   .then(() => process.exit(0))
   .catch((e) => {
-    console.error(e);
+    logger.error(e);
     process.exit(1);
   });
 

@@ -1,5 +1,5 @@
 import cookie from 'cookie';
-import {AUTH_COOKIE} from './constants';
+import {AUTH_COOKIE} from '../constants';
 import {IncomingHttpHeaders} from 'http';
 
 export const makeHeaders = (token?: string) => {

@@ -1,12 +1,7 @@
-import {YahooError} from './client';
+import {YahooResponse} from './client';
 
 export interface QuoteSummaryResponse {
-  quoteSummary: QuoteSummary
-}
-
-export interface QuoteSummary {
-  result: Result[]
-  error: YahooError
+  quoteSummary: YahooResponse<Result>
 }
 
 export interface Result {

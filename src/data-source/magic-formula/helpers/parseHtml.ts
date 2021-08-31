@@ -1,6 +1,6 @@
 import {JSDOM} from 'jsdom';
 import {unescape} from 'html-escaper';
-import {MagicCompany} from '../../common/companies';
+import {MagicCompany} from '../../../common/companies';
 
 export const parseHtml = (html: string): MagicCompany[] => {
   const {document} = new JSDOM(html).window;

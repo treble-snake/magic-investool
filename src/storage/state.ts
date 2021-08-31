@@ -1,5 +1,6 @@
 import {readFile, writeFile} from 'fs/promises';
 import {MagicCompany} from '../common/companies';
+import {logger} from '../common/logging/logger';
 
 export const STORAGE = process.env.STORAGE;
 export const STORAGE_FILE = process.env.STORAGE_FILE;
@@ -12,7 +13,7 @@ export const readState = async (): Promise<MagicCompany[]> => {
     const fd = await readFile(STORAGE_FILE);
     return JSON.parse(fd.toString()).companies;
   } catch (e) {
-    console.error('Failed to read state', e);
+    logger.error('Failed to read state', e);
     return [];
   }
 }
