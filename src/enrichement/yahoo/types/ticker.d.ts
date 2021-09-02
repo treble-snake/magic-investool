@@ -1,7 +1,7 @@
 import {YahooResponse} from './client';
 
 export interface QuoteSummaryResponse {
-  quoteSummary: YahooResponse<Result>
+  quoteSummary: YahooResponse<Result[]>
 }
 
 export interface Result {

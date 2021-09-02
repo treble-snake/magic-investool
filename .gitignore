@@ -5,6 +5,8 @@ coverage
 *.log
 .env
 reports
+tmp
+_persistance_
 
 # TODO: remove
 cron.sh
