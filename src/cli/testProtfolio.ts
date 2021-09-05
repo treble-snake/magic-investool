@@ -1,10 +1,10 @@
-import {MagicCompany} from '../common/companies';
+import {CompanyWithAnalytics} from '../common/companies';
 import {readFile, writeFile} from 'fs/promises';
 import {logger} from '../common/logging/logger';
 import {getCompanyData} from '../enrichement/yahoo/methods/getCompanyData';
 const PORTFOLIO_STORAGE = 'reports/state/portfolio.json';
 
-export const readState = async (): Promise<MagicCompany[]> => {
+export const readState = async (): Promise<CompanyWithAnalytics[]> => {
   try {
     const fd = await readFile(PORTFOLIO_STORAGE);
     return JSON.parse(fd.toString()).companies;
@@ -14,7 +14,7 @@ export const readState = async (): Promise<MagicCompany[]> => {
   }
 }
 
-export const writeState = (companies: MagicCompany[]) => {
+export const writeState = (companies: CompanyWithAnalytics[]) => {
   return writeFile(PORTFOLIO_STORAGE, JSON.stringify({
     lastUpdate: new Date().toISOString(),
     companies

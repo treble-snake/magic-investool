@@ -1,4 +1,4 @@
-import {askYahoo} from '../client';
+import {askYahoo} from '../httpClient';
 import {QuoteSummaryResponse} from '../types/ticker';
 
 const COMPANY_DATA_ENDPOINT = '/v11/finance/quoteSummary';

@@ -1,5 +1,5 @@
 import {readFile, writeFile} from 'fs/promises';
-import {MagicCompany} from '../../common/companies';
+import {CompanyWithAnalytics, CoreCompany} from '../../common/companies';
 import {logger} from '../../common/logging/logger';
 
 export const STORAGE = process.env.STORAGE;
@@ -8,7 +8,7 @@ export const STORAGE_FILE = process.env.STORAGE_FILE;
     throw new Error('No storage path');
   }
 
-export const readState = async (): Promise<MagicCompany[]> => {
+export const readState = async (): Promise<CompanyWithAnalytics[]> => {
   try {
     const fd = await readFile(STORAGE_FILE);
     return JSON.parse(fd.toString()).companies;
@@ -18,7 +18,7 @@ export const readState = async (): Promise<MagicCompany[]> => {
   }
 }
 
-export const writeState = (companies: MagicCompany[]) => {
+export const writeState = (companies: CoreCompany[]) => {
   return writeFile(STORAGE_FILE, JSON.stringify({
     lastUpdate: new Date().toISOString(),
     companies

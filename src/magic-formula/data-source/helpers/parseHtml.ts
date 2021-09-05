@@ -1,8 +1,8 @@
 import {JSDOM} from 'jsdom';
 import {unescape} from 'html-escaper';
-import {MagicCompany} from '../../../common/companies';
+import {CoreCompany} from '../../../common/companies';
 
-export const parseHtml = (html: string): MagicCompany[] => {
+export const parseHtml = (html: string): CoreCompany[] => {
   const {document} = new JSDOM(html).window;
 
   const companies = Array.from(document.querySelectorAll('table.screeningdata tbody tr'))

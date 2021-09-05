@@ -1,15 +1,15 @@
-import {MagicCompany} from '../../common/companies';
 import {differenceWith} from 'ramda';
+import {CoreCompany} from '../../common/companies';
 
 export type StateComparison = {
-  added: MagicCompany[],
-  removed: MagicCompany[],
-  combined: MagicCompany[],
+  added: CoreCompany[],
+  removed: CoreCompany[],
+  combined: CoreCompany[],
 }
 
-const tickerEquality = (a: MagicCompany, b: MagicCompany) => a.ticker === b.ticker;
+const tickerEquality = (a: CoreCompany, b: CoreCompany) => a.ticker === b.ticker;
 
-export const compareState = (oldState: MagicCompany[], newState: MagicCompany[]): StateComparison => {
+export const compareState = (oldState: CoreCompany[], newState: CoreCompany[]): StateComparison => {
   const added = differenceWith(tickerEquality, newState, oldState);
   const removed = differenceWith(tickerEquality, oldState, newState);
   const combined = differenceWith(tickerEquality, oldState, removed)

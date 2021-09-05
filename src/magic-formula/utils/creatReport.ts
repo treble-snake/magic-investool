@@ -1,6 +1,6 @@
 import {StateComparison} from './compareState';
 import {writeFile} from 'fs/promises';
-import {MagicCompany} from '../../common/companies';
+import {CompanyWithAnalytics} from '../../common/companies';
 
 if (!process.env.REPORT_DIR) {
   throw new Error('No report dir');
@@ -8,7 +8,7 @@ if (!process.env.REPORT_DIR) {
 export const REPORT_DIR = process.env.REPORT_DIR +
   (process.env.REPORT_DIR.endsWith('/') ? '' : '/');
 
-const mapCompanies = (items: MagicCompany[]) =>
+const mapCompanies = (items: CompanyWithAnalytics[]) =>
   items.map(it => `${it.ticker}: ${it.name}`).join('\n');
 
 export const creatReport = (changes: StateComparison) => {
