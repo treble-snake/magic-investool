@@ -1,23 +1,23 @@
 import {logger} from '../common/logging/logger';
-import {readState, writeState} from '../magic-formula/storage/state';
-import {enrichAllMissing} from '../enrichement/enrichAllMissing';
+import {readState} from '../magic-formula/storage/state';
+import {enrichCompanyWith} from '../enrichement/enrichCompany';
+import {omit} from 'ramda';
+import {inspect} from 'util';
 
 const run = async () => {
   const state = await readState();
-  // console.warn(state.length);
-  // console.warn(await enrichAllMissing(state));
-  // let newState = state;
-  //
-  // if (ARG_TICKER) {
-  //   newState = await enrichInState(ARG_TICKER, newState);
-  // } else {
-  //   for (const company of state) {
-  //     newState = await enrichInState(company.ticker, newState);
-  //   }
-  // }
-  //
-  const newState = await enrichAllMissing(state);
-  await writeState(newState);
+
+
+  const newState = state.slice(0, 5).map((company) => {
+    // console.warn(omit(['reports'], rawFinancialData.yahoo.insights.instrumentInfo));
+    const enriched = enrichCompanyWith(
+      company,
+      company.rawFinancialData!.yahoo.basic,
+      company.rawFinancialData!.yahoo.insights
+    );
+    console.warn(inspect(omit(['rawFinancialData', 'revenue'], enriched), false, 3, true));
+    return enriched;
+  });
 };
 
 run()

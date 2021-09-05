@@ -1,8 +1,8 @@
 import {logger} from '../common/logging/logger';
 import {enrichCompany} from './enrichCompany';
-import {Company, CompanyWithAnalytics, CoreCompany} from '../common/companies';
+import {CompanyWithAnalytics, CoreCompany} from '../common/companies';
 
-export const enrichAllMissing = async (state: Array<CoreCompany|Company|CompanyWithAnalytics>) => {
+export const enrichAllMissing = async (state: Array<CoreCompany|CompanyWithAnalytics>) => {
   logger.info('Enriching all companies without financial data');
 
   return Promise.all(state.map((company) => {

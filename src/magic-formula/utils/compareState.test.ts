@@ -1,7 +1,7 @@
 import {compareState} from './compareState';
-import {CompanyWithAnalytics} from '../../common/companies';
+import {CoreCompany} from '../../common/companies';
 
-const OLD_STATE: CompanyWithAnalytics[] = [{
+const OLD_STATE: CoreCompany[] = [{
   name: 'Old 1',
   ticker: 'OLD1',
 }, {
@@ -9,7 +9,7 @@ const OLD_STATE: CompanyWithAnalytics[] = [{
   ticker: 'OLD2',
 }];
 
-const NEW_STATE: CompanyWithAnalytics[] = [{
+const NEW_STATE: CoreCompany[] = [{
   name: 'New 1',
   ticker: 'NEW1',
 }, {
