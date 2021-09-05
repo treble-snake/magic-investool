@@ -18,14 +18,27 @@ export type RevenueData = {
   valueStr: string;
 };
 
+export enum ValuationType {
+  Undervalued = 'Undervalued',
+  Overvalued = 'Overvalued',
+  NearFair = 'Near Fair Value',
+  Unknown = 'UNKNOWN'
+}
+
 export type ValuationData = {
-  type: string;
+  type: ValuationType;
   percentage: number;
+}
+
+export enum InsightRecommendationType {
+  Buy = 'BUY',
+  Hold = 'HOLD',
+  Sell = 'SELL'
 }
 
 export type RecommendationData = {
   insight: {
-    type: string;
+    type: InsightRecommendationType;
     price: number;
   },
   trend: {
@@ -47,6 +60,7 @@ export type RawFinancialData = {
 export type CompanyWithAnalytics = CoreCompany & {
   industry: string;
   sector: string;
+  sectorScore: number;
   country: string;
   revenue: CompanyIndicator<RevenueData[]>;
   valuation: CompanyIndicator<ValuationData>;

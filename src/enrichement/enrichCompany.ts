@@ -7,17 +7,20 @@ import {getCompanyData} from './yahoo/methods/getCompanyData';
 import {getInsightData} from './yahoo/methods/getInsightData';
 import {Result as BasicResult} from './yahoo/types/ticker';
 import {Result as InsightResult} from './yahoo/types/insight';
+import {prop, sort} from 'ramda';
 
 const processRevenue = (incomeHistory: any[]) => {
+  // TODO: add revenue stream →
+  const data = sort(prop('timestamp'), incomeHistory.map((it) => ({
+    timestamp: it.endDate.raw,
+    date: it.endDate.fmt,
+    value: it.totalRevenue.raw,
+    valueStr: it.totalRevenue.fmt
+  })));
+
   return {
     score: 0,
-    // TODO: remove formatted values
-    data: incomeHistory.map((it) => ({
-      timestamp: it.endDate.raw,
-      date: it.endDate.fmt,
-      value: it.totalRevenue.raw,
-      valueStr: it.totalRevenue.fmt
-    }))
+    data
   };
 };
 
@@ -29,7 +32,7 @@ const mapValuation = (data: InsightResult) => {
   }
   return {
     data: {
-      type: valuation.description,
+      type: valuation?.description || 'UNKNOWN',
       percentage
     },
     score: 0
@@ -61,6 +64,7 @@ export const enrichCompanyWith = (
     ...company,
     name: quoteType.longName,
     sector: assetProfile.sector,
+    sectorScore: 0,
     industry: assetProfile.industry,
     country: assetProfile.country,
     revenue: processRevenue(incomeStatementHistory.incomeStatementHistory),
