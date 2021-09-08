@@ -1,4 +1,4 @@
-import {readState, writeState} from '../magic-formula/storage/state';
+import {readState, writeState} from '../magic-formula/storage/mfStorage';
 import {enrichCompanyWith} from '../enrichement/enrichCompany';
 import {omit} from 'ramda';
 import {inspect} from 'util';

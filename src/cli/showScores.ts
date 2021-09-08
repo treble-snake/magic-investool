@@ -1,8 +1,9 @@
 import {run} from './run';
-import {readState, writeState} from '../magic-formula/storage/state';
-import {CompanyWithAnalytics, CoreCompany} from '../common/companies';
-import {indexBy, omit, pick, prop, reverse} from 'ramda';
-import {readPortfolio} from '../portfoio/readPortfolio';
+import {readState} from '../magic-formula/storage/mfStorage';
+import {CompanyWithAnalytics} from '../common/companies';
+import {indexBy, omit, prop, reverse} from 'ramda';
+import {readPortfolio} from '../portfoio/portfolioStorage';
+import {FileStorage} from '../storage/file';
 
 const indexByScore = (
   companies: CompanyWithAnalytics[],
@@ -15,6 +16,8 @@ const indexByScore = (
       return acc;
     }, {} as Record<string, number>);
 };
+
+const storage = new FileStorage<any>('_persistance_/storage/ranked.json');
 
 run(async () => {
   const companies = await readState();
@@ -44,17 +47,15 @@ run(async () => {
 
   console.warn(rankedCompanies.map(it => `${it.name} (${it.sector})`));
 
-  await writeState(
-    rankedCompanies.map(it => {
-      const result: any = omit(['rawFinancialData', 'revenue'], it);
-      result.revenueStr = {
-        ...it.revenue,
-        data: reverse(it.revenue.data).map(it => `${it.valueStr ?? '?'} (${it.date})`).join(' → ')
-      };
+  await storage.write(rankedCompanies.map(it => {
+    const result: any = omit(['rawFinancialData', 'revenue'], it);
+    result.revenueStr = {
+      ...it.revenue,
+      data: reverse(it.revenue.data).map(it => `${it.valueStr ?? '?'} (${it.date})`).join(' → ')
+    };
 
-      return result;
-    }),
-    '_persistance_/storage/ranked.json');
+    return result;
+  }));
 });
 
 

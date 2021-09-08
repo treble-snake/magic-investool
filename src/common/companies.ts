@@ -58,6 +58,7 @@ export type RawFinancialData = {
 }
 
 export type CompanyWithAnalytics = CoreCompany & {
+  lastUpdated?: string;
   industry: string;
   sector: string;
   sectorScore: number;

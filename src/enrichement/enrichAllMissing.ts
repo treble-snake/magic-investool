@@ -11,7 +11,6 @@ export const enrichAllMissing = async (state: Array<CoreCompany|CompanyWithAnaly
       return company;
     }
 
-    logger.debug(`Enriching ${company.ticker}...`);
     return enrichCompany(company);
   }));
 }

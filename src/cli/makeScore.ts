@@ -1,10 +1,10 @@
 import {run} from './run';
-import {readState, writeState} from '../magic-formula/storage/state';
+import {readState, writeState} from '../magic-formula/storage/mfStorage';
 import {getPortfolioSectors, scoreSector} from '../scores/scoreSector';
 import {scoreValuation} from '../scores/scoreValuation';
 import {scoreRecommendation} from '../scores/scoreRecommendation';
 import {scoreRevenue} from '../scores/scoreRevenue';
-import {readPortfolio} from '../portfoio/readPortfolio';
+import {readPortfolio} from '../portfoio/portfolioStorage';
 import {omit} from 'ramda';
 
 run(async () => {

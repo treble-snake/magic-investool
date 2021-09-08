@@ -1,6 +1,6 @@
 import {run} from './run';
 import {getPortfolioSectors} from '../scores/scoreSector';
-import {readPortfolio} from '../portfoio/readPortfolio';
+import {readPortfolio} from '../portfoio/portfolioStorage';
 
 run(async () => {
   Object.entries(getPortfolioSectors(await readPortfolio()))

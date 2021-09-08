@@ -8,6 +8,7 @@ import {getInsightData} from './yahoo/methods/getInsightData';
 import {Result as BasicResult} from './yahoo/types/ticker';
 import {Result as InsightResult} from './yahoo/types/insight';
 import {prop, sort} from 'ramda';
+import {logger} from '../common/logging/logger';
 
 const processRevenue = (incomeHistory: any[]) => {
   // TODO: add revenue stream →
@@ -78,6 +79,7 @@ export const enrichCompany = async (company: CoreCompany): Promise<CompanyWithAn
     throw new Error('Given company does not have a ticker');
   }
 
+  logger.info(`Enriching ${company.ticker}`);
   const [basic, insights] = await Promise.all([
     getCompanyData(company.ticker),
     getInsightData(company.ticker)
@@ -85,6 +87,7 @@ export const enrichCompany = async (company: CoreCompany): Promise<CompanyWithAn
 
   return {
     ...enrichCompanyWith(company, basic, insights),
+    lastUpdated: new Date().toISOString(),
     rawFinancialData: {
       yahoo: {basic, insights}
     }
