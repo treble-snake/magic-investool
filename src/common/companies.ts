@@ -66,5 +66,5 @@ export type CompanyWithAnalytics = CoreCompany & {
   revenue: CompanyIndicator<RevenueData[]>;
   valuation: CompanyIndicator<ValuationData>;
   recommendation: CompanyIndicator<RecommendationData>;
-  rawFinancialData?: RawFinancialData;
+  rawFinancialData: RawFinancialData;
 }

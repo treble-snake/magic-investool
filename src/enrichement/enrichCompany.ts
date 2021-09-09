@@ -58,7 +58,7 @@ export const enrichCompanyWith = (
   company: CoreCompany,
   basic: BasicResult,
   insights: InsightResult
-): CompanyWithAnalytics => {
+): Omit<CompanyWithAnalytics, 'rawFinancialData'> => {
   const {quoteType, assetProfile, incomeStatementHistory} = basic;
 
   return {

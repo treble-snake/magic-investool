@@ -13,3 +13,10 @@ export const readPortfolio = async () => {
   const data = await storage.read();
   return data ? data.companies : [];
 }
+
+export const writePortfolio = (companies: CompanyWithAnalytics[]) => {
+  return storage.write({
+    lastUpdate: new Date().toISOString(),
+    companies
+  });
+};
