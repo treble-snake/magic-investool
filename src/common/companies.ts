@@ -58,7 +58,7 @@ export type RawFinancialData = {
 }
 
 export type CompanyWithAnalytics = CoreCompany & {
-  lastUpdated?: string;
+  lastUpdated: string;
   industry: string;
   sector: string;
   sectorScore: number;
@@ -67,4 +67,8 @@ export type CompanyWithAnalytics = CoreCompany & {
   valuation: CompanyIndicator<ValuationData>;
   recommendation: CompanyIndicator<RecommendationData>;
   rawFinancialData: RawFinancialData;
+}
+
+export type PortfolioCompany = CompanyWithAnalytics & {
+  purchaseDate: string;
 }

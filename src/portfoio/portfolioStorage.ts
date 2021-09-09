@@ -1,8 +1,8 @@
-import {CompanyWithAnalytics} from '../common/companies';
+import {PortfolioCompany} from '../common/companies';
 import {FileStorage} from '../storage/file';
 
 type PortfolioStorage = {
-  companies: CompanyWithAnalytics[];
+  companies: PortfolioCompany[];
   lastUpdate: string;
 }
 
@@ -14,7 +14,7 @@ export const readPortfolio = async () => {
   return data ? data.companies : [];
 }
 
-export const writePortfolio = (companies: CompanyWithAnalytics[]) => {
+export const writePortfolio = (companies: PortfolioCompany[]) => {
   return storage.write({
     lastUpdate: new Date().toISOString(),
     companies
