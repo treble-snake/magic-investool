@@ -20,7 +20,7 @@ const indexByScore = (
 const storage = new FileStorage<any>('_persistance_/storage/ranked.json');
 
 run(async () => {
-  const companies = await readState();
+  const companies = (await readState()) as CompanyWithAnalytics[];
   const portfolio = await readPortfolio();
   const ownedCompanies = indexBy(prop('ticker'), portfolio);
 

@@ -6,12 +6,13 @@ import {scoreRecommendation} from '../scores/scoreRecommendation';
 import {scoreRevenue} from '../scores/scoreRevenue';
 import {readPortfolio} from '../portfoio/portfolioStorage';
 import {omit} from 'ramda';
+import {CompanyWithAnalytics} from '../common/companies';
 
 run(async () => {
   const companies = await readState();
   const sectors = getPortfolioSectors(await readPortfolio());
 
-  const newState = companies.map(it => {
+  const newState = (companies as CompanyWithAnalytics[]).map(it => {
     // console.warn(omit(['rawFinancialData'], it));
 
     it.sectorScore = scoreSector(it.sector, sectors);

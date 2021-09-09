@@ -3,10 +3,11 @@ import {enrichCompanyWith} from '../enrichement/enrichCompany';
 import {omit} from 'ramda';
 import {inspect} from 'util';
 import {run} from './run';
+import {CompanyWithAnalytics} from '../common/companies';
 
 
 run(async () => {
-  const state = await readState();
+  const state = (await readState()) as CompanyWithAnalytics[];
 
   const newState = state.map((company) => {
     const enriched = enrichCompanyWith(
