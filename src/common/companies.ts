@@ -51,7 +51,7 @@ export type RecommendationData = {
 }
 
 export type RawFinancialData = {
-  yahoo: {
+  yahoo?: {
     basic: BasicYahooResult;
     insights: InsightYahooResult;
   }

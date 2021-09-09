@@ -1,5 +1,5 @@
 import {request} from 'undici';
-import {BASE_YAHOO_URL, YAHOO_API_KEY} from './env.config';
+import {BASE_YAHOO_URL, YAHOO_API_KEY} from './config';
 
 const HEADERS = Object.freeze({
   'x-api-key': YAHOO_API_KEY

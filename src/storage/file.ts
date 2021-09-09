@@ -16,6 +16,7 @@ export class FileStorage<T> {
     }
   }
   async write(data: T) {
+    console.warn(`writing to ${this.file}`);
     return writeFile(this.file, JSON.stringify(data));
   }
 }

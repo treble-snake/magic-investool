@@ -12,8 +12,8 @@ run(async () => {
   const newState = state.map((company) => {
     const enriched = enrichCompanyWith(
       company,
-      company.rawFinancialData!.yahoo.basic,
-      company.rawFinancialData!.yahoo.insights
+      company.rawFinancialData.yahoo!.basic,
+      company.rawFinancialData.yahoo!.insights
     );
 
     console.warn(inspect(omit(['rawFinancialData'], enriched), false, 3, true));

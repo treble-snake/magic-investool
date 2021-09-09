@@ -11,7 +11,6 @@ import {prop, sort} from 'ramda';
 import {logger} from '../common/logging/logger';
 
 const processRevenue = (incomeHistory: any[]) => {
-  // TODO: add revenue stream →
   const data = sort(prop('timestamp'), incomeHistory.map((it) => ({
     timestamp: it.endDate.raw,
     date: it.endDate.fmt,

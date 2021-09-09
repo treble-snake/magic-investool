@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node -r dotenv/config src/index.ts",
+    "start": "echo 'Not implemented'",
     "go": "ts-node -r dotenv/config",
     "build": "tsc",
-    "test": "jest",
-    "test:cov": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test": "jest --maxWorkers=1",
+    "test:cov": "jest --maxWorkers=1 --coverage",
+    "test:watch": "jest --maxWorkers=25% --watch"
   },
   "author": "Cap <treble.snake@gmail.com>",
   "license": "UNLICENSED",
