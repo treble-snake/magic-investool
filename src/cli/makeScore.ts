@@ -1,7 +1,7 @@
 import {run} from './run';
 import {readState, writeState} from '../magic-formula/storage/mfStorage';
 import {readPortfolio} from '../portfoio/portfolioStorage';
-import {calculateScores} from '../scores/calculateScores';
+import {calculateScores} from '../evaluation/calculateScores';
 
 run(async () => {
   const [companies, portfolio] = await Promise.all([readState(), readPortfolio()]);

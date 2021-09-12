@@ -1,7 +1,7 @@
 import {readState, writeState} from '../magic-formula/storage/mfStorage';
 import {run} from './run';
 import {refreshMagicFormulaData} from '../magic-formula/refreshMagicFormulaData';
-import {enrichOutdated} from '../enrichement/enrichOutdated';
+import {enrichOutdated} from '../enrichment/enrichOutdated';
 
 
 run(async () => {

@@ -1,11 +1,11 @@
-import {CompanyWithAnalytics} from '../common/companies';
+import {CompanyStock} from '../common/companies';
 import {countBy, mapObjIndexed} from 'ramda';
 
-export const getPortfolioSectors = (companies: CompanyWithAnalytics[]) => {
+export const getPortfolioSectors = (companies: CompanyStock[]) => {
   const total = companies.length;
   return mapObjIndexed(
     (x: number) => Math.round(100 * 100 * x / total) / 100,
-    countBy((it: CompanyWithAnalytics) => it.sector)(companies)
+    countBy((it: CompanyStock) => it.sector)(companies)
   );
 };
 

@@ -1,6 +1,6 @@
 import {run} from './run';
 import {readState, writeState} from '../magic-formula/storage/mfStorage';
-import {enrichOutdated} from '../enrichement/enrichOutdated';
+import {enrichOutdated} from '../enrichment/enrichOutdated';
 
 
 run(async () => {

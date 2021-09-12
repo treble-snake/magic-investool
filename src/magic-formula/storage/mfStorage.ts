@@ -1,5 +1,5 @@
 import {readFile, writeFile} from 'fs/promises';
-import {CompanyWithAnalytics, CoreCompany} from '../../common/companies';
+import {CompanyStock, CoreCompany} from '../../common/companies';
 import {logger} from '../../common/logging/logger';
 import {FileStorage} from '../../storage/file';
 
@@ -10,7 +10,7 @@ if (!STORAGE_FILE) {
 }
 
 type MagicFormulaStorage = {
-  companies: CompanyWithAnalytics[];
+  companies: CompanyStock[];
   lastUpdate: string;
 }
 
@@ -22,7 +22,7 @@ export const readState = async () => {
   return data ? data.companies : [];
 };
 
-export const writeState = (companies: CompanyWithAnalytics[]) => {
+export const writeState = (companies: CompanyStock[]) => {
   return storage.write({
     lastUpdate: new Date().toISOString(),
     companies

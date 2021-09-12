@@ -1,8 +1,8 @@
-import {CompanyWithAnalytics, RankedCompany} from '../common/companies';
+import {CompanyStock} from '../common/companies';
 
 const indexByScore = (
-  companies: CompanyWithAnalytics[],
-  scoreFn: (it: CompanyWithAnalytics) => number) => {
+  companies: CompanyStock[],
+  scoreFn: (it: CompanyStock) => number) => {
   return companies
     .sort((a, b) => scoreFn(a) > scoreFn(b) ? 1 : -1)
     .reduce((acc, it, index) => {
@@ -11,7 +11,7 @@ const indexByScore = (
     }, {} as Record<string, number>);
 };
 
-export const rankCompanies = (companies: CompanyWithAnalytics[]): RankedCompany[] => {
+export const rankCompanies = (companies: CompanyStock[]) => {
   const bySector = indexByScore(companies, it => it.sectorScore);
   const byRevenue = indexByScore(companies, it => it.revenue.score);
   const byRecommendation = indexByScore(companies, it => it.recommendation.score);
@@ -28,5 +28,5 @@ export const rankCompanies = (companies: CompanyWithAnalytics[]): RankedCompany[
         total: bySector[it.ticker] + byRevenue[it.ticker] + byRecommendation[it.ticker] + byValuation[it.ticker]
       }
     };
-  })
+  });
 };

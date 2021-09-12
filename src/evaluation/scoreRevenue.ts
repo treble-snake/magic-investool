@@ -1,7 +1,6 @@
-import {RevenueData} from '../common/companies';
-import {filter} from 'ramda';
+import {RevenueData} from '../common/ranking';
 
-export const scoreRevenue = (data: RevenueData[]) => {
+export const scoreRevenue = (data: RevenueData) => {
   if (data.length < 2) {
     // No info
     return -100;

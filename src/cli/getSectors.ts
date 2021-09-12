@@ -1,5 +1,5 @@
 import {run} from './run';
-import {getPortfolioSectors} from '../scores/scoreSector';
+import {getPortfolioSectors} from '../evaluation/scoreSector';
 import {readPortfolio} from '../portfoio/portfolioStorage';
 
 run(async () => {

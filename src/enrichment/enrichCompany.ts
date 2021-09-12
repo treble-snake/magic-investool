@@ -1,16 +1,20 @@
-import {
-  CompanyIndicator,
-  CompanyWithAnalytics,
-  CoreCompany, RecommendationData
-} from '../common/companies';
+import {CompanyStock, CoreCompany} from '../common/companies';
 import {getCompanyData} from './yahoo/methods/getCompanyData';
 import {getInsightData} from './yahoo/methods/getInsightData';
 import {Result as BasicResult} from './yahoo/types/ticker';
 import {Result as InsightResult} from './yahoo/types/insight';
 import {prop, sort} from 'ramda';
 import {logger} from '../common/logging/logger';
+import {
+  CompanyIndicator,
+  RecommendationData,
+  RevenueData,
+  ValuationData
+} from '../common/ranking';
+import {addToYahooCache, readYahooCache} from './cache/yahooCache';
+import {makeEmptyCompany} from './makeEmptyCompany';
 
-const processRevenue = (incomeHistory: any[]) => {
+const processRevenue = (incomeHistory: any[]): CompanyIndicator<RevenueData> => {
   const data = sort(prop('timestamp'), incomeHistory.map((it) => ({
     timestamp: it.endDate.raw,
     date: it.endDate.fmt,
@@ -24,7 +28,7 @@ const processRevenue = (incomeHistory: any[]) => {
   };
 };
 
-const mapValuation = (data: InsightResult) => {
+const mapValuation = (data: InsightResult): CompanyIndicator<ValuationData> => {
   const valuation = data.instrumentInfo?.valuation;
   let percentage = 0;
   if (valuation?.discount) {
@@ -53,15 +57,13 @@ function mapRecommendation(basic: BasicResult, insights: InsightResult): Company
   };
 }
 
-export const enrichCompanyWith = (
-  company: CoreCompany,
+const enrichCompanyWithYahoo = (
   basic: BasicResult,
   insights: InsightResult
-): Omit<CompanyWithAnalytics, 'rawFinancialData'> => {
+): Omit<CompanyStock, 'rank' | 'ticker' | 'lastUpdated'> => {
   const {quoteType, assetProfile, incomeStatementHistory} = basic;
 
   return {
-    ...company,
     name: quoteType.longName,
     sector: assetProfile.sector,
     sectorScore: 0,
@@ -69,26 +71,43 @@ export const enrichCompanyWith = (
     country: assetProfile.country,
     revenue: processRevenue(incomeStatementHistory.incomeStatementHistory),
     valuation: mapValuation(insights),
-    recommendation: mapRecommendation(basic, insights)
+    recommendation: mapRecommendation(basic, insights),
   };
 };
 
-export const enrichCompany = async (company: CoreCompany): Promise<CompanyWithAnalytics> => {
+export const enrichCompany = async (company: CoreCompany): Promise<CompanyStock> => {
   if (!company.ticker) {
     throw new Error('Given company does not have a ticker');
   }
 
   logger.info(`Enriching ${company.ticker}`);
-  const [basic, insights] = await Promise.all([
-    getCompanyData(company.ticker),
-    getInsightData(company.ticker)
-  ]);
+  const emptyCompany = makeEmptyCompany(company);
 
-  return {
-    ...enrichCompanyWith(company, basic, insights),
-    lastUpdated: new Date().toISOString(),
-    rawFinancialData: {
-      yahoo: {basic, insights}
+  try {
+    // TODO: don't fail all if only 1 req failed
+    const [basic, insights] = await Promise.all([
+      getCompanyData(company.ticker),
+      getInsightData(company.ticker)
+    ]);
+
+    addToYahooCache(company.ticker, {basic, insights});
+
+    return {
+      ...emptyCompany,
+      ...enrichCompanyWithYahoo(basic, insights),
+      lastUpdated: new Date().toISOString(),
+    };
+  } catch (e) {
+    const cache = await readYahooCache();
+    const cachedData = cache?.[company.ticker];
+    if (cachedData) {
+      return {
+        ...emptyCompany,
+        ...enrichCompanyWithYahoo(cachedData.basic, cachedData.insights),
+        lastUpdated: cachedData.lastUpdated,
+      };
     }
-  };
+
+    return emptyCompany;
+  }
 };

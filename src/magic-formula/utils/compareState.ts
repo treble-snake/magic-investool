@@ -1,19 +1,19 @@
-import {differenceWith} from 'ramda';
-import {CoreCompany} from '../../common/companies';
+import {differenceWith, eqProps} from 'ramda';
+import {CompanyStock, CoreCompany} from '../../common/companies';
 
 export type StateComparison = {
   added: CoreCompany[],
-  removed: CoreCompany[],
-  combined: CoreCompany[],
+  removed: CompanyStock[],
+  combined: (CoreCompany | CompanyStock)[],
 }
 
-const tickerEquality = (a: CoreCompany, b: CoreCompany) => a.ticker === b.ticker;
-
-export const compareState = (oldState: CoreCompany[], newState: CoreCompany[]): StateComparison => {
-  const added = differenceWith(tickerEquality, newState, oldState);
-  const removed = differenceWith(tickerEquality, oldState, newState);
-  const combined = differenceWith(tickerEquality, oldState, removed)
-    .concat(...added);
+export const compareState = (oldState: CompanyStock[], newState: CoreCompany[]): StateComparison => {
+  const added = differenceWith(eqProps('ticker'), newState, oldState);
+  const removed = differenceWith(eqProps('ticker'), oldState, newState);
+  const combined = [
+    ...differenceWith(eqProps('ticker'), oldState, removed),
+    ...added
+  ];
 
   return {
     added,

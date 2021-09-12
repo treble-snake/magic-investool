@@ -1,4 +1,4 @@
-import {ValuationData, ValuationType} from '../common/companies';
+import {ValuationData, ValuationType} from '../common/ranking';
 
 export const scoreValuation = (data: ValuationData) => {
   switch (data.type) {

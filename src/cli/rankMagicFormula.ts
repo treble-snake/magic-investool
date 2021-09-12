@@ -3,7 +3,7 @@ import {readState} from '../magic-formula/storage/mfStorage';
 import {indexBy, omit, prop, reverse} from 'ramda';
 import {readPortfolio} from '../portfoio/portfolioStorage';
 import {FileStorage} from '../storage/file';
-import {rankCompanies} from '../scores/rankCompanies';
+import {rankCompanies} from '../evaluation/rankCompanies';
 
 const storage = new FileStorage<any>('_persistance_/storage/rankedMagicFormula.json');
 

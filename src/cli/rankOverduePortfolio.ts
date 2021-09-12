@@ -2,9 +2,9 @@ import {run} from './run';
 import {readPortfolio} from '../portfoio/portfolioStorage';
 import {findOverdueItems} from '../portfoio/findOverdueItems';
 import {omit, pick, reverse} from 'ramda';
-import {calculateScores} from '../scores/calculateScores';
+import {calculateScores} from '../evaluation/calculateScores';
 import {FileStorage} from '../storage/file';
-import {rankCompanies} from '../scores/rankCompanies';
+import {rankCompanies} from '../evaluation/rankCompanies';
 
 const storage = new FileStorage<any>('_persistance_/storage/rankedPortfolio.json');
 

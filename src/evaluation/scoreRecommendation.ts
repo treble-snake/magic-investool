@@ -1,11 +1,9 @@
-import {
-  InsightRecommendationType,
-  RecommendationData
-} from '../common/companies';
+import {InsightRecommendationType, RecommendationData} from '../common/ranking';
 
 const INSIGHT_RESULT = Object.freeze({
   [InsightRecommendationType.Sell]: -1,
   [InsightRecommendationType.Hold]: 0,
+  [InsightRecommendationType.Unknown]: 0,
   [InsightRecommendationType.Buy]: 1,
 });
 

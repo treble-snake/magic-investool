@@ -6,7 +6,10 @@ import {readState, writeState} from './storage/mfStorage';
 import {compareState} from './utils/compareState';
 import {logger} from '../common/logging/logger';
 import {creatReport} from './utils/creatReport';
-import {enrichAllMissing} from '../enrichement/enrichAllMissing';
+import {enrichCompany} from '../enrichment/enrichCompany';
+import {CompanyStock} from '../common/companies';
+import {indexBy, prop} from 'ramda';
+import {log} from 'util';
 
 const getNewItems = async () => {
   const token = await login(AUTH_EMAIL, AUTH_PASSWORD);
@@ -20,15 +23,21 @@ export const refreshMagicFormulaData = async () => {
 
   if (changes.removed.length + changes.added.length === 0) {
     logger.info('Nothing changed in MF');
-  } else {
-    logger.info('Changes detected, updating state');
-    await creatReport(changes);
-    try {
-      // TODO: don't fail all, do as much as possbile
-      await writeState(await enrichAllMissing(changes.combined));
-    } catch (e) {
-      logger.warn('Enrichment failed: ', e);
-      await writeState(changes.combined);
-    }
+    return;
   }
+
+  logger.info('Changes detected, making updates');
+  // report in the background
+  creatReport(changes)
+    .catch(e => logger.warn('Failed to create a report', e));
+
+  const addedByTicker = indexBy(prop('ticker'), changes.added);
+  await writeState(await Promise.all(changes.combined.map((it) => {
+      if (addedByTicker[it.ticker]) {
+        return enrichCompany(it);
+      }
+
+      return it as CompanyStock;
+    })
+  ));
 };
