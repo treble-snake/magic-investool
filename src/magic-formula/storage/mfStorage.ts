@@ -10,7 +10,7 @@ if (!STORAGE_FILE) {
 }
 
 type MagicFormulaStorage = {
-  companies: CompanyWithAnalytics[] | CoreCompany[];
+  companies: CompanyWithAnalytics[];
   lastUpdate: string;
 }
 
@@ -22,7 +22,7 @@ export const readState = async () => {
   return data ? data.companies : [];
 };
 
-export const writeState = (companies: CoreCompany[]) => {
+export const writeState = (companies: CompanyWithAnalytics[]) => {
   return storage.write({
     lastUpdate: new Date().toISOString(),
     companies

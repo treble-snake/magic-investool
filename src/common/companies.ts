@@ -72,3 +72,15 @@ export type CompanyWithAnalytics = CoreCompany & {
 export type PortfolioCompany = CompanyWithAnalytics & {
   purchaseDate: string;
 }
+
+export type Rank = {
+  bySector: number,
+  byRevenue: number,
+  byRecommendation: number,
+  byValuation: number,
+  total: number;
+}
+
+export type RankedCompany = CompanyWithAnalytics & {
+  rank: Rank;
+}

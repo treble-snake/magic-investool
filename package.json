@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "cookie": "^0.4.1",
+    "date-fns": "^2.23.0",
     "html-escaper": "^3.0.3",
     "jsdom": "^17.0.0",
     "ramda": "^0.27.1",
