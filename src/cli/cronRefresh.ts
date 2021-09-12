@@ -1,4 +1,4 @@
-import {readState, writeState} from '../magic-formula/storage/mfStorage';
+import {readMfState, writeMfState} from '../magic-formula/storage/mfStorage';
 import {run} from './run';
 import {refreshMagicFormulaData} from '../magic-formula/refreshMagicFormulaData';
 import {enrichOutdated} from '../enrichment/enrichOutdated';
@@ -9,6 +9,6 @@ run(async () => {
   await refreshMagicFormulaData();
 
   // Refresh MF data
-  const state = await readState();
-  return writeState(await enrichOutdated(state, 5));
+  const state = await readMfState();
+  return writeMfState(await enrichOutdated(state, 5));
 });

@@ -17,12 +17,12 @@ type MagicFormulaStorage = {
 // TODO: bad singleton, bad!
 const storage = new FileStorage<MagicFormulaStorage>(STORAGE_FILE);
 
-export const readState = async () => {
+export const readMfState = async () => {
   const data = await storage.read();
   return data ? data.companies : [];
 };
 
-export const writeState = (companies: CompanyStock[]) => {
+export const writeMfState = (companies: CompanyStock[]) => {
   return storage.write({
     lastUpdate: new Date().toISOString(),
     companies

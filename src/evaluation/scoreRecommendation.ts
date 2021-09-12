@@ -11,7 +11,7 @@ export const scoreRecommendation = (data: RecommendationData) => {
   const {trend, insight} = data;
   return 1.5 * (INSIGHT_RESULT[insight.type] || 0) +
     1.5 * trend.strongBuy +
-    trend.strongBuy -
+    trend.buy -
     trend.sell -
     1.5 * trend.strongSell;
 };

@@ -22,7 +22,7 @@ run(async () => {
     overdue
       .sort((a, b) => a.rank.total - b.rank.total)
       .map(it => {
-        const result: any = omit(['rawFinancialData', 'revenue'], it);
+        const result: any = omit(['revenue'], it);
         result.revenueStr = {
           ...it.revenue,
           data: reverse(it.revenue.data).map(it => `${it.valueStr ?? '?'} (${it.date})`).join(' → ')
