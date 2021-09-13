@@ -1,5 +1,5 @@
 import {readMfState, writeMfState} from '../magic-formula/storage/mfStorage';
-import {run} from './run';
+import {run} from './utils/run';
 import {refreshMagicFormulaData} from '../magic-formula/refreshMagicFormulaData';
 import {enrichOutdated} from '../enrichment/enrichOutdated';
 

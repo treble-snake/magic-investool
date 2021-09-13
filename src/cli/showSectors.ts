@@ -1,4 +1,4 @@
-import {run} from './run';
+import {run} from './utils/run';
 import {getPortfolioSectors} from '../evaluation/scoreSector';
 import {readPortfolio} from '../portfoio/portfolioStorage';
 

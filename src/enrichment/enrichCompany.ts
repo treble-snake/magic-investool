@@ -75,6 +75,9 @@ const enrichCompanyWithYahoo = (
   };
 };
 
+/**
+ * Best effort update, should not throw
+ */
 export const enrichCompany = async (company: CoreCompany): Promise<CompanyStock> => {
   if (!company.ticker) {
     throw new Error('Given company does not have a ticker');

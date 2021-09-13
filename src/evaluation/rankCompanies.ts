@@ -11,7 +11,7 @@ const indexByScore = (
     }, {} as Record<string, number>);
 };
 
-export const rankCompanies = (companies: CompanyStock[]) => {
+export const rankCompanies = (companies: CompanyStock[]): CompanyStock[] => {
   const bySector = indexByScore(companies, it => it.sectorScore);
   const byRevenue = indexByScore(companies, it => it.revenue.score);
   const byRecommendation = indexByScore(companies, it => it.recommendation.score);

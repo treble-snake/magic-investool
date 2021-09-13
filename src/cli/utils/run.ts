@@ -1,4 +1,4 @@
-import {logger} from '../common/logging/logger';
+import {logger} from '../../common/logging/logger';
 
 export const run = (fn: (...args: any) => Promise<any>) => {
   fn()

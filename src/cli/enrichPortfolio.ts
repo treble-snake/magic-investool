@@ -1,4 +1,4 @@
-import {run} from './run';
+import {run} from './utils/run';
 import {enrichOutdated} from '../enrichment/enrichOutdated';
 import {readPortfolio, writePortfolio} from '../portfoio/portfolioStorage';
 import {CompanyStock} from '../common/companies';

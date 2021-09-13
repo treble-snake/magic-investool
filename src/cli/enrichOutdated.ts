@@ -1,4 +1,4 @@
-import {run} from './run';
+import {run} from './utils/run';
 import {readMfState, writeMfState} from '../magic-formula/storage/mfStorage';
 import {enrichOutdated} from '../enrichment/enrichOutdated';
 

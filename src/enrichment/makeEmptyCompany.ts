@@ -4,7 +4,6 @@ import {subYears} from 'date-fns';
 
 export const makeEmptyCompany = (core: CoreCompany): CompanyStock => {
   return {
-    ...core,
     sector: '',
     sectorScore: 0,
     industry: '',
@@ -43,6 +42,7 @@ export const makeEmptyCompany = (core: CoreCompany): CompanyStock => {
       bySector: 0,
       byValuation: 0,
       total: 0
-    }
+    },
+    ...core
   };
 };
