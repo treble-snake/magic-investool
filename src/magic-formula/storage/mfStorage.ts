@@ -1,4 +1,4 @@
-import {CompanyStock} from '../../common/companies';
+import {CompanyStock} from '../../common/types/companies.types';
 import {FileStorage} from '../../storage/file';
 import path from 'path';
 import {STORAGE_DIR} from '../../common/config';

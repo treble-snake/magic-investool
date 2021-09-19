@@ -1,4 +1,4 @@
-import {CompanyStock, CoreCompany} from '../common/companies';
+import {CompanyStock, CoreCompany} from '../common/types/companies.types';
 import {getCompanyData} from './yahoo/methods/getCompanyData';
 import {getInsightData} from './yahoo/methods/getInsightData';
 import {Result as BasicResult} from './yahoo/types/ticker';
@@ -10,7 +10,7 @@ import {
   RecommendationData,
   RevenueData,
   ValuationData
-} from '../common/ranking';
+} from '../common/types/ranking.types';
 import {addToYahooCache, readYahooCache} from './cache/yahooCache';
 import {makeEmptyCompany} from './makeEmptyCompany';
 

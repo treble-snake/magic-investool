@@ -1,5 +1,5 @@
 import {differenceWith, eqProps} from 'ramda';
-import {CompanyStock, CoreCompany} from '../../common/companies';
+import {CompanyStock, CoreCompany} from '../../common/types/companies.types';
 
 export type StateComparison = {
   added: CoreCompany[],

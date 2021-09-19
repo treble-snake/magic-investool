@@ -7,7 +7,7 @@ import {compareState} from './utils/compareState';
 import {logger} from '../common/logging/logger';
 import {creatReport} from './utils/creatReport';
 import {enrichCompany} from '../enrichment/enrichCompany';
-import {CompanyStock} from '../common/companies';
+import {CompanyStock} from '../common/types/companies.types';
 import {indexBy, prop} from 'ramda';
 import {calculateScores} from '../evaluation/calculateScores';
 import {readPortfolio} from '../portfoio/portfolioStorage';

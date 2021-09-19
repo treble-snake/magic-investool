@@ -1,4 +1,4 @@
-import {CompanyStock, PortfolioCompany} from '../common/companies';
+import {CompanyStock, PortfolioCompany} from '../common/types/companies.types';
 import {getPortfolioSectors, scoreSector} from './scoreSector';
 import {scoreRevenue} from './scoreRevenue';
 import {scoreValuation} from './scoreValuation';

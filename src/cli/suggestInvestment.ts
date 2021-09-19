@@ -8,7 +8,7 @@ import {rankCompanies} from '../evaluation/rankCompanies';
 import {readMfState} from '../magic-formula/storage/mfStorage';
 import {logger} from '../common/logging/logger';
 import {replaceRevenue} from './utils/replaceRevenue';
-import {CompanyStock} from '../common/companies';
+import {CompanyStock} from '../common/types/companies.types';
 import {enrichCompany} from '../enrichment/enrichCompany';
 import {format} from 'date-fns';
 

@@ -1,6 +1,6 @@
 import {StateComparison} from './compareState';
 import {writeFile} from 'fs/promises';
-import {CoreCompany} from '../../common/companies';
+import {CoreCompany} from '../../common/types/companies.types';
 
 if (!process.env.REPORT_DIR) {
   throw new Error('No report dir');

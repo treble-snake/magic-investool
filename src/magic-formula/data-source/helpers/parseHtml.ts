@@ -1,6 +1,6 @@
 import {JSDOM} from 'jsdom';
 import {unescape} from 'html-escaper';
-import {CoreCompany} from '../../../common/companies';
+import {CoreCompany} from '../../../common/types/companies.types';
 
 export const parseHtml = (html: string): CoreCompany[] => {
   const {document} = new JSDOM(html).window;

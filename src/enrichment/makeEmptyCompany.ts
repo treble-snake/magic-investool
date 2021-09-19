@@ -1,5 +1,5 @@
-import {CompanyStock, CoreCompany} from '../common/companies';
-import {InsightRecommendationType, ValuationType} from '../common/ranking';
+import {CompanyStock, CoreCompany} from '../common/types/companies.types';
+import {InsightRecommendationType, ValuationType} from '../common/types/ranking.types';
 import {subYears} from 'date-fns';
 
 export const makeEmptyCompany = (core: CoreCompany): CompanyStock => {

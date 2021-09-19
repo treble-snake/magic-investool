@@ -1,5 +1,5 @@
 import {findOverdueItems} from '../../src/portfoio/findOverdueItems';
-import {PortfolioCompany} from '../../src/common/companies';
+import {PortfolioCompany} from '../../src/common/types/companies.types';
 
 describe('findOverdueItems', () => {
   it('should return empty result on empty input', () => {

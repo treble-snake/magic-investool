@@ -1,6 +1,6 @@
 import {logger} from '../common/logging/logger';
 import {enrichCompany} from './enrichCompany';
-import {CompanyStock} from '../common/companies';
+import {CompanyStock} from '../common/types/companies.types';
 
 const getTimestamp = (company: CompanyStock) => {
   if ('lastUpdated' in company && company.lastUpdated) {

@@ -1,5 +1,5 @@
 import {omit, reverse} from 'ramda';
-import {CompanyStock} from '../../common/companies';
+import {CompanyStock} from '../../common/types/companies.types';
 
 export const replaceRevenue = (company: CompanyStock) => {
   const result: any = omit(['revenue'], company);

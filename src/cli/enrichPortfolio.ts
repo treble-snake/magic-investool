@@ -1,7 +1,7 @@
 import {run} from './utils/run';
 import {enrichOutdated} from '../enrichment/enrichOutdated';
 import {readPortfolio, writePortfolio} from '../portfoio/portfolioStorage';
-import {CompanyStock} from '../common/companies';
+import {CompanyStock} from '../common/types/companies.types';
 
 
 run(async () => {

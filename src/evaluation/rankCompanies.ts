@@ -1,4 +1,4 @@
-import {CompanyStock} from '../common/companies';
+import {CompanyStock} from '../common/types/companies.types';
 
 const indexByScore = (
   companies: CompanyStock[],

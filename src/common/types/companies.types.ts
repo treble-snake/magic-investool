@@ -4,7 +4,7 @@ import {
   RecommendationData,
   RevenueData,
   ValuationData
-} from './ranking';
+} from './ranking.types';
 
 export type CoreCompany = {
   name: string;
