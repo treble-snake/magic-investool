@@ -25,4 +25,5 @@ export type CompanyStock = CoreCompany & {
 
 export type PortfolioCompany = CompanyStock & {
   purchaseDate: string;
+  sharesQty: number;
 }

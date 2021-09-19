@@ -1,5 +1,7 @@
 import {PortfolioCompany} from '../common/companies';
 import {FileStorage} from '../storage/file';
+import path from 'path';
+import {STORAGE_DIR} from '../common/config';
 
 type PortfolioStorage = {
   companies: PortfolioCompany[];
@@ -7,12 +9,13 @@ type PortfolioStorage = {
 }
 
 // TODO: bad singleton, bad!
-const storage = new FileStorage<PortfolioStorage>('_persistance_/storage/portfolio.json');
+const STORAGE_FILE = path.join(STORAGE_DIR, 'portfolio.json');
+const storage = new FileStorage<PortfolioStorage>(STORAGE_FILE);
 
 export const readPortfolio = async () => {
   const data = await storage.read();
   return data ? data.companies : [];
-}
+};
 
 export const writePortfolio = (companies: PortfolioCompany[]) => {
   return storage.write({

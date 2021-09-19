@@ -1,13 +1,7 @@
-import {readFile, writeFile} from 'fs/promises';
-import {CompanyStock, CoreCompany} from '../../common/companies';
-import {logger} from '../../common/logging/logger';
+import {CompanyStock} from '../../common/companies';
 import {FileStorage} from '../../storage/file';
-
-const STORAGE = process.env.STORAGE;
-const STORAGE_FILE = process.env.STORAGE_FILE;
-if (!STORAGE_FILE) {
-  throw new Error('No storage path');
-}
+import path from 'path';
+import {STORAGE_DIR} from '../../common/config';
 
 type MagicFormulaStorage = {
   companies: CompanyStock[];
@@ -15,6 +9,7 @@ type MagicFormulaStorage = {
 }
 
 // TODO: bad singleton, bad!
+const STORAGE_FILE = path.join(STORAGE_DIR, 'mfState.json');
 const storage = new FileStorage<MagicFormulaStorage>(STORAGE_FILE);
 
 export const readMfState = async () => {

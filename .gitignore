@@ -9,5 +9,5 @@ tmp
 _persistance_
 
 # TODO: remove
-cron.sh
+cron*.sh
 cron_log.txt

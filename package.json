@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "echo 'Not implemented'",
+    "start": "yarn go src/cli/index.ts",
     "go": "ts-node -r dotenv/config",
-    "build": "tsc",
+    "build": "rm -rf dist/ && tsc",
     "test": "jest --maxWorkers=1",
     "test:cov": "jest --maxWorkers=1 --coverage",
     "test:watch": "jest --maxWorkers=25% --watch"
