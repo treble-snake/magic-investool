@@ -3,7 +3,7 @@ import {FileStorage, makeFileStorage} from '../../storage/file';
 import {PORTFOLIO_FILENAME} from '../../common/config';
 import {PortfolioStorage} from './PortfolioStorage.types';
 
-export type PortfolioData = {
+type PortfolioData = {
   companies: PortfolioCompany[];
   lastUpdate: string;
 }
@@ -26,9 +26,12 @@ export const filePortfolioStorage = (
       const companies = await this.findAll();
       const newCompanies = companies.filter(it => it.ticker !== ticker);
       if (companies.length !== newCompanies.length) {
-        await this.save(newCompanies);
+        return this.save(newCompanies);
       }
-      return newCompanies;
+    },
+    async findByTicker(ticker: string): Promise<PortfolioCompany | null> {
+      const all = await this.findAll();
+      return all.find(it => it.ticker === ticker) || null;
     }
   };
 };

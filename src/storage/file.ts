@@ -3,13 +3,20 @@ import {logger} from '../common/logging/logger';
 import path from 'path';
 import {STORAGE_DIR} from '../common/config';
 
-export const makeFileStorage = <T> (filename: string, directory = STORAGE_DIR) => {
-  return new FileStorage<T>(path.join(directory, filename));
+export const makeFileStorage =
+  <T>(filename: string, directory = STORAGE_DIR): FileStorage<T> => {
+    return new JsonFileStorage<T>(path.join(directory, filename));
+  };
+
+export interface FileStorage<T> {
+  read(): Promise<T | null>;
+
+  write(data: T): Promise<void>;
 }
 
-export class FileStorage<T> {
+export class JsonFileStorage<T> implements FileStorage<T> {
   constructor(
-    readonly file: string
+    private readonly file: string
   ) {
   }
 

@@ -1,4 +1,4 @@
-import {FileStorage, makeFileStorage} from '../../storage/file';
+import {JsonFileStorage, makeFileStorage} from '../../storage/file';
 import {Result as BasicYahooResult} from '../yahoo/types/ticker';
 import {Result as InsightYahooResult} from '../yahoo/types/insight';
 import {logger} from '../../common/logging/logger';

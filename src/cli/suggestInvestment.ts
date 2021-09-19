@@ -3,7 +3,7 @@ import {filePortfolioStorage} from '../portfoio/storage/FilePortfolioStorage';
 import {findOverdueItems} from '../portfoio/findOverdueItems';
 import {identity, indexBy, prop} from 'ramda';
 import {calculateScores} from '../evaluation/calculateScores';
-import {FileStorage} from '../storage/file';
+import {JsonFileStorage} from '../storage/file';
 import {rankCompanies} from '../evaluation/rankCompanies';
 import {logger} from '../common/logging/logger';
 import {replaceRevenue} from './utils/replaceRevenue';
@@ -12,7 +12,7 @@ import {enrichCompany} from '../enrichment/enrichCompany';
 import {format} from 'date-fns';
 import {fileMagicFormulaStorage} from '../magic-formula/storage/FileMagicFormulaStorage';
 
-const storage = new FileStorage<any>('_persistance_/storage/rankedPortfolio.json');
+const storage = new JsonFileStorage<any>('_persistance_/storage/rankedPortfolio.json');
 
 const enrichAll = async (companies: CompanyStock[]) => {
   if (companies.length <= 1) {
