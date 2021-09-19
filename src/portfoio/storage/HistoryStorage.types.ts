@@ -12,3 +12,10 @@ export type HistoryRecord = {
   price: number;
 };
 
+export interface HistoryStorage {
+  findAll(): Promise<HistoryRecord[]>;
+
+  save(records: HistoryRecord[]): Promise<void>;
+
+  addRecord(record: HistoryRecord): Promise<void>;
+}

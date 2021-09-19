@@ -18,20 +18,20 @@
     "@types/html-escaper": "^3.0.0",
     "@types/jest": "^27.0.1",
     "@types/jsdom": "^16.2.13",
-    "@types/node": "16.9.1",
+    "@types/node": "16.9.3",
     "@types/ramda": "^0.27.44",
     "dotenv": "^10.0.0",
-    "jest": "27.1.1",
+    "jest": "27.2.0",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
     "typescript": "4.4.3"
   },
   "dependencies": {
     "cookie": "^0.4.1",
-    "date-fns": "^2.23.0",
+    "date-fns": "^2.24.0",
     "html-escaper": "^3.0.3",
     "jsdom": "^17.0.0",
     "ramda": "^0.27.1",
-    "undici": "4.5.1"
+    "undici": "^4.5.1"
   }
 }

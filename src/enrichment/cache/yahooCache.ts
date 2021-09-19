@@ -1,4 +1,4 @@
-import {FileStorage} from '../../storage/file';
+import {FileStorage, makeFileStorage} from '../../storage/file';
 import {Result as BasicYahooResult} from '../yahoo/types/ticker';
 import {Result as InsightYahooResult} from '../yahoo/types/insight';
 import {logger} from '../../common/logging/logger';
@@ -12,9 +12,10 @@ type YahooData = {
 type YahooCache = Record<string, YahooData>;
 
 // TODO: bad singleton, bad!
-const storage = new FileStorage<YahooCache>('_persistance_/storage/yahooData.json');
+const storage = makeFileStorage<YahooCache>('yahooData.json');
 
-export const readYahooCache = () => {
+// TODO: fix cache
+export const readYahooCache = async (): Promise<YahooCache|null> => {
   return storage.read();
 };
 
@@ -22,17 +23,16 @@ export const writeYahooCache = (data: YahooCache) => {
   return storage.write(data);
 };
 
-// TODO: make async ?
-export const addToYahooCache = (ticker: string, data: Partial<YahooData>) => {
+export const addToYahooCache = async (ticker: string, data: Partial<YahooData>) => {
   try {
-    const cache = storage.readSync() ?? {};
+    const cache = (await storage.read()) ?? {};
     cache[ticker] = Object.assign(
       {},
       cache[ticker],
       data,
       {lastUpdated: new Date().toISOString()}
     );
-    storage.writeSync(cache);
+    await storage.write(cache);
   } catch (e) {
     logger.warn(`Failed to add ${ticker} to Yahoo cache`, e);
   }

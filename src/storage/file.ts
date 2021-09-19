@@ -1,6 +1,11 @@
 import {readFile, writeFile} from 'fs/promises';
 import {logger} from '../common/logging/logger';
-import {readFileSync, writeFileSync} from 'fs';
+import path from 'path';
+import {STORAGE_DIR} from '../common/config';
+
+export const makeFileStorage = <T> (filename: string, directory = STORAGE_DIR) => {
+  return new FileStorage<T>(path.join(directory, filename));
+}
 
 export class FileStorage<T> {
   constructor(
@@ -20,18 +25,5 @@ export class FileStorage<T> {
 
   async write(data: T) {
     return writeFile(this.file, JSON.stringify(data));
-  }
-
-  readSync() {
-    try {
-      return JSON.parse(readFileSync(this.file).toString()) as T;
-    } catch (e) {
-      logger.warn(`Failed to read file ${this.file}:`, e);
-      return null;
-    }
-  }
-
-  writeSync(data: T) {
-    writeFileSync(this.file, JSON.stringify(data));
   }
 }

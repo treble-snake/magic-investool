@@ -93,6 +93,7 @@ export const enrichCompany = async (company: CoreCompany): Promise<CompanyStock>
       getInsightData(company.ticker)
     ]);
 
+    // TODO: don't wait for cache ?
     addToYahooCache(company.ticker, {basic, insights});
 
     return {

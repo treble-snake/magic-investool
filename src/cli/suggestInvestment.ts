@@ -1,16 +1,16 @@
 import {run} from './utils/run';
-import {readPortfolio} from '../portfoio/portfolioStorage';
+import {filePortfolioStorage} from '../portfoio/storage/FilePortfolioStorage';
 import {findOverdueItems} from '../portfoio/findOverdueItems';
 import {identity, indexBy, prop} from 'ramda';
 import {calculateScores} from '../evaluation/calculateScores';
 import {FileStorage} from '../storage/file';
 import {rankCompanies} from '../evaluation/rankCompanies';
-import {readMfState} from '../magic-formula/storage/mfStorage';
 import {logger} from '../common/logging/logger';
 import {replaceRevenue} from './utils/replaceRevenue';
 import {CompanyStock} from '../common/types/companies.types';
 import {enrichCompany} from '../enrichment/enrichCompany';
 import {format} from 'date-fns';
+import {fileMagicFormulaStorage} from '../magic-formula/storage/FileMagicFormulaStorage';
 
 const storage = new FileStorage<any>('_persistance_/storage/rankedPortfolio.json');
 
@@ -28,7 +28,10 @@ run(async () => {
   const forceUpdate = process.env.FORCE_UPD === 'true' || process.env.FORCE_UPD === '1';
   const prepareOverdue = forceUpdate ? enrichAll : identity;
 
-  const [portfolio, mfState] = await Promise.all([readPortfolio(), readMfState()]);
+  const [portfolio, mfState] = await Promise.all([
+    filePortfolioStorage().findAll(),
+    fileMagicFormulaStorage().findAll()
+  ]);
   const magicByTicker = indexBy(prop('ticker'), mfState);
 
   const overdue = await prepareOverdue(findOverdueItems(portfolio, date));

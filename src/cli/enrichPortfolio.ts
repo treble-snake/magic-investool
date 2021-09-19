@@ -1,12 +1,13 @@
 import {run} from './utils/run';
 import {enrichOutdated} from '../enrichment/enrichOutdated';
-import {readPortfolio, writePortfolio} from '../portfoio/portfolioStorage';
-import {CompanyStock} from '../common/types/companies.types';
+import {filePortfolioStorage} from '../portfoio/storage/FilePortfolioStorage';
+import {PortfolioCompany} from '../common/types/companies.types';
 
 
 run(async () => {
   throw new Error('Not implemented')
-  // const state = await readPortfolio();
-  // const enriched = await enrichOutdated(state, 30);
-  // await writePortfolio(enriched);
+  const storage = filePortfolioStorage();
+  const state = await storage.findAll();
+  const enriched = await enrichOutdated(state, 30);
+  await storage.save(enriched as PortfolioCompany[]);
 });
