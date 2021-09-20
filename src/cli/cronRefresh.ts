@@ -1,15 +1,15 @@
 import {run} from './utils/run';
-import {refreshMagicFormulaData} from '../magic-formula/refreshMagicFormulaData';
+import {magicFormulaOperations} from '../magic-formula/operations';
 import {enrichOutdated} from '../enrichment/enrichOutdated';
-import {fileMagicFormulaStorage} from '../magic-formula/storage/FileMagicFormulaStorage';
+import {defaultContext} from '../context/context';
 
 
 run(async () => {
+  const context = defaultContext();
   // Refresh MF
-  await refreshMagicFormulaData();
+  await magicFormulaOperations(context).refresh();
 
   // Refresh MF data
-  const storage = fileMagicFormulaStorage();
-  const state = await storage.findAll();
-  return storage.save(await enrichOutdated(state, 5));
+  const state = await context.mfStorage.findAll();
+  return context.mfStorage.save(await enrichOutdated(state, 5));
 });

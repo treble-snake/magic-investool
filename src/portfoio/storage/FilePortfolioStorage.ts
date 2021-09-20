@@ -2,6 +2,7 @@ import {PortfolioCompany} from '../../common/types/companies.types';
 import {FileStorage, makeFileStorage} from '../../storage/file';
 import {PORTFOLIO_FILENAME} from '../../common/config';
 import {PortfolioStorage} from './PortfolioStorage.types';
+import {omit} from 'ramda';
 
 type PortfolioData = {
   companies: PortfolioCompany[];
@@ -32,6 +33,27 @@ export const filePortfolioStorage = (
     async findByTicker(ticker: string): Promise<PortfolioCompany | null> {
       const all = await this.findAll();
       return all.find(it => it.ticker === ticker) || null;
+    },
+    async updateOne(ticker: string, company: Partial<PortfolioCompany>) {
+      const all = await this.findAll();
+      const existing = all.find(it => it.ticker === ticker);
+      if (!existing) {
+        return null;
+      }
+      Object.assign(existing, omit(['ticker'], company));
+      await this.save(all);
+      return existing;
+    },
+    async add(company: PortfolioCompany) {
+      const all = await this.findAll();
+      const existing = all.find(it => it.ticker === company.ticker);
+      if (existing) {
+        throw new Error(`${company.ticker} already exists`);
+      }
+
+      all.push(company);
+      await this.save(all);
+      return company;
     }
   };
 };

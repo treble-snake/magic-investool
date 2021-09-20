@@ -7,5 +7,9 @@ export interface PortfolioStorage {
 
   save(companies: PortfolioCompany[]): Promise<void>;
 
+  updateOne(ticker: string, company: Partial<PortfolioCompany>): Promise<PortfolioCompany | null>;
+
+  add(company: PortfolioCompany): Promise<PortfolioCompany>;
+
   remove(ticker: string): Promise<void>;
 }

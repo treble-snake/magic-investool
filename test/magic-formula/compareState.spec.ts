@@ -1,5 +1,5 @@
-import {compareState} from './compareState';
-import {makeEmptyCompany} from '../../enrichment/makeEmptyCompany';
+import {compareState} from '../../src/magic-formula/utils/compareState';
+import {makeEmptyCompany} from '../../src/enrichment/makeEmptyCompany';
 
 const OLD_STATE = [
   makeEmptyCompany({

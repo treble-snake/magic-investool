@@ -1,4 +1,4 @@
-import {parseHtml} from './parseHtml';
+import {parseHtml} from '../../src/magic-formula/data-source/helpers/parseHtml';
 import {readFileSync} from 'fs';
 
 describe('parseHtml', function () {
