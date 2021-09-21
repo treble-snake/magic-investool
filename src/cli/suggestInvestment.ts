@@ -1,5 +1,4 @@
 import {run} from './utils/run';
-import {filePortfolioStorage} from '../portfoio/storage/FilePortfolioStorage';
 import {findOverdueItems} from '../portfoio/findOverdueItems';
 import {identity, indexBy, prop} from 'ramda';
 import {calculateScores} from '../evaluation/calculateScores';
@@ -8,29 +7,32 @@ import {rankCompanies} from '../evaluation/rankCompanies';
 import {logger} from '../common/logging/logger';
 import {replaceRevenue} from './utils/replaceRevenue';
 import {CompanyStock} from '../common/types/companies.types';
-import {enrichCompany} from '../enrichment/enrichCompany';
 import {format} from 'date-fns';
-import {fileMagicFormulaStorage} from '../magic-formula/storage/FileMagicFormulaStorage';
+import {AppContext, defaultContext} from '../context/context';
+import {enrichmentOperations} from '../enrichment/operations';
 
 const storage = new JsonFileStorage<any>('_persistance_/storage/rankedPortfolio.json');
 
-const enrichAll = async (companies: CompanyStock[]) => {
+const enrichAll = (context: AppContext) => async (companies: CompanyStock[]) => {
   if (companies.length <= 1) {
     return companies;
   }
 
-  return Promise.all(companies.map(it => enrichCompany(it)));
+  return Promise.all(companies.map(
+    it => enrichmentOperations(context).enrichCompany(it)));
 };
 
 run(async () => {
+  const context = defaultContext();
+
   const date = process.env.DATE ? new Date(process.env.DATE) : new Date();
   // TODO: save force enrichments to portfolio
   const forceUpdate = process.env.FORCE_UPD === 'true' || process.env.FORCE_UPD === '1';
-  const prepareOverdue = forceUpdate ? enrichAll : identity;
+  const prepareOverdue = forceUpdate ? enrichAll(context) : identity;
 
   const [portfolio, mfState] = await Promise.all([
-    filePortfolioStorage().findAll(),
-    fileMagicFormulaStorage().findAll()
+    context.portfolioStorage.findAll(),
+    context.mfStorage.findAll()
   ]);
   const magicByTicker = indexBy(prop('ticker'), mfState);
 
@@ -38,7 +40,7 @@ run(async () => {
 
   const itemsToBuyMore = rankCompanies(calculateScores(
     overdue.filter(it => magicByTicker[it.ticker]), portfolio))
-    .sort((a, b) => - a.rank.total + b.rank.total)
+    .sort((a, b) => -a.rank.total + b.rank.total)
     .map(replaceRevenue);
 
   const itemsToBuyByTicker = indexBy(prop('ticker'), itemsToBuyMore);

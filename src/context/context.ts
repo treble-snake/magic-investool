@@ -5,9 +5,10 @@ import {fileHistoryStorage} from '../portfoio/storage/FileHistoryStorage';
 import {MagicFormulaStorage} from '../magic-formula/storage/MagicFormulaStorage.types';
 import {fileMagicFormulaStorage} from '../magic-formula/storage/FileMagicFormulaStorage';
 import {
-  KeyValueCache,
-  makeDefaultYahooCache, YahooCacheItem
+  makeDefaultYahooCache,
+  YahooCacheItem
 } from '../enrichment/cache/YahooCache';
+import {KeyValueCache} from '../enrichment/cache/cache.types';
 
 export type AppContext = {
   portfolioStorage: PortfolioStorage,

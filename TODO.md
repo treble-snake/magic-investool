@@ -7,3 +7,4 @@
 * https://www.alphavantage.co/documentation/
 * https://www.yahoofinanceapi.com/
 * file-system-cache - ts version ?
+* Cache cleanup

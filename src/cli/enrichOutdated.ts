@@ -1,11 +1,11 @@
 import {run} from './utils/run';
-import {enrichOutdated} from '../enrichment/enrichOutdated';
-import {fileMagicFormulaStorage} from '../magic-formula/storage/FileMagicFormulaStorage';
+import {defaultContext} from '../context/context';
+import {enrichmentOperations} from '../enrichment/operations';
 
 
 run(async () => {
-  const storage = fileMagicFormulaStorage();
-  const state = await storage.findAll();
-  const enriched = await enrichOutdated(state, 5);
-  await storage.save(enriched);
+  const context = defaultContext();
+  const enriched = await enrichmentOperations(context)
+    .enrichOutdated(await context.mfStorage.findAll(), 5);
+  await context.mfStorage.save(enriched);
 });

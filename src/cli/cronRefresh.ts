@@ -1,7 +1,7 @@
 import {run} from './utils/run';
 import {magicFormulaOperations} from '../magic-formula/operations';
-import {enrichOutdated} from '../enrichment/enrichOutdated';
 import {defaultContext} from '../context/context';
+import {enrichmentOperations} from '../enrichment/operations';
 
 
 run(async () => {
@@ -11,5 +11,6 @@ run(async () => {
 
   // Refresh MF data
   const state = await context.mfStorage.findAll();
-  return context.mfStorage.save(await enrichOutdated(state, 5));
+  return context.mfStorage.save(
+    await enrichmentOperations(context).enrichOutdated(state, 5));
 });

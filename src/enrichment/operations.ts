@@ -1,6 +1,7 @@
-import {logger} from '../common/logging/logger';
+import {AppContext} from '../context/context';
+import {CompanyStock, CoreCompany} from '../common/types/companies.types';
 import {enrichCompany} from './enrichCompany';
-import {CompanyStock} from '../common/types/companies.types';
+import {logger} from '../common/logging/logger';
 
 const getTimestamp = (company: CompanyStock) => {
   if ('lastUpdated' in company && company.lastUpdated) {
@@ -10,7 +11,11 @@ const getTimestamp = (company: CompanyStock) => {
   return 0;
 }
 
-export const enrichOutdated = async (current: CompanyStock[], batchSize = 5) => {
+export const enrichmentOperations = (context: AppContext) => ({
+  enrichCompany(company: CoreCompany) {
+    return enrichCompany(company, context);
+  },
+  async enrichOutdated(current: CompanyStock[], batchSize = 5) {
   logger.info(`Enriching max ${batchSize} outdated companies`);
 
   const toEnrich = [...current]
@@ -20,12 +25,12 @@ export const enrichOutdated = async (current: CompanyStock[], batchSize = 5) => 
   logger.debug(`To enrich: ${toEnrich}`);
 
   // todo: check not today
-  // todo: don't fail all if one fails
   return Promise.all(current.map((company) => {
     if (!toEnrich.includes(company.ticker)) {
       return company;
     }
 
-    return enrichCompany(company);
+    return this.enrichCompany(company);
   }));
 }
+});

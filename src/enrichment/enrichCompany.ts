@@ -11,8 +11,8 @@ import {
   RevenueData,
   ValuationData
 } from '../common/types/ranking.types';
-import {makeDefaultYahooCache} from './cache/YahooCache';
 import {makeEmptyCompany} from './makeEmptyCompany';
+import {AppContext} from '../context/context';
 
 const processRevenue = (incomeHistory: any[]): CompanyIndicator<RevenueData> => {
   const data = sort(prop('timestamp'), incomeHistory.map((it) => ({
@@ -78,13 +78,13 @@ const enrichCompanyWithYahoo = (
 /**
  * Best effort update, should not throw
  */
-export const enrichCompany = async (company: CoreCompany): Promise<CompanyStock> => {
+// TODO: decouple more stuff
+export const enrichCompany = async (company: CoreCompany, context: AppContext): Promise<CompanyStock> => {
   if (!company.ticker) {
     throw new Error('Given company does not have a ticker');
   }
 
-  // TODO: read from context
-  const cache = makeDefaultYahooCache();
+  const cache = context.yahooCache;
 
   logger.info(`Enriching ${company.ticker}`);
   const emptyCompany = makeEmptyCompany(company);
