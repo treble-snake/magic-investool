@@ -12,6 +12,7 @@ import {MockAgent, setGlobalDispatcher} from 'undici';
 import {BASE_YAHOO_URL} from '../../src/common/config';
 import {dummyQuoteSummary} from '../data-source/yahoo/dummyQuoteSummary';
 import {dummyInsight} from '../data-source/yahoo/dummyInsight';
+import {defaultContext} from '../../src/context/context';
 
 type FakeFileStorage<T> = FileStorage<T> & { data: T; };
 
@@ -32,6 +33,7 @@ describe('portfolio operations', () => {
     const portfolio = fakeStorage({lastUpdate: 'xxx', companies: []});
     const history = fakeStorage([]);
     await portfolioOperations({
+      ...defaultContext(),
       portfolioStorage: filePortfolioStorage(portfolio),
       historyStorage: fileHistoryStorage(history)
     }).sell('MISS', 100);
@@ -59,6 +61,7 @@ describe('portfolio operations', () => {
     const expected = [portfolio.data.companies[0], portfolio.data.companies[2]];
 
     await portfolioOperations({
+      ...defaultContext(),
       portfolioStorage: filePortfolioStorage(portfolio),
       historyStorage: fileHistoryStorage(history)
     }).sell('RM', 100);
@@ -94,6 +97,7 @@ describe('portfolio operations', () => {
     const history = fakeStorage([]);
 
     await portfolioOperations({
+      ...defaultContext(),
       portfolioStorage: filePortfolioStorage(portfolio),
       historyStorage: fileHistoryStorage(history)
     }).buy('BANG', 100, 500);
@@ -145,6 +149,7 @@ describe('portfolio operations', () => {
     }).reply(200, dummyInsight('BANG'));
 
     await portfolioOperations({
+      ...defaultContext(),
       portfolioStorage: filePortfolioStorage(portfolio),
       historyStorage: fileHistoryStorage(history)
     }).buy('BANG', 100, 500);

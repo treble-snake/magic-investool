@@ -11,7 +11,7 @@ import {
   RevenueData,
   ValuationData
 } from '../common/types/ranking.types';
-import {addToYahooCache, readYahooCache} from './cache/yahooCache';
+import {makeDefaultYahooCache} from './cache/YahooCache';
 import {makeEmptyCompany} from './makeEmptyCompany';
 
 const processRevenue = (incomeHistory: any[]): CompanyIndicator<RevenueData> => {
@@ -83,6 +83,9 @@ export const enrichCompany = async (company: CoreCompany): Promise<CompanyStock>
     throw new Error('Given company does not have a ticker');
   }
 
+  // TODO: read from context
+  const cache = makeDefaultYahooCache();
+
   logger.info(`Enriching ${company.ticker}`);
   const emptyCompany = makeEmptyCompany(company);
 
@@ -94,7 +97,8 @@ export const enrichCompany = async (company: CoreCompany): Promise<CompanyStock>
     ]);
 
     // TODO: don't wait for cache ?
-    addToYahooCache(company.ticker, {basic, insights});
+    await cache.set(
+      company.ticker, {basic, insights, lastUpdated: new Date().toISOString()});
 
     return {
       ...emptyCompany,
@@ -102,8 +106,7 @@ export const enrichCompany = async (company: CoreCompany): Promise<CompanyStock>
       lastUpdated: new Date().toISOString(),
     };
   } catch (e) {
-    const cache = await readYahooCache();
-    const cachedData = cache?.[company.ticker];
+    const cachedData = await cache.get(company.ticker);
     if (cachedData) {
       return {
         ...emptyCompany,
