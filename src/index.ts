@@ -1,1 +1,3 @@
-console.log(`Run a command using: yarn go src/cli/{command}.ts`);
+export {defaultContext, AppContext} from './context/context';
+export {portfolioOperations} from './portfoio/operations';
+export {magicFormulaOperations} from './magic-formula/operations';
