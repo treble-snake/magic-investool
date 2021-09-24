@@ -1,0 +1,13 @@
+.idea
+node_modules
+dist
+coverage
+*.log
+.env
+reports
+tmp
+_persistance_
+
+# TODO: remove
+cron*.sh
+cron_log.txt
