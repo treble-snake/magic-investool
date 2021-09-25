@@ -1,6 +1,8 @@
 import {ActionType} from './storage/HistoryStorage.types';
 import {AppContext} from '../context/context';
 import {enrichmentOperations} from '../enrichment/operations';
+import {countBy, mapObjIndexed} from 'ramda';
+import {CompanyStock} from '../common/types/companies.types';
 
 export const portfolioOperations = (context: AppContext) => ({
   async sell(ticker: string, pricePerShare: number, date?: Date) {
@@ -50,5 +52,13 @@ export const portfolioOperations = (context: AppContext) => ({
       price: pricePerShare,
       qty
     });
+  },
+  async getSectors() {
+    const companies = await context.portfolioStorage.findAll();
+    const total = companies.length;
+    return mapObjIndexed(
+      (x: number): number => Math.round(100 * 100 * x / total) / 100,
+      countBy((it: CompanyStock) => it.sector)(companies)
+    );
   }
 });

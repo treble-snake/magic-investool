@@ -1,6 +1,7 @@
 import {CompanyStock} from '../common/types/companies.types';
 import {countBy, mapObjIndexed} from 'ramda';
 
+/** @deprecated */
 export const getPortfolioSectors = (companies: CompanyStock[]) => {
   const total = companies.length;
   return mapObjIndexed(
