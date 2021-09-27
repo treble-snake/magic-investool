@@ -11,12 +11,15 @@
   "dependencies": {
     "@investool/engine": "file:../engine",
     "antd": "^4.16.13",
+    "date-fns": "^2.24.0",
     "next": "11.1.2",
+    "ramda": "^0.27.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "swr": "^1.0.1"
   },
   "devDependencies": {
+    "@types/ramda": "^0.27.45",
     "@types/react": "17.0.24",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",

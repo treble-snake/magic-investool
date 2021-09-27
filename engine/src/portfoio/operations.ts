@@ -55,10 +55,9 @@ export const portfolioOperations = (context: AppContext) => ({
   },
   async getSectors() {
     const companies = await context.portfolioStorage.findAll();
-    const total = companies.length;
-    return mapObjIndexed(
-      (x: number): number => Math.round(100 * 100 * x / total) / 100,
-      countBy((it: CompanyStock) => it.sector)(companies)
-    );
+    return Object.entries(countBy((it: CompanyStock) => it.sector)(companies))
+      .reduce((acc, [name, qty]) => {
+        return acc.concat({name, qty});
+      }, [] as Array<{ name: string, qty: number }>);
   }
 });
