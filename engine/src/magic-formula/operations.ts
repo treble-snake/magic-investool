@@ -7,9 +7,9 @@ import {logger} from '../common/logging/logger';
 import {creatReport} from './utils/creatReport';
 import {CompanyStock} from '../common/types/companies.types';
 import {indexBy, prop} from 'ramda';
-import {calculateScores} from '../evaluation/calculateScores';
 import {AppContext} from '../context/context';
 import {enrichmentOperations} from '../enrichment/operations';
+import {rankOperations} from '../evaluation/operations';
 
 const getNewItems = async () => {
   const token = await login(AUTH_EMAIL, AUTH_PASSWORD);
@@ -19,7 +19,7 @@ const getNewItems = async () => {
 
 export const magicFormulaOperations = (context: AppContext) => ({
   async refresh() {
-    const {mfStorage, portfolioStorage} = context;
+    const {mfStorage} = context;
     const [items, state] = await Promise.all([getNewItems(), mfStorage.findAll()]);
     const changes = compareState(state, items);
 
@@ -44,10 +44,8 @@ export const magicFormulaOperations = (context: AppContext) => ({
       })
     );
 
-    logger.info('Calculating scores');
-    await mfStorage.save(calculateScores(
-      enrichedCompanies,
-      await portfolioStorage.findAll()
-    ));
+    logger.info('Calculating scores and ranks');
+    const ranked = await rankOperations(context).scoreAndRank(enrichedCompanies);
+    await mfStorage.save(ranked);
   }
 });

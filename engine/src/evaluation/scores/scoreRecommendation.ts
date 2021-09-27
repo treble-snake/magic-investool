@@ -1,4 +1,4 @@
-import {InsightRecommendationType, RecommendationData} from '../common/types/ranking.types';
+import {InsightRecommendationType, RecommendationData} from '../../common/types/ranking.types';
 
 const INSIGHT_RESULT = Object.freeze({
   [InsightRecommendationType.Sell]: -1,

@@ -90,6 +90,8 @@ export const enrichCompany = async (company: CoreCompany, context: AppContext): 
   const emptyCompany = makeEmptyCompany(company);
 
   try {
+    // TODO: check cache first, if data is fresh - use it
+
     // TODO: don't fail all if only 1 req failed
     const [basic, insights] = await Promise.all([
       getCompanyData(company.ticker),

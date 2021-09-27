@@ -1,4 +1,4 @@
-import {RevenueData} from '../common/types/ranking.types';
+import {RevenueData} from '../../common/types/ranking.types';
 
 export const scoreRevenue = (data: RevenueData) => {
   if (data.length < 2) {

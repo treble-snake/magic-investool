@@ -1,4 +1,1 @@
-export type SectorData = {
-  name: string,
-  qty: number;
-};
+export type Unpacked<T> = T extends PromiseLike<infer U> ? U : T;

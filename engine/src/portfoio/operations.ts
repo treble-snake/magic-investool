@@ -1,8 +1,10 @@
 import {ActionType} from './storage/HistoryStorage.types';
 import {AppContext} from '../context/context';
 import {enrichmentOperations} from '../enrichment/operations';
-import {countBy, mapObjIndexed} from 'ramda';
+import {countBy} from 'ramda';
 import {CompanyStock} from '../common/types/companies.types';
+
+export type SectorQty = { name: string, qty: number };
 
 export const portfolioOperations = (context: AppContext) => ({
   async sell(ticker: string, pricePerShare: number, date?: Date) {
@@ -58,6 +60,6 @@ export const portfolioOperations = (context: AppContext) => ({
     return Object.entries(countBy((it: CompanyStock) => it.sector)(companies))
       .reduce((acc, [name, qty]) => {
         return acc.concat({name, qty});
-      }, [] as Array<{ name: string, qty: number }>);
+      }, [] as SectorQty[]);
   }
 });

@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import {fetcher} from '../../libs/api';
 import {Button, Spin, Table, Tag, Tooltip} from 'antd';
 import {formatDistanceToNow} from 'date-fns';
-import {prop, sum} from 'ramda';
+import {comparator, prop, sum} from 'ramda';
 import {MagicCompany, MagicData} from '../api/magic-formula';
 import {ApiError} from '../../components/error/ApiError';
 import {CheckCircleTwoTone, ReloadOutlined} from '@ant-design/icons';
@@ -36,6 +36,14 @@ export default function MagicFormula() {
              size={'small'}
              pagination={false}
       >
+        <Column<MagicCompany> title={'Rank'} key={'rank'}
+                              sorter={comparator((a, b) => a.rank.total < b.rank.total)}
+                              defaultSortOrder={'ascend'}
+                              render={(_, item) => {
+                                return <Tag>{item.rank.total}</Tag>;
+                              }}
+        />
+
         <Column<MagicCompany> title={'Ticker'} dataIndex={'ticker'}
                               sorter={companyComparator('ticker')}
                               render={(name, item) => {

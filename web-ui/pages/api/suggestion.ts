@@ -1,25 +1,26 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {
   defaultContext,
-  PortfolioCompany,
   portfolioOperations
 } from '@investool/engine';
 import {SectorQty} from '../../../engine/src/portfoio/operations';
+import {Unpacked} from '../../libs/types';
+import {rankOperations} from '@investool/engine';
 
-export type PortfolioData = {
-  companies: PortfolioCompany[],
+export type SuggestionData = {
+  suggestion: Unpacked<ReturnType<ReturnType<typeof rankOperations>['makeSuggestion']>>
   sectors: SectorQty[]
 }
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<PortfolioData>
+  res: NextApiResponse<SuggestionData>
 ) {
   const context = defaultContext();
   const sectors = await portfolioOperations(context).getSectors();
-  const companies = await context.portfolioStorage.findAll();
+  const suggestion = await rankOperations(context).makeSuggestion('2021-10-10');
 
   res.status(200).json({
-    companies, sectors
+    suggestion, sectors
   });
 }

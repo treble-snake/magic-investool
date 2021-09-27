@@ -4,13 +4,13 @@ import {
   defaultContext,
   portfolioOperations
 } from '@investool/engine';
-import {SectorData} from '../../libs/types';
 import {indexBy, prop} from 'ramda';
+import {SectorQty} from '../../../engine/src/portfoio/operations';
 
 export type MagicCompany = CompanyStock & { owned: boolean };
 export type MagicData = {
   magic: MagicCompany[],
-  sectors: SectorData[]
+  sectors: SectorQty[]
 }
 
 export default async function handler(

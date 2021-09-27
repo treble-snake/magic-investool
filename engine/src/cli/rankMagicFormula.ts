@@ -1,24 +1,23 @@
 import {run} from './utils/run';
 import {indexBy, prop} from 'ramda';
-import {filePortfolioStorage} from '../portfoio/storage/FilePortfolioStorage';
 import {JsonFileStorage} from '../storage/file';
-import {rankCompanies} from '../evaluation/rankCompanies';
-import {calculateScores} from '../evaluation/calculateScores';
 import {replaceRevenue} from './utils/replaceRevenue';
-import {fileMagicFormulaStorage} from '../magic-formula/storage/FileMagicFormulaStorage';
+import {defaultContext} from '../context/context';
+import {rankOperations} from '../evaluation/operations';
 
 const storage = new JsonFileStorage<any>('_persistance_/storage/rankedMagicFormula.json');
 
 run(async () => {
-  const mfStorage = fileMagicFormulaStorage();
+  const context = defaultContext();
   const [companies, portfolio] = await Promise.all([
-    mfStorage.findAll(),
-    filePortfolioStorage().findAll()
+    context.mfStorage.findAll(),
+    context.portfolioStorage.findAll()
   ]);
-  const rankedCompanies = rankCompanies(calculateScores(companies, portfolio));
+
+  const rankedCompanies = await rankOperations(context).scoreAndRank(companies);
   const ownedCompanies = indexBy(prop('ticker'), portfolio);
 
-  await mfStorage.save(rankedCompanies);
+  await context.mfStorage.save(rankedCompanies);
   await storage.write(
     rankedCompanies
       .filter(it => !ownedCompanies[it.ticker])
