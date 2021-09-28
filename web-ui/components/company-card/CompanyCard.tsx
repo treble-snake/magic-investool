@@ -26,6 +26,39 @@ type Props = {
 
 const {Item} = Descriptions;
 
+const ValuationIcons = Object.freeze({
+  [ValuationType.Overvalued]: <ArrowUpOutlined />,
+  [ValuationType.Undervalued]: <ArrowDownOutlined />,
+  [ValuationType.NearFair]: <VerticalAlignMiddleOutlined />,
+  [ValuationType.Unknown]: <QuestionOutlined />,
+});
+
+const ValuationColors = Object.freeze({
+  [ValuationType.Overvalued]: '#3f8600',
+  [ValuationType.Undervalued]: '#cf1322',
+  [ValuationType.NearFair]: '#1a3a8d',
+  [ValuationType.Unknown]: '#6c6c6c',
+});
+
+const InsightColors = Object.freeze({
+  [InsightRecommendationType.Buy]: '#3f8600',
+  [InsightRecommendationType.Sell]: '#cf1322',
+  [InsightRecommendationType.Hold]: '#1a3a8d',
+  [InsightRecommendationType.Unknown]: '#6c6c6c',
+});
+
+const getRevColor = (current: number, prev?: number) => {
+  if (!current) {
+    return 'gray';
+  }
+
+  if (!prev) {
+    return undefined;
+  }
+
+  return current > prev ? 'green' : 'red';
+};
+
 export const CompanyCard = ({company, mutate}: Props) => {
   const dataRefresher = (ticker: string) => async () => {
     await fetcher(`/api/refresh/${ticker}`);
@@ -37,26 +70,12 @@ export const CompanyCard = ({company, mutate}: Props) => {
     mutate();
   };
 
-  const ValuationIcon = {
-    [ValuationType.Overvalued]: <ArrowUpOutlined />,
-    [ValuationType.Undervalued]: <ArrowDownOutlined />,
-    [ValuationType.NearFair]: <VerticalAlignMiddleOutlined />,
-    [ValuationType.Unknown]: <QuestionOutlined />,
-  }[company.valuation.data.type];
-  const valuationColor = {
-    [ValuationType.Overvalued]: '#3f8600',
-    [ValuationType.Undervalued]: '#cf1322',
-    [ValuationType.NearFair]: '#1a3a8d',
-    [ValuationType.Unknown]: '#6c6c6c',
-  }[company.valuation.data.type] || '#6c6c6c';
+  const valuationType = company.valuation.data.type || ValuationType.Unknown;
+  const ValuationIcon = ValuationIcons[company.valuation.data.type];
+  const valuationColor = ValuationColors[company.valuation.data.type];
 
   const insightType = company.recommendation.data.insight.type || InsightRecommendationType.Unknown;
-  const insightColor = {
-    [InsightRecommendationType.Buy]: '#3f8600',
-    [InsightRecommendationType.Sell]: '#cf1322',
-    [InsightRecommendationType.Hold]: '#1a3a8d',
-    [InsightRecommendationType.Unknown]: '#6c6c6c',
-  }[insightType];
+  const insightColor = InsightColors[insightType];
 
   const title = <>
     {`${company.ticker} / ${company.name}`}{' '}
@@ -82,7 +101,7 @@ export const CompanyCard = ({company, mutate}: Props) => {
       </Item>
       <Item>
         <Statistic
-          title={company.valuation.data.type}
+          title={valuationType}
           value={company.valuation.data.percentage}
           precision={2}
           valueStyle={{color: valuationColor}}
@@ -103,10 +122,12 @@ export const CompanyCard = ({company, mutate}: Props) => {
         <Timeline mode={'left'} style={{width: '100%'}}>
           {
             company.revenue.data
-              .sort(comparator((a, b) => a.date > b.date))
-              .map(it => <Timeline.Item
+              .sort(comparator((a, b) => a.date < b.date))
+              .map((it, index, all) => <Timeline.Item
                 key={it.timestamp}
-                label={format(it.timestamp * 1000, 'yyyy/MM')}>
+                label={format(it.timestamp * 1000, 'yyyy/MM')}
+              color={getRevColor(it.value, all[index - 1]?.value)}
+              >
                 {it.valueStr}
               </Timeline.Item>)
           }
