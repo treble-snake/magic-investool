@@ -5,10 +5,12 @@ import {PortfolioCompany} from '@investool/engine';
 import {toDate} from '../../libs/date';
 import {formatDistanceToNow} from 'date-fns';
 import {PortfolioData} from '../api/portfolio';
-import {prop, sum} from 'ramda';
 import {ApiError} from '../../components/error/ApiError';
 import {companyComparator} from '../../libs/companyComparator';
 import {ReloadOutlined} from '@ant-design/icons';
+import {SectorTag} from '../../components/sector/SectorTag';
+import {LastUpdated} from '../../components/LastUpdated';
+import {CompanyCard} from '../../components/company-card/CompanyCard';
 
 const {Column} = Table;
 
@@ -26,9 +28,6 @@ export default function Portfolio() {
     return <Spin size={'large'} />;
   }
 
-  const maxSector = Math.max(...data.sectors.map(prop('qty')));
-  const avgSector = sum(data.sectors.map(prop('qty'))) / data.sectors.length;
-
   // TODO: mark items in MgF list
 
   return (
@@ -37,7 +36,7 @@ export default function Portfolio() {
              size={'small'} pagination={false}
              expandable={{
                expandedRowRender: (item) => {
-                 return <Tag>Details will be here</Tag>
+                 return <CompanyCard company={item} mutate={() =>{}}/>
                }
              }}
       >
@@ -64,14 +63,7 @@ export default function Portfolio() {
 
                                     return sectorA.qty - sectorB.qty;
                                   }}
-                                  render={(name) => {
-                                    const sector = data.sectors.find(it => it.name === name);
-                                    const value = sector?.qty || 0;
-                                    const color = value === maxSector ? 'gold' :
-                                      (value >= avgSector ? 'yellow' : 'green');
-                                    return <Tag
-                                      color={color}>{name} x{value}</Tag>;
-                                  }}
+                                  render={(name) => <SectorTag sector={name}/>}
         />
 
         <Column<PortfolioCompany> title={'Purchased at'}
@@ -83,10 +75,7 @@ export default function Portfolio() {
 
         <Column<PortfolioCompany> title={'Data from'} dataIndex={'lastUpdated'}
                                   sorter={companyComparator('lastUpdated')}
-                                  render={(date) => formatDistanceToNow(new Date(date), {
-                                    includeSeconds: false,
-                                    addSuffix: true
-                                  })}
+                                  render={(date) => <LastUpdated date={date} />}
         />
 
         <Column<PortfolioCompany> title={'Actions'} dataIndex={'Actions'}

@@ -5,15 +5,14 @@ import {scoreRevenue} from './scores/scoreRevenue';
 import {scoreValuation} from './scores/scoreValuation';
 import {scoreRecommendation} from './scores/scoreRecommendation';
 import {portfolioOperations, SectorQty} from '../portfoio/operations';
-import {identity, indexBy, mapObjIndexed, prop, sum} from 'ramda';
+import {comparator, indexBy, mapObjIndexed, prop, sum} from 'ramda';
 import {rankCompanies} from './rankCompanies';
 import {findOverdueItems} from '../portfoio/findOverdueItems';
-import {replaceRevenue} from '../cli/utils/replaceRevenue';
-import {logger} from '../common/logging/logger';
-import {format} from 'date-fns';
+
+const DEFAULT_BUY_SIZE = 6;
 
 export const rankOperations = (context: AppContext) => ({
-  async scoreAndRank(companies: CompanyStock[]) {
+  async scoreAndRank<T extends CompanyStock>(companies: T[]) {
     const sectors = await portfolioOperations(context).getSectors();
     const sectorsTotal = sum(sectors.map(prop('qty')));
     const sectorPercentage = mapObjIndexed(
@@ -33,7 +32,11 @@ export const rankOperations = (context: AppContext) => ({
 
     return rankCompanies(withScores);
   },
-  async makeSuggestion(customDate?: string) {
+  async makeSuggestion(options: {
+    customDate?: string,
+    size?: number
+  } = {}) {
+    const {size, customDate} = options;
     const date = customDate ? new Date(customDate) : new Date();
     const [portfolio, mfState] = await Promise.all([
       context.portfolioStorage.findAll(),
@@ -44,23 +47,23 @@ export const rankOperations = (context: AppContext) => ({
     const overdue = findOverdueItems(portfolio, date);
     const toBuyMore = (
       await this.scoreAndRank(overdue.filter(it => magicByTicker[it.ticker]))
-    ).sort((a, b) => -a.rank.total + b.rank.total);
+    ).sort(comparator((a, b) => a.rank.total < b.rank.total))
 
-    const toBuyByTicker = indexBy(prop('ticker'), toBuyMore);
+    const toBuyMoreByTicker = indexBy(prop('ticker'), toBuyMore);
+    // reverse order for "sell" items
     const toSell = (
-      await this.scoreAndRank(overdue.filter(it => !toBuyByTicker[it.ticker]))
-    ).sort((a, b) => a.rank.total - b.rank.total);
+      await this.scoreAndRank(overdue.filter(it => !toBuyMoreByTicker[it.ticker]))
+    ).sort(comparator((a, b) => a.rank.total > b.rank.total));
 
 
-    let toBuy: CompanyStock[] = [];
-    if (toSell.length > 0) {
-      const portfolioByTicker = indexBy(prop('ticker'), portfolio);
-      toBuy = mfState
-        .filter(it => !portfolioByTicker[it.ticker])
-        .sort((a, b) => a.rank.total - b.rank.total)
-        .slice(0, toSell.length * 2)
-    }
+    const portfolioByTicker = indexBy(prop('ticker'), portfolio);
+    // ensure we have the latest ranks
+    const rankedMgf = await this.scoreAndRank(
+      mfState.filter(it => !portfolioByTicker[it.ticker]));
+    const toBuy = rankedMgf
+      .sort(comparator((a, b) => a.rank.total < b.rank.total))
+      .slice(0, size || DEFAULT_BUY_SIZE);
 
-    return {toBuyMore, toBuy, toSell}
+    return {toBuyMore, toBuy, toSell};
   }
 });

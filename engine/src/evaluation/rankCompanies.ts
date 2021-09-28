@@ -1,22 +1,25 @@
 import {CompanyStock} from '../common/types/companies.types';
+import {comparator} from 'ramda';
 
 const indexByScore = (
   companies: CompanyStock[],
   scoreFn: (it: CompanyStock) => number) => {
   return companies
-    .sort((a, b) => scoreFn(a) > scoreFn(b) ? 1 : -1)
+    // the bigger score is the better
+    .sort(comparator((a, b) => scoreFn(a) > scoreFn(b)))
     .reduce((acc, it, index) => {
       acc[it.ticker] = index + 1;
       return acc;
     }, {} as Record<string, number>);
 };
 
-export const rankCompanies = (companies: CompanyStock[]): CompanyStock[] => {
+export const rankCompanies =<T extends CompanyStock> (companies: T[]): T[] => {
   const bySector = indexByScore(companies, it => it.sectorScore);
   const byRevenue = indexByScore(companies, it => it.revenue.score);
   const byRecommendation = indexByScore(companies, it => it.recommendation.score);
   const byValuation = indexByScore(companies, it => it.valuation.score);
 
+  // the smaller the rank is the better
   return companies.map(it => {
     return {
       ...it,

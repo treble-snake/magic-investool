@@ -16,6 +16,11 @@ run(async () => {
     // state.map(omit(['rawFinancialData']))
     await rankOperations(context).scoreAndRank(state)
   );
+
+  const pf = await context.portfolioStorage.findAll();
+  await context.portfolioStorage.save(
+    await rankOperations(context).scoreAndRank(pf)
+  );
   // console.warn(
   //   state.map(pick(['lastUpdated', 'ticker']))
   // );

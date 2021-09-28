@@ -4,11 +4,11 @@ import {
   PortfolioCompany,
   portfolioOperations
 } from '@investool/engine';
-import {SectorQty} from '../../../engine/src/portfoio/operations';
+import {Unpacked} from '../../libs/types';
 
 export type PortfolioData = {
   companies: PortfolioCompany[],
-  sectors: SectorQty[]
+  sectors: Unpacked<ReturnType<ReturnType<typeof portfolioOperations>['getSectors']>>
 }
 
 export default async function handler(

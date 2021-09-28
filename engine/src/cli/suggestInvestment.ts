@@ -22,7 +22,8 @@ run(async () => {
   // TODO: reimplement force update if needed and save force enrichments to portfolio
   // const forceUpdate = process.env.FORCE_UPD === 'true' || process.env.FORCE_UPD === '1';
   // const prepareOverdue = forceUpdate ? enrichAll(context) : identity;
-  const {toSell, toBuy, toBuyMore} = await rankOperations(context).makeSuggestion(process.env.DATE)
+  const {toSell, toBuy, toBuyMore} = await rankOperations(context)
+    .makeSuggestion({customDate: process.env.DATE})
 
   logger.info(`Suggestions:`);
   if (toBuy.length > 0) {

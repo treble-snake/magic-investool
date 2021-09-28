@@ -7,6 +7,9 @@ import {MagicCompany, MagicData} from '../api/magic-formula';
 import {ApiError} from '../../components/error/ApiError';
 import {CheckCircleTwoTone, ReloadOutlined} from '@ant-design/icons';
 import {companyComparator} from '../../libs/companyComparator';
+import {SectorTag} from '../../components/sector/SectorTag';
+import {LastUpdated} from '../../components/LastUpdated';
+import {CompanyCard} from '../../components/company-card/CompanyCard';
 
 const {Column} = Table;
 
@@ -26,15 +29,17 @@ export default function MagicFormula() {
     return <Spin size={'large'} />;
   }
 
-  const maxSector = Math.max(...data.sectors.map(prop('qty')));
-  const avgSector = sum(data.sectors.map(prop('qty'))) / data.sectors.length;
-
   return (
     <>
       <Table dataSource={data.magic}
              rowKey={'ticker'}
              size={'small'}
              pagination={false}
+             expandable={{
+               expandedRowRender: (item) => {
+                 return <CompanyCard company={item} mutate={() =>{}}/>
+               }
+             }}
       >
         <Column<MagicCompany> title={'Rank'} key={'rank'}
                               sorter={comparator((a, b) => a.rank.total < b.rank.total)}
@@ -70,22 +75,12 @@ export default function MagicFormula() {
 
         <Column<MagicCompany> title={'Sector'} dataIndex={'sector'}
                               sorter={companyComparator('sector')}
-                              render={(name) => {
-                                const sector = data.sectors.find(it => it.name === name);
-                                const value = sector?.qty || 0;
-                                const color = value === maxSector ? 'gold' :
-                                  (value >= avgSector ? 'yellow' : 'green');
-                                return <Tag
-                                  color={value === 0 ? 'blue' : color}>{name} x{value}</Tag>;
-                              }}
+                              render={(name) => <SectorTag sector={name} />}
         />
 
         <Column<MagicCompany> title={'Data from'} dataIndex={'lastUpdated'}
                               sorter={companyComparator('lastUpdated')}
-                              render={(date) => formatDistanceToNow(new Date(date), {
-                                includeSeconds: false,
-                                addSuffix: true
-                              })}
+                              render={(date) => <LastUpdated date={date} />}
         />
 
         <Column<MagicCompany> title={'Actions'} dataIndex={'Actions'}
@@ -96,8 +91,7 @@ export default function MagicFormula() {
                                             icon={<ReloadOutlined />}
                                             onClick={() => {
                                               mutate({
-                                                magic: data.magic.splice(0, 1),
-                                                sectors: data.sectors
+                                                magic: data.magic.splice(0, 1)
                                               });
                                             }}
 

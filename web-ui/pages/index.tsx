@@ -1,11 +1,12 @@
 import type {NextPage} from 'next';
 import useSWR from 'swr';
-import {PortfolioData} from './api/portfolio';
 import {fetcher} from '../libs/api';
 import {ApiError} from '../components/error/ApiError';
-import {Spin} from 'antd';
+import {Col, Empty, Row, Spin, Typography} from 'antd';
 import {SuggestionData} from './api/suggestion';
-import {CompanyStock} from '@investool/engine';
+// TODO: not perfect
+import {CompanyStock} from '@investool/engine/dist/types';
+import {CompanyCard} from '../components/company-card/CompanyCard';
 
 const Home: NextPage = () => {
   const {
@@ -21,23 +22,28 @@ const Home: NextPage = () => {
     return <Spin size={'large'} />;
   }
 
-  function list(c: CompanyStock[]) {
-    if (c.length === 0) {
-      return <p>Nothing</p>;
+  function list(items: CompanyStock[]) {
+    if (items.length === 0) {
+      return <Empty />;
     }
 
-    return <ul>
-      {c.map(it => <li key={it.ticker}>{it.name}</li>)}
-    </ul>;
+    return <Row gutter={16}>
+      {items.map((it) => <Col span={8} key={it.ticker}>
+        <CompanyCard company={it} mutate={mutate} />
+      </Col>)}
+    </Row>;
   }
 
   return (
     <>
-      <p>To Buy More:</p>
-      {list(data.suggestion.toBuyMore)}
-      <p>To Sell:</p>
+      <Typography.Title>Up this month</Typography.Title>
+      <Typography.Title level={2}>To Buy More</Typography.Title>
+      <div>
+        {list(data.suggestion.toBuyMore)}
+      </div>
+      <Typography.Title level={2}>To Sell</Typography.Title>
       {list(data.suggestion.toSell)}
-      <p>To Buy New Ones:</p>
+      <Typography.Title level={2}>To Buy New Ones</Typography.Title>
       {list(data.suggestion.toBuy)}
     </>
   );
