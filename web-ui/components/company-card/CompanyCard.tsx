@@ -16,10 +16,12 @@ import {SectorTag} from '../sector/SectorTag';
 import {LastUpdated} from '../LastUpdated';
 import {Revenue} from './Revenue';
 import {CompanyActions} from '../company-actions/CompanyActions';
+import {DetailsLink} from '../DetailsLink';
 
 type Props = {
   company: CompanyStock | PortfolioCompany,
   actionsCallback: Function,
+  showHeader?: boolean
 }
 
 const {Item} = Descriptions;
@@ -45,7 +47,7 @@ const InsightColors = Object.freeze({
   [InsightRecommendationType.Unknown]: '#6c6c6c',
 });
 
-export const CompanyCard = ({company, actionsCallback}: Props) => {
+export const CompanyCard = ({company, actionsCallback, showHeader}: Props) => {
   const valuationType = company.valuation.data.type || ValuationType.Unknown;
   const ValuationIcon = ValuationIcons[company.valuation.data.type];
   const valuationColor = ValuationColors[company.valuation.data.type];
@@ -56,12 +58,16 @@ export const CompanyCard = ({company, actionsCallback}: Props) => {
   const title = <>
     <LastUpdated date={company.lastUpdated} showDiff={false} />
     <Tag>{company.ticker}</Tag>
-    {company.name}
+    <DetailsLink ticker={company.ticker}>
+      {company.name}
+    </DetailsLink>
   </>;
+  const extra = <CompanyActions company={company} callback={actionsCallback} />;
 
-  return <Card title={title} size={'small'}
-               extra={<CompanyActions company={company} callback={actionsCallback} />}
-               style={{marginBottom: 15}}
+  return <Card title={showHeader ? title : null}
+               extra={showHeader ? extra : null}
+               style={showHeader ? {marginBottom: 15} : {}}
+               size={'small'}
   >
     <Descriptions size={'small'} layout={'vertical'}>
       <Item><SectorTag sector={company.sector} showQty={false} /></Item>

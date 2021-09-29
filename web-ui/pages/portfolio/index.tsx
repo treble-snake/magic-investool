@@ -10,6 +10,7 @@ import {SectorTag} from '../../components/sector/SectorTag';
 import {LastUpdated} from '../../components/LastUpdated';
 import {CompanyCard} from '../../components/company-card/CompanyCard';
 import {CompanyActions} from '../../components/company-actions/CompanyActions';
+import {DetailsLink} from '../../components/DetailsLink';
 
 const {Column} = Table;
 
@@ -48,7 +49,9 @@ export default function Portfolio() {
                                       return <>
                                         {company.hasMagic ?
                                           <Tag>Magic</Tag> : null}
-                                        {name} x {company.sharesQty}
+                                        <DetailsLink ticker={company.ticker}>
+                                          {name} x {company.sharesQty}
+                                        </DetailsLink>
                                       </>;
                                     }}
         />

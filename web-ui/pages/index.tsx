@@ -4,7 +4,7 @@ import {fetcher} from '../libs/api';
 import {ApiError} from '../components/error/ApiError';
 import {Col, Empty, Row, Spin, Typography} from 'antd';
 import {SuggestionData} from './api/suggestion';
-// TODO: not perfect
+// TODO: importing from dist/ folder is not cool
 import {CompanyStock} from '@investool/engine/dist/types';
 import {CompanyCard} from '../components/company-card/CompanyCard';
 
@@ -29,7 +29,7 @@ const Home: NextPage = () => {
 
     return <Row gutter={16}>
       {items.map((it) => <Col span={8} key={it.ticker}>
-        <CompanyCard company={it} actionsCallback={mutate} />
+        <CompanyCard showHeader company={it} actionsCallback={mutate} />
       </Col>)}
     </Row>;
   }
