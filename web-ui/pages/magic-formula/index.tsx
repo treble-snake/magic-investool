@@ -1,11 +1,10 @@
 import useSWR from 'swr';
 import {fetcher} from '../../libs/api';
-import {Button, Spin, Table, Tag, Tooltip} from 'antd';
-import {formatDistanceToNow} from 'date-fns';
-import {comparator, prop, sum} from 'ramda';
+import {Spin, Table, Tag} from 'antd';
+import {comparator} from 'ramda';
 import {MagicCompany, MagicData} from '../api/magic-formula';
 import {ApiError} from '../../components/error/ApiError';
-import {CheckCircleTwoTone, ReloadOutlined} from '@ant-design/icons';
+import {CheckCircleTwoTone} from '@ant-design/icons';
 import {companyComparator} from '../../libs/companyComparator';
 import {SectorTag} from '../../components/sector/SectorTag';
 import {LastUpdated} from '../../components/LastUpdated';

@@ -3,7 +3,7 @@ import {fetcher} from '../../libs/api';
 import {Spin, Table, Tag} from 'antd';
 import {PortfolioCompany} from '@investool/engine';
 import {toDate} from '../../libs/date';
-import {PortfolioData} from '../api/portfolio';
+import {PortfolioData, UiPortfolioCompany} from '../api/portfolio';
 import {ApiError} from '../../components/error/ApiError';
 import {companyComparator} from '../../libs/companyComparator';
 import {SectorTag} from '../../components/sector/SectorTag';
@@ -27,7 +27,6 @@ export default function Portfolio() {
     return <Spin size={'large'} />;
   }
 
-  // TODO: mark items in MgF list
   return (
     <>
       <Table dataSource={data.companies} rowKey={'ticker'}
@@ -43,9 +42,15 @@ export default function Portfolio() {
                                   render={(name) => <Tag>{name}</Tag>}
         />
 
-        <Column<PortfolioCompany> title={'Name'} dataIndex={'name'}
-                                  sorter={companyComparator('name')}
-                                  render={(name, company) => `${name} x ${company.sharesQty}`}
+        <Column<UiPortfolioCompany> title={'Name'} dataIndex={'name'}
+                                    sorter={companyComparator('name')}
+                                    render={(name, company) => {
+                                      return <>
+                                        {company.hasMagic ?
+                                          <Tag>Magic</Tag> : null}
+                                        {name} x {company.sharesQty}
+                                      </>;
+                                    }}
         />
 
         <Column<PortfolioCompany> title={'Sector'} dataIndex={'sector'}
