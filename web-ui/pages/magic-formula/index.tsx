@@ -10,6 +10,7 @@ import {companyComparator} from '../../libs/companyComparator';
 import {SectorTag} from '../../components/sector/SectorTag';
 import {LastUpdated} from '../../components/LastUpdated';
 import {CompanyCard} from '../../components/company-card/CompanyCard';
+import {CompanyActions} from '../../components/company-actions/CompanyActions';
 
 const {Column} = Table;
 
@@ -37,7 +38,8 @@ export default function MagicFormula() {
              pagination={false}
              expandable={{
                expandedRowRender: (item) => {
-                 return <CompanyCard company={item} mutate={() =>{}}/>
+                 return <CompanyCard company={item} actionsCallback={() => {
+                 }} />;
                }
              }}
       >
@@ -84,21 +86,9 @@ export default function MagicFormula() {
         />
 
         <Column<MagicCompany> title={'Actions'} dataIndex={'Actions'}
-                              render={(_, item) => {
-                                return <>
-                                  <Tooltip title={'Refresh data'}>
-                                    <Button type={'primary'}
-                                            icon={<ReloadOutlined />}
-                                            onClick={() => {
-                                              mutate({
-                                                magic: data.magic.splice(0, 1)
-                                              });
-                                            }}
-
-                                    />
-                                  </Tooltip>
-                                </>;
-                              }}
+                              render={(_, item) =>
+                                <CompanyActions company={item}
+                                                callback={mutate} />}
         />
 
       </Table>

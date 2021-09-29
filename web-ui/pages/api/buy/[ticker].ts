@@ -1,26 +1,21 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
-import {
-  CoreCompany,
-  defaultContext,
-  portfolioOperations,
-  rankOperations
-} from '@investool/engine';
-import {Unpacked} from '../../../libs/types';
-import {enrichmentOperations} from '@investool/engine/dist/enrichment/operations';
+import {defaultContext, portfolioOperations} from '@investool/engine';
+
+type Body = {
+  price: number,
+  qty: number,
+  date: string
+};
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<any>
+  res: NextApiResponse<void>
 ) {
   const context = defaultContext();
-  const {ticker} = req.query;
-  const {price} = req.body;
+  const ticker = String(req.query.ticker);
+  const {price, qty, date} = req.body as Body;
 
-  console.warn('ticker', ticker, 'price', price);
-  await portfolioOperations(context).buy(String(ticker), 666, price);
+  await portfolioOperations(context).buy(ticker, qty, price, new Date(date));
 
-
-  res.status(200).json({
-    ok: 1
-  });
+  res.status(204).send();
 }

@@ -8,20 +8,18 @@ import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   QuestionOutlined,
-  ReloadOutlined,
   VerticalAlignMiddleOutlined
 } from '@ant-design/icons';
-import {Button, Card, Descriptions, Statistic, Tag, Timeline} from 'antd';
-import {toDate} from '../../libs/date';
-import {comparator, omit} from 'ramda';
-import {format} from 'date-fns';
-import {fetcher} from '../../libs/api';
+import {Card, Descriptions, Statistic, Tag, Timeline} from 'antd';
+import {omit} from 'ramda';
 import {SectorTag} from '../sector/SectorTag';
 import {LastUpdated} from '../LastUpdated';
+import {Revenue} from './Revenue';
+import {CompanyActions} from '../company-actions/CompanyActions';
 
 type Props = {
   company: CompanyStock | PortfolioCompany,
-  mutate: Function
+  actionsCallback: Function,
 }
 
 const {Item} = Descriptions;
@@ -47,29 +45,7 @@ const InsightColors = Object.freeze({
   [InsightRecommendationType.Unknown]: '#6c6c6c',
 });
 
-const getRevColor = (current: number, prev?: number) => {
-  if (!current) {
-    return 'gray';
-  }
-
-  if (!prev) {
-    return undefined;
-  }
-
-  return current > prev ? 'green' : 'red';
-};
-
-export const CompanyCard = ({company, mutate}: Props) => {
-  const dataRefresher = (ticker: string) => async () => {
-    await fetcher(`/api/refresh/${ticker}`);
-    mutate();
-  };
-
-  const sellHandler = (ticker: string) => async () => {
-    await fetcher(`/api/buy/${ticker}`, {price: 101});
-    mutate();
-  };
-
+export const CompanyCard = ({company, actionsCallback}: Props) => {
   const valuationType = company.valuation.data.type || ValuationType.Unknown;
   const ValuationIcon = ValuationIcons[company.valuation.data.type];
   const valuationColor = ValuationColors[company.valuation.data.type];
@@ -78,27 +54,17 @@ export const CompanyCard = ({company, mutate}: Props) => {
   const insightColor = InsightColors[insightType];
 
   const title = <>
-    {`${company.ticker} / ${company.name}`}{' '}
-    <LastUpdated date={company.lastUpdated} showDiff={false}/>
-  </>;
-
-  const actions = <>
-    <Button type={'primary'} size={'small'} icon={<ReloadOutlined />}
-            onClick={dataRefresher(company.ticker)} />
-    {' '}
-    <Button type={'primary'} size={'small'}
-            onClick={sellHandler(company.ticker)}
-    >Do it!</Button>
+    <LastUpdated date={company.lastUpdated} showDiff={false} />
+    <Tag>{company.ticker}</Tag>
+    {company.name}
   </>;
 
   return <Card title={title} size={'small'}
-               extra={actions}
+               extra={<CompanyActions company={company} callback={actionsCallback} />}
                style={{marginBottom: 15}}
   >
     <Descriptions size={'small'} layout={'vertical'}>
-      <Item>
-        <SectorTag sector={company.sector} showQty={false}/>
-      </Item>
+      <Item><SectorTag sector={company.sector} showQty={false} /></Item>
       <Item>
         <Statistic
           title={valuationType}
@@ -119,19 +85,7 @@ export const CompanyCard = ({company, mutate}: Props) => {
       </Item>
 
       <Item>
-        <Timeline mode={'left'} style={{width: '100%'}}>
-          {
-            company.revenue.data
-              .sort(comparator((a, b) => a.date < b.date))
-              .map((it, index, all) => <Timeline.Item
-                key={it.timestamp}
-                label={format(it.timestamp * 1000, 'yyyy/MM')}
-              color={getRevColor(it.value, all[index - 1]?.value)}
-              >
-                {it.valueStr}
-              </Timeline.Item>)
-          }
-        </Timeline>
+        <Revenue data={company.revenue.data} />
       </Item>
 
 
@@ -163,4 +117,4 @@ export const CompanyCard = ({company, mutate}: Props) => {
       </Item>
     </Descriptions>
   </Card>;
-}
+};

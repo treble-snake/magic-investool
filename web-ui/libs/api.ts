@@ -1,4 +1,4 @@
-// TODO: type properly
+// TODO: use Axios?
 export const fetcher = async (url: string, body?: any) => {
   const options: RequestInit = body ? {
     method: 'POST',
@@ -7,5 +7,11 @@ export const fetcher = async (url: string, body?: any) => {
   } : {};
 
   const res = await fetch(url, options);
-  return res.json();
+  if (res.status >= 400) {
+    console.debug('Failed request\'s response:', res);
+    throw new Error(res.status + ': ' + res.statusText);
+  }
+  if (res.status !== 204) {
+    return res.json();
+  }
 };

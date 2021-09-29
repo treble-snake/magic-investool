@@ -29,7 +29,7 @@ const Home: NextPage = () => {
 
     return <Row gutter={16}>
       {items.map((it) => <Col span={8} key={it.ticker}>
-        <CompanyCard company={it} mutate={mutate} />
+        <CompanyCard company={it} actionsCallback={mutate} />
       </Col>)}
     </Row>;
   }

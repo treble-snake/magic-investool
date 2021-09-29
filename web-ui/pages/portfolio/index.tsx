@@ -1,16 +1,15 @@
 import useSWR from 'swr';
 import {fetcher} from '../../libs/api';
-import {Button, Spin, Table, Tag, Tooltip} from 'antd';
+import {Spin, Table, Tag} from 'antd';
 import {PortfolioCompany} from '@investool/engine';
 import {toDate} from '../../libs/date';
-import {formatDistanceToNow} from 'date-fns';
 import {PortfolioData} from '../api/portfolio';
 import {ApiError} from '../../components/error/ApiError';
 import {companyComparator} from '../../libs/companyComparator';
-import {ReloadOutlined} from '@ant-design/icons';
 import {SectorTag} from '../../components/sector/SectorTag';
 import {LastUpdated} from '../../components/LastUpdated';
 import {CompanyCard} from '../../components/company-card/CompanyCard';
+import {CompanyActions} from '../../components/company-actions/CompanyActions';
 
 const {Column} = Table;
 
@@ -29,14 +28,13 @@ export default function Portfolio() {
   }
 
   // TODO: mark items in MgF list
-
   return (
     <>
       <Table dataSource={data.companies} rowKey={'ticker'}
              size={'small'} pagination={false}
              expandable={{
                expandedRowRender: (item) => {
-                 return <CompanyCard company={item} mutate={() =>{}}/>
+                 return <CompanyCard company={item} actionsCallback={mutate} />;
                }
              }}
       >
@@ -63,7 +61,7 @@ export default function Portfolio() {
 
                                     return sectorA.qty - sectorB.qty;
                                   }}
-                                  render={(name) => <SectorTag sector={name}/>}
+                                  render={(name) => <SectorTag sector={name} />}
         />
 
         <Column<PortfolioCompany> title={'Purchased at'}
@@ -79,19 +77,9 @@ export default function Portfolio() {
         />
 
         <Column<PortfolioCompany> title={'Actions'} dataIndex={'Actions'}
-                                  render={(_, item) => {
-                                    return <>
-                                      <Tooltip title={'Refresh data'}>
-                                        <Button type={'primary'}
-                                                icon={<ReloadOutlined />}
-                                                onClick={() => {
-                                                  mutate();
-                                                }}
-
-                                        />
-                                      </Tooltip>
-                                    </>;
-                                  }}
+                                  render={(_, item) =>
+                                    <CompanyActions company={item}
+                                                    callback={mutate} />}
         />
       </Table>
     </>
