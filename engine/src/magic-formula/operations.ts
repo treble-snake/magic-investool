@@ -48,5 +48,17 @@ export const magicFormulaOperations = (context: AppContext) => ({
     logger.info('Calculating scores and ranks');
     const ranked = await rankOperations(context).scoreAndRank(enrichedCompanies);
     await mfStorage.save(ranked);
+  },
+  async updateAll() {
+    const {mfStorage} = context;
+    const state = await mfStorage.findAll();
+
+    logger.info('Fetching financial data');
+    const enrichmentOps = enrichmentOperations(context);
+    const enrichedCompanies = await Promise.all(
+      state.map((it) => enrichmentOps.enrichCompany(it)));
+
+    logger.info('Calculating scores and ranks');
+    await mfStorage.save(await rankOperations(context).scoreAndRank(enrichedCompanies));
   }
 });

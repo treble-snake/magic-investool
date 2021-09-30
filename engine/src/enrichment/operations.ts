@@ -15,15 +15,17 @@ const getTimestamp = (company: CompanyStock) => {
   return 0;
 };
 
-const fetchData = async (ticker: string, context: AppContext) => {
+const fetchData = async (ticker: string, forceUpdate: boolean, context: AppContext) => {
   logger.info(`Enriching ${ticker}`);
 
-  const cached = await context.yahooCache.get(ticker);
-  if (cached) {
-    const cacheAge = differenceInHours(new Date(), new Date(cached.lastUpdated));
-    if (cacheAge <= context.config.FINANCE_CACHE_THRESHOLD_HRS) {
-      logger.debug(`Using fresh enough (${cacheAge}h) cache values for ${ticker}`);
-      return cached;
+  if (!forceUpdate) {
+    const cached = await context.yahooCache.get(ticker);
+    if (cached) {
+      const cacheAge = differenceInHours(new Date(), new Date(cached.lastUpdated));
+      if (cacheAge <= context.config.FINANCE_CACHE_THRESHOLD_HRS) {
+        logger.debug(`Using fresh enough (${cacheAge}h) cache values for ${ticker}`);
+        return cached;
+      }
     }
   }
 
@@ -45,14 +47,19 @@ const fetchData = async (ticker: string, context: AppContext) => {
 export const enrichmentOperations = (context: AppContext) => ({
   /**
    * Best effort update, should not throw
+   * @param company - at least ticker should be defined
+   * @param forceUpdate - tries to get frmo cache first if false, skips cache check if true
    */
-  async enrichCompany(company: Partial<CoreCompany> & Pick<CoreCompany, 'ticker'>) {
+  async enrichCompany(
+    company: Partial<CoreCompany> & Pick<CoreCompany, 'ticker'>,
+    forceUpdate = false
+  ) {
     if (!company.ticker) {
       throw new Error('Given company does not have a ticker');
     }
 
     // TODO: cache gets called twice (1st time in fetchData())
-    const data = await fetchData(company.ticker, context)
+    const data = await fetchData(company.ticker, forceUpdate, context)
       .catch(e => context.yahooCache.get(company.ticker));
 
     if (data) {

@@ -5,6 +5,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<void>
 ) {
-  await magicFormulaOperations(defaultContext()).refresh();
+  await magicFormulaOperations(defaultContext()).updateAll();
   res.status(204).send();
 }

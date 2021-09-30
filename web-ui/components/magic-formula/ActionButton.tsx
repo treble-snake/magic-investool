@@ -6,16 +6,23 @@ import styles from './ActionButton.module.css';
 type Props = {
   url: string,
   text: string | null,
-  icon?: ReactNode
+  icon?: ReactNode,
+  callback: Function
 }
-export const ActionButton = ({url, text, icon}: Props) => {
+export const ActionButton = ({url, text, icon, callback}: Props) => {
   const [loading, setLoading] = useState(false);
 
   const click = async () => {
     setLoading(true);
     fetcher(url)
-      .then(() => message.success('Operation succeeded!'))
-      .catch((e) => message.error('Operation failed.'))
+      .then(() => {
+        callback();
+        message.success('Operation succeeded!')
+      })
+      .catch((e) => {
+        console.error(e);
+        message.error('Operation failed.')
+      })
       .finally(() => setLoading(false));
   };
 

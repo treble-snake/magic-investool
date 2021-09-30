@@ -39,10 +39,9 @@ export default function MagicFormula() {
     <>
       <div style={{marginBottom: 15}}>
         <ActionButton text={'Sync MagicFormula'} url={'/api/magic-formula/sync'}
-                      icon={<DownloadOutlined/>}/>
-        {/* TODO implement*/}
-        <ActionButton text={'Update all (not implemented)'} url={'/api/magic-formula/refresh'}
-                      icon={<ReloadOutlined />}/>
+                      icon={<DownloadOutlined/>} callback={mutate}/>
+        <ActionButton text={'Update financial data'} url={'/api/magic-formula/update'}
+                      icon={<ReloadOutlined />} callback={mutate}/>
       </div>
       <Table dataSource={data.magic}
              rowKey={'ticker'}

@@ -1,41 +1,31 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
-import {
-  CoreCompany,
-  defaultContext,
-  portfolioOperations,
-  rankOperations
-} from '@investool/engine';
-import {Unpacked} from '../../../libs/types';
+import {defaultContext, rankOperations} from '@investool/engine';
 import {enrichmentOperations} from '@investool/engine/dist/enrichment/operations';
+
+type Query = {
+  ticker: string,
+};
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<any>
+  res: NextApiResponse<void>
 ) {
   const context = defaultContext();
-  const [portfolio, mgfState] = await Promise.all([
-    context.portfolioStorage.findAll(),
-    context.mfStorage.findAll()
-  ]);
+  const {ticker} = req.query as Query;
 
-  const {ticker} = req.query;
-
-  const freshData = await enrichmentOperations(context).enrichCompany({
-    // TODO: improve interface?
-    ticker: req.query.ticker
-  } as CoreCompany);
+  const mfState = await context.mfStorage.findAll();
+  const freshData = await enrichmentOperations(context)
+    .enrichCompany({ticker}, true);
 
   // no need to rank the portfolio
   await context.portfolioStorage.updateOne(String(ticker), freshData);
 
   // TODO: updateOne method?
-  if (mgfState.some(it => it.ticker === ticker)) {
+  if (mfState.some(it => it.ticker === ticker)) {
     await context.mfStorage.save(
       await rankOperations(context).scoreAndRank(
-        mgfState.map(it => it.ticker === ticker ? {...it, ...freshData} : it)));
+        mfState.map(it => it.ticker === ticker ? {...it, ...freshData} : it)));
   }
 
-  res.status(200).json({
-    ok: 1
-  });
+  res.status(204).json();
 }
