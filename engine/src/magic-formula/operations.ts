@@ -1,5 +1,5 @@
 import {login} from './data-source/methods/login';
-import {AUTH_EMAIL, AUTH_PASSWORD} from './data-source/config';
+import {MF_AUTH_EMAIL, MF_AUTH_PASSWORD} from './data-source/config';
 import {getCompanies} from './data-source/methods/getCompanies';
 import {parseHtml} from './data-source/helpers/parseHtml';
 import {compareState} from './utils/compareState';
@@ -12,7 +12,7 @@ import {enrichmentOperations} from '../enrichment/operations';
 import {rankOperations} from '../evaluation/operations';
 
 const getNewItems = async () => {
-  const token = await login(AUTH_EMAIL, AUTH_PASSWORD);
+  const token = await login(MF_AUTH_EMAIL, MF_AUTH_PASSWORD);
   const html = await getCompanies(token);
   return parseHtml(html);
 };
@@ -34,10 +34,11 @@ export const magicFormulaOperations = (context: AppContext) => ({
       .catch(e => logger.warn('Failed to create a report', e));
 
     logger.info('Fetching financial data');
+    const enrichmentOps = enrichmentOperations(context);
     const addedByTicker = indexBy(prop('ticker'), changes.added);
     const enrichedCompanies = await Promise.all(changes.combined.map((it) => {
         if (addedByTicker[it.ticker]) {
-          return enrichmentOperations(context).enrichCompany(it);
+          return enrichmentOps.enrichCompany(it);
         }
 
         return it as CompanyStock;

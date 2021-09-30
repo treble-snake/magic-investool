@@ -1,16 +1,22 @@
 import useSWR from 'swr';
 import {fetcher} from '../../libs/api';
-import {Spin, Table, Tag} from 'antd';
+import {Button, Spin, Table, Tag} from 'antd';
 import {comparator} from 'ramda';
 import {MagicCompany, MagicData} from '../api/magic-formula';
 import {ApiError} from '../../components/error/ApiError';
-import {CheckCircleTwoTone} from '@ant-design/icons';
+import {
+  CheckCircleTwoTone,
+  DownloadOutlined,
+  ReloadOutlined
+} from '@ant-design/icons';
 import {objectComparator} from '../../libs/objectComparator';
 import {SectorTag} from '../../components/sector/SectorTag';
 import {LastUpdated} from '../../components/LastUpdated';
 import {CompanyCard} from '../../components/company-card/CompanyCard';
 import {CompanyActions} from '../../components/company-actions/CompanyActions';
 import {DetailsLink} from '../../components/DetailsLink';
+import {PortfolioOperation} from '../../components/company-actions/PortfolioOperation';
+import {ActionButton} from '../../components/magic-formula/ActionButton';
 
 const {Column} = Table;
 
@@ -31,6 +37,13 @@ export default function MagicFormula() {
 
   return (
     <>
+      <div style={{marginBottom: 15}}>
+        <ActionButton text={'Sync MagicFormula'} url={'/api/magic-formula/sync'}
+                      icon={<DownloadOutlined/>}/>
+        {/* TODO implement*/}
+        <ActionButton text={'Update all (not implemented)'} url={'/api/magic-formula/refresh'}
+                      icon={<ReloadOutlined />}/>
+      </div>
       <Table dataSource={data.magic}
              rowKey={'ticker'}
              size={'small'}

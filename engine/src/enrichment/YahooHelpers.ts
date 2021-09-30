@@ -13,6 +13,7 @@ import {
 } from '../common/types/ranking.types';
 import {makeEmptyCompany} from './makeEmptyCompany';
 import {AppContext} from '../context/context';
+import {differenceInHours} from 'date-fns';
 
 const processRevenue = (incomeHistory: any[]): CompanyIndicator<RevenueData> => {
   const data = sort(prop('timestamp'), incomeHistory.map((it) => ({
@@ -57,7 +58,7 @@ function mapRecommendation(basic: BasicResult, insights: InsightResult): Company
   };
 }
 
-const enrichCompanyWithYahoo = (
+export const enrichCompanyWithYahoo = (
   basic: BasicResult,
   insights: InsightResult
 ): Omit<CompanyStock, 'rank' | 'ticker' | 'lastUpdated'> => {
@@ -73,50 +74,4 @@ const enrichCompanyWithYahoo = (
     valuation: mapValuation(insights),
     recommendation: mapRecommendation(basic, insights),
   };
-};
-
-/**
- * Best effort update, should not throw
- */
-// TODO: decouple more stuff
-export const enrichCompany = async (company: CoreCompany, context: AppContext): Promise<CompanyStock> => {
-  if (!company.ticker) {
-    throw new Error('Given company does not have a ticker');
-  }
-
-  const cache = context.yahooCache;
-
-  logger.info(`Enriching ${company.ticker}`);
-  const emptyCompany = makeEmptyCompany(company);
-
-  try {
-    // TODO: check cache first, if data is fresh - use it
-
-    // TODO: don't fail all if only 1 req failed
-    const [basic, insights] = await Promise.all([
-      getCompanyData(company.ticker),
-      getInsightData(company.ticker)
-    ]);
-
-    // TODO: don't wait for cache ?
-    await cache.set(
-      company.ticker, {basic, insights, lastUpdated: new Date().toISOString()});
-
-    return {
-      ...emptyCompany,
-      ...enrichCompanyWithYahoo(basic, insights),
-      lastUpdated: new Date().toISOString(),
-    };
-  } catch (e) {
-    const cachedData = await cache.get(company.ticker);
-    if (cachedData) {
-      return {
-        ...emptyCompany,
-        ...enrichCompanyWithYahoo(cachedData.basic, cachedData.insights),
-        lastUpdated: cachedData.lastUpdated,
-      };
-    }
-
-    return emptyCompany;
-  }
 };

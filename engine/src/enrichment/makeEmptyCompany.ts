@@ -2,7 +2,7 @@ import {CompanyStock, CoreCompany} from '../common/types/companies.types';
 import {InsightRecommendationType, ValuationType} from '../common/types/ranking.types';
 import {subYears} from 'date-fns';
 
-export const makeEmptyCompany = (core: CoreCompany): CompanyStock => {
+export const makeEmptyCompany = (core: Partial<CoreCompany> & Pick<CoreCompany, 'ticker'>): CompanyStock => {
   return {
     sector: '',
     sectorScore: 0,
@@ -43,6 +43,7 @@ export const makeEmptyCompany = (core: CoreCompany): CompanyStock => {
       byValuation: 0,
       total: 0
     },
+    name: core.ticker,
     ...core
   };
 };

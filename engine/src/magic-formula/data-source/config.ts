@@ -1,2 +1,2 @@
-export const AUTH_EMAIL = process.env.AUTH_EMAIL || '';
-export const AUTH_PASSWORD = process.env.AUTH_PASSWORD || '';
+export const MF_AUTH_EMAIL = process.env.MF_AUTH_EMAIL || '';
+export const MF_AUTH_PASSWORD = process.env.MF_AUTH_PASSWORD || '';

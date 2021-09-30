@@ -10,3 +10,4 @@ export const MAGIC_FORMULA_FILENAME = process.env.PORTFOLIO_FILENAME || 'mfState
 // APIs
 export const YAHOO_API_KEY = process.env.YAHOO_API_KEY || '';
 export const BASE_YAHOO_URL = process.env.BASE_YAHOO_URL || 'https://yfapi.net';
+export const FINANCE_CACHE_THRESHOLD_HRS = Number(process.env.FINANCE_CACHE_THRESHOLD_HRS) || 24;
