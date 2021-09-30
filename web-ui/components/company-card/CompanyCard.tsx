@@ -74,8 +74,7 @@ export const CompanyCard = ({company, actionsCallback, showHeader}: Props) => {
       <Item>
         <Statistic
           title={valuationType}
-          value={company.valuation.data.percentage}
-          precision={2}
+          value={Math.round(company.valuation.data.percentage * 100)}
           valueStyle={{color: valuationColor}}
           prefix={ValuationIcon}
           suffix="%"
@@ -93,7 +92,6 @@ export const CompanyCard = ({company, actionsCallback, showHeader}: Props) => {
       <Item>
         <Revenue data={company.revenue.data} />
       </Item>
-
 
       <Item>
         <Timeline mode={'left'} style={{width: '100%'}}>

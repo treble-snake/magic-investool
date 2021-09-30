@@ -5,12 +5,13 @@ import {PortfolioCompany} from '@investool/engine';
 import {toDate} from '../../libs/date';
 import {PortfolioData, UiPortfolioCompany} from '../api/portfolio';
 import {ApiError} from '../../components/error/ApiError';
-import {companyComparator} from '../../libs/companyComparator';
+import {objectComparator} from '../../libs/objectComparator';
 import {SectorTag} from '../../components/sector/SectorTag';
 import {LastUpdated} from '../../components/LastUpdated';
 import {CompanyCard} from '../../components/company-card/CompanyCard';
 import {CompanyActions} from '../../components/company-actions/CompanyActions';
 import {DetailsLink} from '../../components/DetailsLink';
+import {PortfolioOperation} from '../../components/company-actions/PortfolioOperation';
 
 const {Column} = Table;
 
@@ -30,6 +31,9 @@ export default function Portfolio() {
 
   return (
     <>
+      <div style={{marginBottom: 15}}>
+        <PortfolioOperation callback={mutate} isBuy/>
+      </div>
       <Table dataSource={data.companies} rowKey={'ticker'}
              size={'small'} pagination={false}
              expandable={{
@@ -39,12 +43,12 @@ export default function Portfolio() {
              }}
       >
         <Column<PortfolioCompany> title={'Ticker'} dataIndex={'ticker'}
-                                  sorter={companyComparator('ticker')}
+                                  sorter={objectComparator('ticker')}
                                   render={(name) => <Tag>{name}</Tag>}
         />
 
         <Column<UiPortfolioCompany> title={'Name'} dataIndex={'name'}
-                                    sorter={companyComparator('name')}
+                                    sorter={objectComparator('name')}
                                     render={(name, company) => {
                                       return <>
                                         {company.hasMagic ?
@@ -74,13 +78,13 @@ export default function Portfolio() {
 
         <Column<PortfolioCompany> title={'Purchased at'}
                                   dataIndex={'purchaseDate'}
-                                  sorter={companyComparator('purchaseDate')}
+                                  sorter={objectComparator('purchaseDate')}
                                   defaultSortOrder={'ascend'}
                                   render={(date) => toDate(new Date(date))}
         />
 
         <Column<PortfolioCompany> title={'Data from'} dataIndex={'lastUpdated'}
-                                  sorter={companyComparator('lastUpdated')}
+                                  sorter={objectComparator('lastUpdated')}
                                   render={(date) => <LastUpdated date={date} />}
         />
 
