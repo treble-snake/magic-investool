@@ -1,5 +1,6 @@
 import {compareState} from '../../src/magic-formula/utils/compareState';
 import {makeEmptyCompany} from '../../src/enrichment/makeEmptyCompany';
+import {omit} from 'ramda';
 
 const OLD_STATE = [
   makeEmptyCompany({
@@ -67,7 +68,12 @@ describe('compareState', () => {
       NEW_STATE.concat({name: 'Same 1', ticker: 'ASAME'})
     )).toEqual(({
       added: NEW_STATE, removed: OLD_STATE, combined: [
-        makeEmptyCompany({name: 'Same 1', ticker: 'ASAME'}),
+        expect.objectContaining(
+          omit(['lastUpdated'], makeEmptyCompany({
+            name: 'Same 1',
+            ticker: 'ASAME'
+          }))
+        ),
         {name: 'New 1', ticker: 'NEW1'},
         {name: 'New 2', ticker: 'NEW2'},
       ]

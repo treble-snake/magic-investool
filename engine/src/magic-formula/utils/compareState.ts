@@ -3,7 +3,7 @@ import {CompanyStock, CoreCompany} from '../../common/types/companies.types';
 
 export type StateComparison = {
   added: CoreCompany[],
-  removed: CompanyStock[],
+  removed:  (CoreCompany | CompanyStock)[],
   combined: (CoreCompany | CompanyStock)[],
 }
 

@@ -26,6 +26,9 @@ export const Wrapper = ({children}: any) => {
           <Menu.Item key="/magic-formula">
             <Link href={'/magic-formula'}>Magic Formula</Link>
           </Menu.Item>
+          <Menu.Item key="/magic-formula/changelog">
+            <Link href={'/magic-formula/changelog'}>MF Changelog</Link>
+          </Menu.Item>
           <Menu.Item key="/history">
             <Link href={'/history'}>History</Link>
           </Menu.Item>

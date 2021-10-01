@@ -10,11 +10,14 @@ import {
 } from '../enrichment/cache/YahooCache';
 import {KeyValueCache} from '../common/types/cache.types';
 import * as config from '../common/config';
+import {fileChangelogStorage} from '../magic-formula/changelog/FileChangelogStorage';
+import {ChangelogStorage} from '../magic-formula/changelog/ChangelogStorage.types';
 
 export type AppContext = {
   portfolioStorage: PortfolioStorage,
   historyStorage: HistoryStorage,
   mfStorage: MagicFormulaStorage,
+  mfChangelogStorage: ChangelogStorage,
   yahooCache: KeyValueCache<YahooCacheItem>,
   config: typeof config
 };
@@ -24,6 +27,7 @@ export const defaultContext = (): AppContext => {
     portfolioStorage: filePortfolioStorage(),
     historyStorage: fileHistoryStorage(),
     mfStorage: fileMagicFormulaStorage(),
+    mfChangelogStorage: fileChangelogStorage(),
     yahooCache: makeDefaultYahooCache(),
     config
   };

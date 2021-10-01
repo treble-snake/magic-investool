@@ -3,46 +3,31 @@ import {
   CoreCompany,
   PortfolioCompany
 } from '../../src/common/types/companies.types';
-import {FileStorage} from '../../src/storage/file';
 import {filePortfolioStorage} from '../../src/portfoio/storage/FilePortfolioStorage';
 import {makeEmptyCompany} from '../../src/enrichment/makeEmptyCompany';
 import {fileHistoryStorage} from '../../src/portfoio/storage/FileHistoryStorage';
-import {clone} from 'ramda';
 import {MockAgent, setGlobalDispatcher} from 'undici';
 import {BASE_YAHOO_URL} from '../../src/common/config';
 import {dummyQuoteSummary} from '../data-source/yahoo/dummyQuoteSummary';
 import {dummyInsight} from '../data-source/yahoo/dummyInsight';
 import {defaultContext} from '../../src/context/context';
-
-type FakeFileStorage<T> = FileStorage<T> & { data: T; };
-
-const fakeStorage = <T>(init: T): FakeFileStorage<T> => {
-  return {
-    data: clone(init),
-    async read() {
-      return clone(this.data);
-    },
-    async write(data: T) {
-      this.data = clone(data);
-    }
-  };
-};
+import {fakeFileStorage} from '../utils/fakeFileStorage';
 
 describe('portfolio operations', () => {
   it('should do nothing trying to sell a missing item', async () => {
-    const portfolio = fakeStorage({lastUpdate: 'xxx', companies: []});
-    const history = fakeStorage([]);
+    const portfolio = fakeFileStorage({lastUpdate: 'xxx', companies: []});
+    const history = fakeFileStorage([]);
     await portfolioOperations({
       ...defaultContext(),
       portfolioStorage: filePortfolioStorage(portfolio),
       historyStorage: fileHistoryStorage(history)
     }).sell('MISS', 100);
-    expect(portfolio.data.companies).toEqual([]);
+    expect(portfolio.data?.companies).toEqual([]);
     expect(history.data).toEqual([]);
   });
 
   it('should remove an existing item when selling', async () => {
-    const portfolio = fakeStorage({
+    const portfolio = fakeFileStorage({
       lastUpdate: 'xxx', companies: [
         makeEmptyCompany({ticker: 'ABC', name: 'ABC Inc'}) as PortfolioCompany,
         makeEmptyCompany({
@@ -56,9 +41,9 @@ describe('portfolio operations', () => {
         }) as PortfolioCompany,
       ]
     });
-    const history = fakeStorage([]);
+    const history = fakeFileStorage([]);
 
-    const expected = [portfolio.data.companies[0], portfolio.data.companies[2]];
+    const expected = [portfolio.data?.companies[0], portfolio.data?.companies[2]];
 
     await portfolioOperations({
       ...defaultContext(),
@@ -66,7 +51,7 @@ describe('portfolio operations', () => {
       historyStorage: fileHistoryStorage(history)
     }).sell('RM', 100);
 
-    expect(portfolio.data.companies).toEqual(expected);
+    expect(portfolio.data?.companies).toEqual(expected);
     expect(history.data).toEqual([
       expect.objectContaining({
         date: expect.any(String),
@@ -80,7 +65,7 @@ describe('portfolio operations', () => {
   });
 
   it('should add shares to existing qty when buying', async () => {
-    const portfolio = fakeStorage({
+    const portfolio = fakeFileStorage({
       lastUpdate: 'xxx', companies: [
         makeEmptyCompany({
           ticker: 'ABC',
@@ -94,7 +79,7 @@ describe('portfolio operations', () => {
         } as CoreCompany) as PortfolioCompany,
       ]
     });
-    const history = fakeStorage([]);
+    const history = fakeFileStorage([]);
 
     await portfolioOperations({
       ...defaultContext(),
@@ -102,7 +87,7 @@ describe('portfolio operations', () => {
       historyStorage: fileHistoryStorage(history)
     }).buy('BANG', 100, 500);
 
-    expect(portfolio.data.companies).toEqual([
+    expect(portfolio.data?.companies).toEqual([
       expect.objectContaining({ticker: 'ABC', name: 'ABC Inc', sharesQty: 1}),
       expect.objectContaining({
         ticker: 'BANG',
@@ -124,7 +109,7 @@ describe('portfolio operations', () => {
   });
 
   it('should add new portfolio entry when buying a new company', async () => {
-    const portfolio = fakeStorage({
+    const portfolio = fakeFileStorage({
       lastUpdate: 'xxx', companies: [
         makeEmptyCompany({
           ticker: 'ABC',
@@ -133,7 +118,7 @@ describe('portfolio operations', () => {
         } as CoreCompany) as PortfolioCompany
       ]
     });
-    const history = fakeStorage([]);
+    const history = fakeFileStorage([]);
 
     const mockAgent = new MockAgent({connections: 1});
     const mockClient = mockAgent.get(BASE_YAHOO_URL);
@@ -154,7 +139,7 @@ describe('portfolio operations', () => {
       historyStorage: fileHistoryStorage(history)
     }).buy('BANG', 100, 500);
 
-    expect(portfolio.data.companies).toEqual([
+    expect(portfolio.data?.companies).toEqual([
       expect.objectContaining({ticker: 'ABC', name: 'ABC Inc', sharesQty: 1}),
       expect.objectContaining({
         ticker: 'BANG',

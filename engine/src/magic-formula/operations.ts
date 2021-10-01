@@ -29,7 +29,9 @@ export const magicFormulaOperations = (context: AppContext) => ({
     }
 
     logger.info('Changes detected, making updates');
-    // report in the background
+    // report and changelog in the background
+    context.mfChangelogStorage.save(changes)
+      .catch(e => logger.warn('Failed to write changelog', e));
     creatReport(changes)
       .catch(e => logger.warn('Failed to create a report', e));
 
