@@ -10,6 +10,7 @@ import {rankOperations} from '../evaluation/operations';
 run(async () => {
   const context = defaultContext();
 
+
  const data =
    await enrichmentOperations(context).enrichCompany({ticker: 'QDEL'});
  console.warn(data);

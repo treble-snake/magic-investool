@@ -1,3 +1,4 @@
+* Configurable reports (on/off at least)
 * add import-alias
 * some revenue data is not annual
 * cleanup cache periodically
@@ -8,3 +9,4 @@
 * https://www.yahoofinanceapi.com/
 * file-system-cache - ts version ?
 * Cache cleanup
+* Use rimraf

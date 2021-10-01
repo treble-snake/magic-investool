@@ -49,8 +49,7 @@ export default function MagicFormula() {
              pagination={false}
              expandable={{
                expandedRowRender: (item) => {
-                 return <CompanyCard company={item} actionsCallback={() => {
-                 }} />;
+                 return <CompanyCard company={item} actionsCallback={mutate} />;
                }
              }}
       >

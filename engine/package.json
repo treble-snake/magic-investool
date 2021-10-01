@@ -13,7 +13,7 @@
     "test:watch": "jest --maxWorkers=25% --watch"
   },
   "author": "Cap <treble.snake@gmail.com>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "devDependencies": {
     "@types/cookie": "^0.4.1",
     "@types/html-escaper": "^3.0.0",

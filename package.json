@@ -1,8 +1,11 @@
 {
   "name": "@investool/root",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha",
   "scripts": {
+    "install": "cd ./cli && yarn install && yarn build && cd ../web-ui && yarn install && yarn build",
+    "setup": "node ./cli/dist/index.js",
+    "start": "cd ./web-ui && yarn start"
   },
   "author": "Cap <treble.snake@gmail.com>",
-  "license": "UNLICENSED"
+  "license": "MIT"
 }

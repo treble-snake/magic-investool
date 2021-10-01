@@ -1,0 +1,1 @@
+* Use lerna or other monorepo manager

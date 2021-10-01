@@ -14,7 +14,7 @@ export interface FileStorage<T> {
   write(data: T): Promise<void>;
 }
 
-// TODO: add caching
+// Maybe add cache?
 export class JsonFileStorage<T> implements FileStorage<T> {
   constructor(
     private readonly file: string

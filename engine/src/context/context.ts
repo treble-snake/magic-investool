@@ -8,7 +8,7 @@ import {
   makeDefaultYahooCache,
   YahooCacheItem
 } from '../enrichment/cache/YahooCache';
-import {KeyValueCache} from '../enrichment/cache/cache.types';
+import {KeyValueCache} from '../common/types/cache.types';
 import * as config from '../common/config';
 
 export type AppContext = {

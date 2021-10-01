@@ -1,0 +1,25 @@
+{
+  "name": "@investool/cli",
+  "version": "1.0.0",
+  "description": "CLI for MagicFormula Investing Tool",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rimraf dist/ && tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node src/index.ts"
+  },
+  "author": "Cap <treble.snake@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "inquirer": "^8.1.5",
+    "mkdirp": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^8.1.3",
+    "@types/mkdirp": "^1.0.2",
+    "@types/node": "^16.10.2",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  }
+}

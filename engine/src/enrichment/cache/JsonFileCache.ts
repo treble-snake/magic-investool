@@ -1,7 +1,7 @@
 import path from 'path';
 import {readFile, rm, writeFile} from 'fs/promises';
 import {logger} from '../../common/logging/logger';
-import {KeyValueCache} from './cache.types';
+import {KeyValueCache} from '../../common/types/cache.types';
 
 export class JsonFileCache<T> implements KeyValueCache<T> {
   constructor(
