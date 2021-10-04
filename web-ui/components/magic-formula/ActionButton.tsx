@@ -7,14 +7,15 @@ type Props = {
   url: string,
   text: string | null,
   icon?: ReactNode,
+  method?: string,
   callback: Function
 }
-export const ActionButton = ({url, text, icon, callback}: Props) => {
+export const ActionButton = ({url, text, icon, callback, method}: Props) => {
   const [loading, setLoading] = useState(false);
 
   const click = async () => {
     setLoading(true);
-    fetcher(url)
+    fetcher(url, undefined, {method})
       .then(() => {
         callback();
         message.success('Operation succeeded!')

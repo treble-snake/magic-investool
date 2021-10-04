@@ -11,9 +11,7 @@ export default async function handler(
   res: NextApiResponse<SuggestionData>
 ) {
   const context = defaultContext();
-  // TODO: del or read from args
-  const suggestion = await rankOperations(context)
-    .makeSuggestion({customDate: '2021-10-10', size: 9});
+  const suggestion = await rankOperations(context).makeSuggestion({size: 9});
 
   res.status(200).json({
     suggestion

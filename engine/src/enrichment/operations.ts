@@ -27,6 +27,7 @@ const fetchData = async (ticker: string, forceUpdate: boolean, context: AppConte
         return cached;
       }
     }
+    logger.debug(`Couldn\'t find info in the cache for ${ticker}`);
   }
 
   // TODO: don't fail all if only 1 req failed
@@ -60,7 +61,10 @@ export const enrichmentOperations = (context: AppContext) => ({
 
     // TODO: cache gets called twice (1st time in fetchData())
     const data = await fetchData(company.ticker, forceUpdate, context)
-      .catch(e => context.yahooCache.get(company.ticker));
+      .catch(e => {
+        logger.warn(`Unable to get data for ${company.ticker}, fallback to cache`, e);
+        return context.yahooCache.get(company.ticker)
+      });
 
     if (data) {
       return {
@@ -70,6 +74,7 @@ export const enrichmentOperations = (context: AppContext) => ({
       };
     }
 
+    logger.warn(`No data were found for ${company.ticker}, fallback to empty`);
     return makeEmptyCompany(company);
 
   },

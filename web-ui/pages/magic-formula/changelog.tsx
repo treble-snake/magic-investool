@@ -1,12 +1,15 @@
 import useSWR from 'swr';
 import {fetcher} from '../../libs/api';
-import {Button, Spin, Table, Tag} from 'antd';
+import {Spin, Table, Tag} from 'antd';
 import {comparator} from 'ramda';
 import {ApiError} from '../../components/error/ApiError';
 import {ChangelogData} from '../api/magic-formula/changelog';
 import {ChangelogEntry} from '@investool/engine/dist/magic-formula/changelog/ChangelogStorage.types';
 import {toDate} from '../../libs/date';
 import {ChangelogCard} from '../../components/magic-formula/ChangelogCard';
+import styles from './changelog.module.css';
+import {ActionButton} from '../../components/magic-formula/ActionButton';
+import {DeleteOutlined} from '@ant-design/icons';
 
 const {Column} = Table;
 
@@ -39,6 +42,7 @@ export default function MagicFormula() {
              pagination={false}
       >
         <Column<ChangelogEntry> title={'Date'} dataIndex={'date'}
+                                className={styles.column}
                                 sorter={comparator((a, b) => a.date < b.date)}
                                 defaultSortOrder={'descend'}
                                 render={(date) => {
@@ -47,6 +51,7 @@ export default function MagicFormula() {
         />
 
         <Column<ChangelogEntry> title={'Changes'} key={'changes'}
+                                className={styles.column}
                                 render={(_, item) => {
                                   return <ChangelogCard entry={item}/>;
                                 }}
@@ -54,7 +59,13 @@ export default function MagicFormula() {
 
 
         <Column<ChangelogEntry> title={'Actions'} key={'Actions'}
-                                render={(_, item) => <Button>TBD</Button>}
+                                className={styles.column}
+                                render={(_, item) => <ActionButton
+                                  url={`/api/magic-formula/changelog/${item.id}`}
+                                  method={'DELETE'}
+                                  text={'Delete'} callback={mutate}
+                                  icon={<DeleteOutlined/>}
+                                />}
         />
 
       </Table>
