@@ -1,7 +1,7 @@
 import {CompanyStock} from '@investool/engine/dist/types';
 import {Timeline} from 'antd';
 import {comparator} from 'ramda';
-import {format} from 'date-fns';
+import moment from 'moment';
 
 type Props = {
   data: CompanyStock['revenue']['data']
@@ -27,7 +27,7 @@ export const Revenue = ({data}: Props) => {
         .sort(comparator((a, b) => a.date < b.date))
         .map((it, index, all) => <Timeline.Item
           key={it.date}
-          label={format(new Date(it.date), 'yyyy/MM')}
+          label={moment(it.date).format('YYYY/MM')}
           color={getColor(it.value, all[index - 1]?.value)}
         >
           {it.valueStr}

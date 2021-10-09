@@ -1,5 +1,5 @@
-import {format} from 'date-fns';
+import moment from 'moment';
 
-export const toDate = (date: Date | string) => {
-  return format(typeof date === 'string' ? new Date(date) : date, 'dd.MM.yyyy');
+export const toDate = (date: Date | string | number) => {
+  return moment(date).format('DD.MM.YYYY');
 };

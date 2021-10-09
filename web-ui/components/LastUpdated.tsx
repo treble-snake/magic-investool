@@ -1,6 +1,6 @@
-import {differenceInHours, formatDistanceToNow} from 'date-fns';
 import {Tag} from 'antd';
 import {toDate} from '../libs/date';
+import moment from 'moment';
 
 type Props = { date: string | number; showDiff?: boolean; }
 
@@ -15,17 +15,13 @@ const getColor = (hoursDiff: number) => {
 };
 
 export const LastUpdated = ({date, showDiff = true}: Props) => {
-  const value = new Date(date);
-  const diff = Math.abs(differenceInHours(value, new Date()));
+  const diff = Math.abs(moment().diff(moment(date), 'hour'));
 
   return <Tag color={getColor(diff)}>
     {
       showDiff ?
-        formatDistanceToNow(new Date(date), {
-          includeSeconds: false,
-          addSuffix: true
-        }) :
-        toDate(value)
+        moment.duration(moment(date).diff(moment())).humanize(true) :
+        toDate(date)
     }
   </Tag>;
 };
