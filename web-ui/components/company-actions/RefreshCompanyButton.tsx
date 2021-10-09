@@ -3,7 +3,6 @@ import {PortfolioCompany} from '@investool/engine';
 import {Button, message} from 'antd';
 import {ReloadOutlined} from '@ant-design/icons';
 import {fetcher} from '../../libs/api';
-import styles from './CompanyActions.module.css';
 import {useState} from 'react';
 
 type Props = {
@@ -18,16 +17,15 @@ export const RefreshCompanyButton = ({company, callback}: Props) => {
     setLoading(true);
     try {
       await fetcher(`/api/refresh/${company.ticker}`);
-      message.success('Operation complete!')
+      message.success('Operation complete!');
       callback();
     } catch (e) {
-      message.error('Operation failed')
+      message.error('Operation failed');
     } finally {
       setLoading(false);
     }
   };
 
-  return <Button type={'primary'} ghost icon={<ReloadOutlined spin={loading} />} key={'refresh'}
-                 className={styles.button}
-                 onClick={refresh} disabled={loading} />;
+  return <Button type={'primary'} ghost onClick={refresh} disabled={loading}
+                 icon={<ReloadOutlined spin={loading} />} key={'refresh'} />;
 };

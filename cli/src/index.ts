@@ -69,11 +69,13 @@ prompt([
   askEnv({
     type: 'input',
     name: 'ENV_STORAGE_DIR',
+    default: `${process.cwd()}/.investool-data/storage`,
     message: 'Directory to store JSON files with data. Will be created if doesn\'t exist.'
   }),
   askEnv({
     type: 'input',
     name: 'ENV_REPORT_DIR',
+    default: `${process.cwd()}/.investool-data/reports`,
     message: 'Directory to store TXT files with Magic Formula changelogs. Will be created if doesn\'t exist.'
   }),
 ])

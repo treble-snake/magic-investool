@@ -10,15 +10,15 @@ import {MockAgent, setGlobalDispatcher} from 'undici';
 import {BASE_YAHOO_URL} from '../../src/common/config';
 import {dummyQuoteSummary} from '../data-source/yahoo/dummyQuoteSummary';
 import {dummyInsight} from '../data-source/yahoo/dummyInsight';
-import {defaultContext} from '../../src/context/context';
 import {fakeFileStorage} from '../utils/fakeFileStorage';
+import {fakeContext} from '../utils/fakeContext';
 
 describe('portfolio operations', () => {
   it('should do nothing trying to sell a missing item', async () => {
     const portfolio = fakeFileStorage({lastUpdate: 'xxx', companies: []});
     const history = fakeFileStorage([]);
     await portfolioOperations({
-      ...defaultContext(),
+      ...fakeContext(),
       portfolioStorage: filePortfolioStorage(portfolio),
       historyStorage: fileHistoryStorage(history)
     }).sell('MISS', 100);
@@ -46,7 +46,7 @@ describe('portfolio operations', () => {
     const expected = [portfolio.data?.companies[0], portfolio.data?.companies[2]];
 
     await portfolioOperations({
-      ...defaultContext(),
+      ...fakeContext(),
       portfolioStorage: filePortfolioStorage(portfolio),
       historyStorage: fileHistoryStorage(history)
     }).sell('RM', 100);
@@ -82,7 +82,7 @@ describe('portfolio operations', () => {
     const history = fakeFileStorage([]);
 
     await portfolioOperations({
-      ...defaultContext(),
+      ...fakeContext(),
       portfolioStorage: filePortfolioStorage(portfolio),
       historyStorage: fileHistoryStorage(history)
     }).buy('BANG', 100, 500);
@@ -105,6 +105,35 @@ describe('portfolio operations', () => {
         ticker: 'BANG',
         type: 'BUY'
       })
+    ]);
+  });
+
+  it('should update purchase date time for the existing item when buying', async () => {
+    const portfolio = fakeFileStorage({
+      lastUpdate: 'xxx', companies: [
+        makeEmptyCompany({
+          ticker: 'BANG',
+          name: 'Bang Inc',
+          purchaseDate: '2020-01-01',
+          sharesQty: 42
+        } as PortfolioCompany) as PortfolioCompany,
+      ]
+    });
+    const history = fakeFileStorage([]);
+
+    await portfolioOperations({
+      ...fakeContext(),
+      portfolioStorage: filePortfolioStorage(portfolio),
+      historyStorage: fileHistoryStorage(history)
+    }).buy('BANG', 100, 500, new Date('2021-02-02'));
+
+    expect(portfolio.data?.companies).toEqual([
+      expect.objectContaining({
+        ticker: 'BANG',
+        name: 'Bang Inc',
+        sharesQty: 142,
+        purchaseDate: new Date('2021-02-02').toISOString()
+      } as PortfolioCompany)
     ]);
   });
 
@@ -134,7 +163,7 @@ describe('portfolio operations', () => {
     }).reply(200, dummyInsight('BANG'));
 
     await portfolioOperations({
-      ...defaultContext(),
+      ...fakeContext(),
       portfolioStorage: filePortfolioStorage(portfolio),
       historyStorage: fileHistoryStorage(history)
     }).buy('BANG', 100, 500);

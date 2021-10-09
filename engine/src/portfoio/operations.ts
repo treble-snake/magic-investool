@@ -34,7 +34,10 @@ export const portfolioOperations = (context: AppContext) => ({
     if (existing) {
       name = existing.name;
       await portfolioStorage
-        .updateOne(ticker, {sharesQty: existing.sharesQty + qty});
+        .updateOne(ticker, {
+          sharesQty: existing.sharesQty + qty,
+          purchaseDate
+        });
     } else {
       const enriched = await enrichmentOperations(context)
         .enrichCompany({ticker});

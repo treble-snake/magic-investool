@@ -1,7 +1,6 @@
 import {Button, message} from 'antd';
 import {fetcher} from '../../libs/api';
 import {ReactNode, useState} from 'react';
-import styles from './ActionButton.module.css';
 
 type Props = {
   url: string,
@@ -18,17 +17,16 @@ export const ActionButton = ({url, text, icon, callback, method}: Props) => {
     fetcher(url, undefined, {method})
       .then(() => {
         callback();
-        message.success('Operation succeeded!')
+        message.success('Operation succeeded!');
       })
       .catch((e) => {
         console.error(e);
-        message.error('Operation failed.')
+        message.error('Operation failed.');
       })
       .finally(() => setLoading(false));
   };
 
-  return <Button type={'default'} icon={icon} className={styles.button}
-                 onClick={click}
+  return <Button type={'default'} icon={icon} onClick={click}
                  loading={loading} disabled={loading}
   >
     {text}
