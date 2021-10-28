@@ -2,7 +2,7 @@
   "name": "@investool/root",
   "version": "1.0.0-alpha",
   "scripts": {
-    "install": "cd ./cli && yarn install && yarn build && cd ../web-ui && yarn install && yarn build",
+    "install": "cd ./engine && yarn && yarn build && cd ../cli && yarn && yarn build && cd ../web-ui && yarn && yarn build",
     "setup": "node ./cli/dist/index.js",
     "start": "cd ./web-ui && yarn start"
   },
