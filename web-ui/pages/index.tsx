@@ -2,18 +2,20 @@ import type {NextPage} from 'next';
 import useSWR from 'swr';
 import {fetcher} from '../libs/api';
 import {ApiError} from '../components/error/ApiError';
-import {Col, Empty, Row, Spin, Typography} from 'antd';
+import {Button, Col, Empty, Row, Space, Spin, Typography} from 'antd';
 import {SuggestionData} from './api/suggestion';
 // TODO: importing from dist/ folder is not cool
 import {CompanyStock} from '@investool/engine/dist/types';
 import {CompanyCard} from '../components/company-card/CompanyCard';
+import {useState} from 'react';
 
 const Home: NextPage = () => {
+  const [nextMonth, setNextMonth] = useState(true);
   const {
     data,
     error,
     mutate
-  } = useSWR<SuggestionData>('/api/suggestion', fetcher);
+  } = useSWR<SuggestionData>('/api/suggestion?nextMonth=' + nextMonth, fetcher);
   if (error) {
     return <ApiError error={error} />;
   }
@@ -36,7 +38,16 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Typography.Title>Up this month</Typography.Title>
+      <Space style={{marginBottom: 15, marginTop: 15}}>
+        <Button size={'large'} type={nextMonth ? 'default' : 'primary'}
+                onClick={() => setNextMonth(false)}>
+          This month
+        </Button>
+        <Button size={'large'} type={nextMonth ? 'primary' : 'dashed'}
+                onClick={() => setNextMonth(true)}>
+          Next month
+        </Button>
+      </Space>
       <Typography.Title level={2}>To Buy More</Typography.Title>
       <div>
         {list(data.suggestion.toBuyMore)}
