@@ -10,7 +10,7 @@ import {CompanyCard} from '../components/company-card/CompanyCard';
 import {useState} from 'react';
 
 const Home: NextPage = () => {
-  const [nextMonth, setNextMonth] = useState(true);
+  const [nextMonth, setNextMonth] = useState(false);
   const {
     data,
     error,
