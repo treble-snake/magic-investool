@@ -4,7 +4,7 @@ import {scoreSector} from './scores/scoreSector';
 import {scoreRevenue} from './scores/scoreRevenue';
 import {scoreValuation} from './scores/scoreValuation';
 import {scoreRecommendation} from './scores/scoreRecommendation';
-import {portfolioOperations, SectorQty} from '../portfoio/operations';
+import {portfolioOperations, SectorQty} from '../portfoio/portfolioOperations';
 import {comparator, indexBy, mapObjIndexed, prop, sum} from 'ramda';
 import {rankCompanies} from './rankCompanies';
 import {findOverdueItems} from '../portfoio/findOverdueItems';

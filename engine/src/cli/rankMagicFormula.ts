@@ -3,7 +3,7 @@ import {indexBy, prop} from 'ramda';
 import {JsonFileStorage} from '../storage/file';
 import {replaceRevenue} from './utils/replaceRevenue';
 import {defaultContext} from '../context/context';
-import {rankOperations} from '../evaluation/operations';
+import {rankOperations} from '../evaluation/rankOperations';
 
 const storage = new JsonFileStorage<any>('_persistance_/storage/rankedMagicFormula.json');
 

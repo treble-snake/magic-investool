@@ -1,10 +1,10 @@
-import {ChangelogEntry} from '@investool/engine/dist/magic-formula/changelog/ChangelogStorage.types';
 import {Divider, Tag} from 'antd';
 import {CoreCompany} from '@investool/engine';
 import {MinusSquareOutlined, PlusSquareOutlined} from '@ant-design/icons';
+import {ChangelogResponse} from '../../pages/api/magic-formula/changelog';
 
 type Props = {
-  entry: ChangelogEntry
+  entry: ChangelogResponse[0]
 }
 
 const renderItems = (items: CoreCompany[], added: boolean) => {

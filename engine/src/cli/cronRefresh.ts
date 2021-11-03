@@ -1,8 +1,8 @@
 import {run} from './utils/run';
-import {magicFormulaOperations} from '../magic-formula/operations';
+import {magicFormulaOperations} from '../magic-formula/magicFormulaOperations';
 import {defaultContext} from '../context/context';
 import {enrichmentOperations} from '../enrichment/operations';
-import {rankOperations} from '../evaluation/operations';
+import {rankOperations} from '../evaluation/rankOperations';
 
 
 run(async () => {

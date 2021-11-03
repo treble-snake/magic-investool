@@ -3,7 +3,7 @@ import {prop} from 'ramda';
 import {JsonFileStorage} from '../storage/file';
 import {logger} from '../common/logging/logger';
 import {defaultContext} from '../context/context';
-import {rankOperations} from '../evaluation/operations';
+import {rankOperations} from '../evaluation/rankOperations';
 
 const storage = new JsonFileStorage<any>('_persistance_/storage/tmp/suggestions.json');
 

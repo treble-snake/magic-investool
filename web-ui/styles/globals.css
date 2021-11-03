@@ -16,3 +16,13 @@ a {
 * {
   box-sizing: border-box;
 }
+
+/* TODO: Antd fix for Menu  (report too restrictive "span > a") */
+.ant-menu-dark .ant-menu-item > span a {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.ant-menu-dark .ant-menu-item-active > span a,
+.ant-menu-dark .ant-menu-item > span a:hover {
+  color: #fff;
+}

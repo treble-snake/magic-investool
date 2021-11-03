@@ -9,7 +9,8 @@ import {CompanyStock} from '../common/types/companies.types';
 import {indexBy, prop} from 'ramda';
 import {AppContext} from '../context/context';
 import {enrichmentOperations} from '../enrichment/operations';
-import {rankOperations} from '../evaluation/operations';
+import {rankOperations} from '../evaluation/rankOperations';
+import {isAfter} from 'date-fns';
 
 const getNewItems = async () => {
   const token = await login(MF_AUTH_EMAIL, MF_AUTH_PASSWORD);
@@ -62,5 +63,16 @@ export const magicFormulaOperations = (context: AppContext) => ({
 
     logger.info('Calculating scores and ranks');
     await mfStorage.save(await rankOperations(context).scoreAndRank(enrichedCompanies));
+  },
+  async getUnseenChanges(thresholdSec = 0) {
+    const [entries, {prev, current}] = await Promise.all([
+      context.mfChangelogStorage.findAll(),
+      context.mfChangelogStorage.lastSeenAt()
+    ]);
+
+    const shouldBeAfter = current.getTime() + thresholdSec * 1000 > Date.now() ?
+      prev :
+      current;
+    return entries.filter(it => isAfter(new Date(it.date), shouldBeAfter));
   }
 });

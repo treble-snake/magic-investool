@@ -1,10 +1,9 @@
 import useSWR from 'swr';
 import {fetcher} from '../../libs/api';
-import {Spin, Table, Tag} from 'antd';
+import {Badge, Spin, Table, Tag} from 'antd';
 import {comparator} from 'ramda';
 import {ApiError} from '../../components/error/ApiError';
-import {ChangelogData} from '../api/magic-formula/changelog';
-import {ChangelogEntry} from '@investool/engine/dist/magic-formula/changelog/ChangelogStorage.types';
+import {ChangelogResponse} from '../api/magic-formula/changelog';
 import {toDate} from '../../libs/date';
 import {ChangelogCard} from '../../components/magic-formula/ChangelogCard';
 import styles from './changelog.module.css';
@@ -13,12 +12,20 @@ import {DeleteOutlined} from '@ant-design/icons';
 
 const {Column} = Table;
 
+function renderDate(_: any, item: ChangelogResponse[0]) {
+  return <Badge dot count={item.unseen ? 1 : 0}>
+    <Tag color={item.unseen ? 'blue' : 'default'}>
+      {toDate(item.date)}
+    </Tag>
+  </Badge>;
+}
+
 export default function MagicFormula() {
   const {
     data,
     error,
     mutate
-  } = useSWR<ChangelogData>('/api/magic-formula/changelog', fetcher);
+  } = useSWR<ChangelogResponse>('/api/magic-formula/changelog', fetcher);
   // TODO: API results code duplication
   if (error) {
     return <ApiError error={error} />;
@@ -41,31 +48,29 @@ export default function MagicFormula() {
              size={'small'}
              pagination={false}
       >
-        <Column<ChangelogEntry> title={'Date'} dataIndex={'date'}
-                                className={styles.column}
-                                sorter={comparator((a, b) => a.date < b.date)}
-                                defaultSortOrder={'descend'}
-                                render={(date) => {
-                                  return <Tag>{toDate(date)}</Tag>;
-                                }}
+        <Column<ChangelogResponse[0]> title={'Date'} dataIndex={'date'}
+                                      className={styles.column}
+                                      sorter={comparator((a, b) => a.date < b.date)}
+                                      defaultSortOrder={'descend'}
+                                      render={renderDate}
         />
 
-        <Column<ChangelogEntry> title={'Changes'} key={'changes'}
-                                className={styles.column}
-                                render={(_, item) => {
-                                  return <ChangelogCard entry={item}/>;
-                                }}
+        <Column<ChangelogResponse[0]> title={'Changes'} key={'changes'}
+                                      className={styles.column}
+                                      render={(_, item) => {
+                                        return <ChangelogCard entry={item} />;
+                                      }}
         />
 
 
-        <Column<ChangelogEntry> title={'Actions'} key={'Actions'}
-                                className={styles.column}
-                                render={(_, item) => <ActionButton
-                                  url={`/api/magic-formula/changelog/${item.id}`}
-                                  method={'DELETE'}
-                                  text={'Delete'} callback={mutate}
-                                  icon={<DeleteOutlined/>}
-                                />}
+        <Column<ChangelogResponse[0]> title={'Actions'} key={'Actions'}
+                                      className={styles.column}
+                                      render={(_, item) => <ActionButton
+                                        url={`/api/magic-formula/changelog/${item.id}`}
+                                        method={'DELETE'}
+                                        text={'Delete'} callback={mutate}
+                                        icon={<DeleteOutlined />}
+                                      />}
         />
 
       </Table>

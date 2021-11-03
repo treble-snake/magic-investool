@@ -8,15 +8,17 @@ export type ChangelogEntry = {
   removed: CoreCompany[];
 }
 
-export type ChangelogData = ChangelogEntry[];
-
 export interface ChangelogStorage {
-  findAll(): Promise<ChangelogData>;
+  findAll(): Promise<ChangelogEntry[]>;
 
   save(change: StateComparison): Promise<ChangelogEntry>;
 
   delete(id: ChangelogEntry['id']): Promise<void>;
 
   // TODO: clear(upTo?: Date): Promise<void>;
+
+  lastSeenAt(): Promise<{prev: Date, current: Date}>;
+
+  setLastSeen(date: Date, thresholdSec?: number): Promise<void>;
 }
 

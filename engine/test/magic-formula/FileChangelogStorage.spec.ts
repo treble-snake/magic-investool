@@ -1,19 +1,21 @@
-import {fileChangelogStorage} from '../../src/magic-formula/changelog/FileChangelogStorage';
+import {
+  ChangelogData,
+  fileChangelogStorage
+} from '../../src/magic-formula/changelog/FileChangelogStorage';
 import {format} from 'date-fns';
 import {fakeFileStorage} from '../utils/fakeFileStorage';
-import {ChangelogData} from '../../src/magic-formula/changelog/ChangelogStorage.types';
+import {makeStorage} from './utils';
 
 describe('FileChangelogStorage', () => {
   it('should save a changelog entry', async () => {
-    const fake = fakeFileStorage<ChangelogData>([]);
-    const storage = fileChangelogStorage(fake);
+    const storage = fileChangelogStorage(makeStorage());
     await storage.save({
       added: [{ticker: 'ADD', name: 'ADD Inc'}],
       removed: [{ticker: 'REM', name: 'REM Inc'}],
       combined: []
     });
 
-    expect(fake.data).toEqual([
+    expect(await storage.findAll()).toEqual([
       {
         id: expect.any(String),
         date: expect.stringContaining(format(Date.now(), 'yyyy-MM-dd')),
@@ -24,9 +26,7 @@ describe('FileChangelogStorage', () => {
   });
 
   it('should return empty array on uninitialized store', async () => {
-    const fake = fakeFileStorage<ChangelogData>(null);
-    const storage = fileChangelogStorage(fake);
-
+    const storage = fileChangelogStorage(fakeFileStorage<ChangelogData>(null));
     expect(await storage.findAll()).toEqual([]);
   });
 
@@ -42,8 +42,7 @@ describe('FileChangelogStorage', () => {
       added: [{ticker: 'ADD2', name: 'ADD2 Inc'}],
       removed: [{ticker: 'REM2', name: 'REM2 Inc'}],
     }];
-    const fake = fakeFileStorage<ChangelogData>(entries);
-    const storage = fileChangelogStorage(fake);
+    const storage = fileChangelogStorage(makeStorage({entries}));
 
     expect(await storage.findAll()).toEqual(entries);
   });
@@ -60,11 +59,10 @@ describe('FileChangelogStorage', () => {
       added: [{ticker: 'ADD2', name: 'ADD2 Inc'}],
       removed: [{ticker: 'REM2', name: 'REM2 Inc'}],
     }];
-    const fake = fakeFileStorage<ChangelogData>(entries);
-    const storage = fileChangelogStorage(fake);
-    await storage.delete(entries[0].id)
+    const storage = fileChangelogStorage(makeStorage({entries}));
+    await storage.delete(entries[0].id);
 
-    expect(fake.data).toEqual(entries.slice(1, 2));
+    expect(await storage.findAll()).toEqual(entries.slice(1, 2));
   });
 
   it('should do nothing on non-existing entry removal', async () => {
@@ -79,10 +77,16 @@ describe('FileChangelogStorage', () => {
       added: [{ticker: 'ADD2', name: 'ADD2 Inc'}],
       removed: [{ticker: 'REM2', name: 'REM2 Inc'}],
     }];
-    const fake = fakeFileStorage<ChangelogData>(entries);
-    const storage = fileChangelogStorage(fake);
-    await storage.delete('non-existing-id')
 
-    expect(fake.data).toEqual(entries);
+    const storage = fileChangelogStorage(makeStorage({entries}));
+    await storage.delete('non-existing-id');
+
+    expect(await storage.findAll()).toEqual(entries);
+  });
+
+  it('should return unix epoch start if no lastSeen data available', async () => {
+    const storage = fileChangelogStorage(fakeFileStorage<ChangelogData>(null));
+    const {current} = await storage.lastSeenAt();
+    expect(current.toISOString()).toEqual(expect.stringContaining('1970-01-01'));
   });
 });

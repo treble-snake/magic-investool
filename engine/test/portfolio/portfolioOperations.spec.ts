@@ -1,4 +1,4 @@
-import {portfolioOperations} from '../../src/portfoio/operations';
+import {portfolioOperations} from '../../src/portfoio/portfolioOperations';
 import {
   CoreCompany,
   PortfolioCompany
