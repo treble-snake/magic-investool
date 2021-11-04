@@ -3,14 +3,15 @@ import useSWR from 'swr';
 import {fetcher} from '../libs/api';
 import {ApiError} from '../components/error/ApiError';
 import {Button, Col, Empty, Row, Space, Spin, Typography} from 'antd';
-import {SuggestionData} from './api/suggestion';
-// TODO: importing from dist/ folder is not cool
-import {CompanyStock} from '@investool/engine/dist/types';
+import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
+import {SuggestionData, UiSuggestedCompany} from './api/suggestion';
 import {CompanyCard} from '../components/company-card/CompanyCard';
 import {useState} from 'react';
 
 const Home: NextPage = () => {
   const [nextMonth, setNextMonth] = useState(false);
+  const [isHiddenShown, setShowHidden] = useState(false);
+
   const {
     data,
     error,
@@ -24,7 +25,7 @@ const Home: NextPage = () => {
     return <Spin size={'large'} />;
   }
 
-  function list(items: CompanyStock[]) {
+  function list(items: UiSuggestedCompany[]) {
     if (items.length === 0) {
       return <Empty />;
     }
@@ -35,6 +36,12 @@ const Home: NextPage = () => {
       </Col>)}
     </Row>;
   }
+
+  const suggestions: SuggestionData['suggestion'] = {
+    ...data.suggestion,
+    toBuy: data.suggestion.toBuy.filter(it => isHiddenShown || !it.hidden),
+    toBuyMore: data.suggestion.toBuyMore.filter(it => isHiddenShown || !it.hidden),
+  };
 
   return (
     <>
@@ -47,15 +54,20 @@ const Home: NextPage = () => {
                 onClick={() => setNextMonth(true)}>
           Next month
         </Button>
+        <Button onClick={() => setShowHidden(!isHiddenShown)}
+                icon={isHiddenShown ? <EyeInvisibleOutlined /> :
+                  <EyeOutlined />}>
+          {isHiddenShown ? 'Hide' : 'Show'} hidden tickers
+        </Button>
       </Space>
       <Typography.Title level={2}>To Buy More</Typography.Title>
       <div>
-        {list(data.suggestion.toBuyMore)}
+        {list(suggestions.toBuyMore)}
       </div>
       <Typography.Title level={2}>To Sell</Typography.Title>
-      {list(data.suggestion.toSell)}
+      {list(suggestions.toSell)}
       <Typography.Title level={2}>To Buy New Ones</Typography.Title>
-      {list(data.suggestion.toBuy)}
+      {list(suggestions.toBuy)}
     </>
   );
 };

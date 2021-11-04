@@ -1,25 +1,27 @@
 import {
-  CompanyStock,
   InsightRecommendationType,
   ValuationType
 } from '@investool/engine/dist/types';
-import {PortfolioCompany} from '@investool/engine';
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   QuestionOutlined,
   VerticalAlignMiddleOutlined
 } from '@ant-design/icons';
-import {Card, Descriptions, Statistic, Tag, Timeline} from 'antd';
+import {Card, Descriptions, Statistic, Timeline} from 'antd';
 import {omit} from 'ramda';
 import {SectorTag} from '../sector/SectorTag';
 import {LastUpdated} from '../LastUpdated';
 import {Revenue} from './Revenue';
 import {CompanyActions} from '../company-actions/CompanyActions';
 import {DetailsLink} from '../DetailsLink';
+import {TickerTag} from '../company/TickerTag';
+import {UiCompanyStock} from '../../pages/api/magic-formula';
+import {UiPortfolioCompany} from '../../pages/api/portfolio';
+import {UiSuggestedCompany} from '../../pages/api/suggestion';
 
 type Props = {
-  company: CompanyStock | PortfolioCompany,
+  company: UiCompanyStock | UiPortfolioCompany | UiSuggestedCompany,
   actionsCallback: Function,
   showHeader?: boolean
 }
@@ -57,7 +59,7 @@ export const CompanyCard = ({company, actionsCallback, showHeader}: Props) => {
 
   const title = <>
     <LastUpdated date={company.lastUpdated} showDiff={false} />
-    <Tag>{company.ticker}</Tag>
+    <TickerTag company={company}/>
     <DetailsLink ticker={company.ticker}>
       {company.name}
     </DetailsLink>

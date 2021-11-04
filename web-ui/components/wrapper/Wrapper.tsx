@@ -42,6 +42,9 @@ export const Wrapper = ({children}: any) => {
           <Menu.Item key="/history">
             <Link href={'/history'}>History</Link>
           </Menu.Item>
+          <Menu.Item key="/settings">
+            <Link href={'/settings'}>Settings</Link>
+          </Menu.Item>
         </Menu>
       </Layout.Header>
       <Layout.Content className={styles.content}>
