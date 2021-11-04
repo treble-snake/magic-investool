@@ -5,8 +5,7 @@ import {PresetColorType, PresetStatusColorType} from 'antd/lib/_util/colors';
 import {UiSuggestedCompany} from '../../pages/api/suggestion';
 
 function getColor(company: UiCompanyStock | UiPortfolioCompany | UiSuggestedCompany): (PresetColorType | PresetStatusColorType) {
-  const usual = 'owned' in company ? 'blue' : 'default';
-  return company.hidden ? 'red' : usual;
+  return company.hidden ? 'red' : 'default';
 }
 
 export function TickerTag({company}: { company: UiCompanyStock | UiPortfolioCompany | UiSuggestedCompany }) {
