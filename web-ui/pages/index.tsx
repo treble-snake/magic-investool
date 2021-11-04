@@ -4,9 +4,11 @@ import {fetcher} from '../libs/api';
 import {ApiError} from '../components/error/ApiError';
 import {Button, Col, Empty, Row, Space, Spin, Typography} from 'antd';
 import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
-import {SuggestionData, UiSuggestedCompany} from './api/suggestion';
+import {DashboardData} from './api/dashboard';
 import {CompanyCard} from '../components/company-card/CompanyCard';
 import {useState} from 'react';
+import {UiCompanyStock} from './api/magic-formula';
+import {UiPortfolioCompany} from './api/portfolio';
 
 const Home: NextPage = () => {
   const [nextMonth, setNextMonth] = useState(false);
@@ -16,7 +18,7 @@ const Home: NextPage = () => {
     data,
     error,
     mutate
-  } = useSWR<SuggestionData>('/api/suggestion?nextMonth=' + nextMonth, fetcher);
+  } = useSWR<DashboardData>('/api/dashboard?nextMonth=' + nextMonth, fetcher);
   if (error) {
     return <ApiError error={error} />;
   }
@@ -25,7 +27,7 @@ const Home: NextPage = () => {
     return <Spin size={'large'} />;
   }
 
-  function list(items: UiSuggestedCompany[]) {
+  function list(items: (UiCompanyStock | UiPortfolioCompany)[]) {
     if (items.length === 0) {
       return <Empty />;
     }
@@ -37,10 +39,10 @@ const Home: NextPage = () => {
     </Row>;
   }
 
-  const suggestions: SuggestionData['suggestion'] = {
-    ...data.suggestion,
-    toBuy: data.suggestion.toBuy.filter(it => isHiddenShown || !it.hidden),
-    toBuyMore: data.suggestion.toBuyMore.filter(it => isHiddenShown || !it.hidden),
+  const suggestions: DashboardData['suggestions'] = {
+    ...data.suggestions,
+    toBuy: data.suggestions.toBuy.filter(it => isHiddenShown || !it.hidden),
+    toBuyMore: data.suggestions.toBuyMore.filter(it => isHiddenShown || !it.hidden),
   };
 
   return (
@@ -60,13 +62,13 @@ const Home: NextPage = () => {
           {isHiddenShown ? 'Hide' : 'Show'} hidden tickers
         </Button>
       </Space>
-      <Typography.Title level={2}>To Buy More</Typography.Title>
+      <Typography.Title level={3}>To Buy More</Typography.Title>
       <div>
         {list(suggestions.toBuyMore)}
       </div>
-      <Typography.Title level={2}>To Sell</Typography.Title>
+      <Typography.Title level={3}>To Sell</Typography.Title>
       {list(suggestions.toSell)}
-      <Typography.Title level={2}>To Buy New Ones</Typography.Title>
+      <Typography.Title level={3}>To Buy New Ones</Typography.Title>
       {list(suggestions.toBuy)}
     </>
   );

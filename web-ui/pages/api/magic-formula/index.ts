@@ -1,6 +1,7 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {CompanyStock, defaultContext, rankOperations} from '@investool/engine';
-import {indexBy, prop, identity} from 'ramda';
+import {indexBy, map, pipe, prop} from 'ramda';
+import {appendFlagHidden} from '../../../libs/utils/appendFlagHidden';
 
 export type UiCompanyStock = CompanyStock & {
   owned: boolean;
@@ -22,13 +23,12 @@ export default async function handler(
   ]);
 
   const owned = indexBy(prop('ticker'), portfolio);
-  const hidden = indexBy(identity, hiddenTickers);
+  const companiesToShow = pipe(
+    map((it: CompanyStock) => ({...it, owned: Boolean(owned[it.ticker])})),
+    appendFlagHidden(hiddenTickers),
+  )(magic);
 
-  res.status(200).json({
-    magic: await rankOperations(context).scoreAndRank(magic.map(it => ({
-      ...it,
-      owned: Boolean(owned[it.ticker]),
-      hidden: Boolean(hidden[it.ticker])
-    })))
+  return res.status(200).json({
+    magic: await rankOperations(context).scoreAndRank(companiesToShow)
   });
 }
