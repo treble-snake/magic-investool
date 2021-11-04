@@ -5,7 +5,8 @@ import {
   portfolioOperations
 } from '@investool/engine';
 import {Unpacked} from '../../libs/types';
-import {indexBy, prop, identity} from 'ramda';
+import {indexBy, map, pipe, prop} from 'ramda';
+import {appendFlagHidden} from '../../libs/utils/appendFlagHidden';
 
 export type UiPortfolioCompany = PortfolioCompany & {
   hasMagic: boolean;
@@ -23,20 +24,17 @@ export default async function handler(
 ) {
   const context = defaultContext();
   const sectors = await portfolioOperations(context).getSectors();
-  const [magic, portfolio, hiddenTickers] = await Promise.all([
+  const [magicList, portfolio, hiddenTickers] = await Promise.all([
     context.mfStorage.findAll(),
     context.portfolioStorage.findAll(),
     context.userSettingsStorage.getHiddenTickers()
   ]);
-  const mgfByTicker = indexBy(prop('ticker'), magic);
-  const hidden = indexBy(identity, hiddenTickers);
+  const magicMap = indexBy(prop('ticker'), magicList);
 
-  res.status(200).json({
-    companies: portfolio.map(it => ({
-      ...it,
-      hasMagic: Boolean(mgfByTicker[it.ticker]),
-      hidden: Boolean(hidden[it.ticker])
-    })),
-    sectors
-  });
+  const companies = pipe(
+    map((it: PortfolioCompany) => ({...it, hasMagic: Boolean(magicMap[it.ticker])})),
+    appendFlagHidden(hiddenTickers),
+  )(portfolio);
+
+  return res.status(200).json({companies, sectors});
 }

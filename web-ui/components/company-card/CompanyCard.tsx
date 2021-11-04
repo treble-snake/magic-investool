@@ -18,10 +18,9 @@ import {DetailsLink} from '../DetailsLink';
 import {TickerTag} from '../company/TickerTag';
 import {UiCompanyStock} from '../../pages/api/magic-formula';
 import {UiPortfolioCompany} from '../../pages/api/portfolio';
-import {UiSuggestedCompany} from '../../pages/api/suggestion';
 
 type Props = {
-  company: UiCompanyStock | UiPortfolioCompany | UiSuggestedCompany,
+  company: UiCompanyStock | UiPortfolioCompany,
   actionsCallback: Function,
   showHeader?: boolean
 }
