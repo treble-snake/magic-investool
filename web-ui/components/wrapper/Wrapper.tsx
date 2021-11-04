@@ -23,7 +23,7 @@ export const Wrapper = ({children}: any) => {
       <Layout.Header>
         <Menu theme="dark" mode="horizontal" selectedKeys={[router.asPath]}>
           <Menu.Item key="/">
-            <Link href={'/'}>Home</Link>
+            <Link href={'/'}>Dashboard</Link>
           </Menu.Item>
           <Menu.Item key="/portfolio">
             <Link href={'/portfolio'}>Portfolio</Link>
