@@ -1,10 +1,22 @@
 import moment from 'moment';
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {defaultContext, rankOperations} from '@investool/engine';
-import {Unpacked} from '../../libs/types';
+import {identity, indexBy} from 'ramda';
+import {appendHidden} from '../../libs/utils/appendHidden';
+import {CompanyStock, PortfolioCompany} from '@investool/engine/dist/types';
+
+export type UiSuggestedCompany =
+  (CompanyStock | PortfolioCompany)
+  & { hidden: boolean; };
+
+type SuggestedItems = {
+  toBuyMore: UiSuggestedCompany[];
+  toBuy: UiSuggestedCompany[];
+  toSell: UiSuggestedCompany[];
+}
 
 export type SuggestionData = {
-  suggestion: Unpacked<ReturnType<ReturnType<typeof rankOperations>['makeSuggestion']>>
+  suggestion: SuggestedItems
 }
 
 export default async function handler(
@@ -15,10 +27,18 @@ export default async function handler(
     moment().add(1, 'month').format('YYYY-MM-DD') :
     undefined;
 
-  const suggestion = await rankOperations(defaultContext())
-    .makeSuggestion({size: 9, customDate});
+  const context = defaultContext();
+  const [suggestion, hiddenTickers] = await Promise.all([
+    rankOperations(context).makeSuggestion({size: 9, customDate}),
+    context.userSettingsStorage.getHiddenTickers()
+  ]);
+  const hidden = indexBy(identity, hiddenTickers);
 
   res.status(200).json({
-    suggestion
+    suggestion: {
+      toBuyMore: appendHidden(suggestion.toBuyMore, hidden),
+      toBuy: appendHidden(suggestion.toBuy, hidden),
+      toSell: appendHidden(suggestion.toSell, hidden)
+    }
   });
-}
+};

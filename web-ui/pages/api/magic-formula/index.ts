@@ -1,10 +1,13 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {CompanyStock, defaultContext, rankOperations} from '@investool/engine';
-import {indexBy, prop} from 'ramda';
+import {indexBy, prop, identity} from 'ramda';
 
-export type MagicCompany = CompanyStock & { owned: boolean };
+export type UiCompanyStock = CompanyStock & {
+  owned: boolean;
+  hidden: boolean;
+};
 export type MagicData = {
-  magic: MagicCompany[]
+  magic: UiCompanyStock[]
 }
 
 export default async function handler(
@@ -12,16 +15,20 @@ export default async function handler(
   res: NextApiResponse<MagicData>
 ) {
   const context = defaultContext();
-  const [magic, portfolio] = await Promise.all([
+  const [magic, portfolio, hiddenTickers] = await Promise.all([
     context.mfStorage.findAll(),
-    context.portfolioStorage.findAll()
+    context.portfolioStorage.findAll(),
+    context.userSettingsStorage.getHiddenTickers()
   ]);
+
   const owned = indexBy(prop('ticker'), portfolio);
+  const hidden = indexBy(identity, hiddenTickers);
 
   res.status(200).json({
     magic: await rankOperations(context).scoreAndRank(magic.map(it => ({
       ...it,
-      owned: Boolean(owned[it.ticker])
+      owned: Boolean(owned[it.ticker]),
+      hidden: Boolean(hidden[it.ticker])
     })))
   });
 }

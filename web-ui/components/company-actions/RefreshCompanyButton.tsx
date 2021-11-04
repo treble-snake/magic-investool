@@ -27,5 +27,5 @@ export const RefreshCompanyButton = ({company, callback}: Props) => {
   };
 
   return <Button type={'primary'} ghost onClick={refresh} disabled={loading}
-                 icon={<ReloadOutlined spin={loading} />} key={'refresh'} />;
+                 icon={<ReloadOutlined spin={loading} />} />;
 };

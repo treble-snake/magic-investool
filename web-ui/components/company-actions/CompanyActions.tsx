@@ -3,6 +3,7 @@ import {PortfolioCompany} from '@investool/engine';
 import {PortfolioOperation} from './PortfolioOperation';
 import {RefreshCompanyButton} from './RefreshCompanyButton';
 import {Space} from 'antd';
+import {HideCompanyButton} from './HideCompanyButton';
 
 type Props = {
   company: CompanyStock | PortfolioCompany,
@@ -11,6 +12,7 @@ type Props = {
 
 export const CompanyActions = ({company, callback}: Props) => {
   const buttons = [
+    <HideCompanyButton company={company} callback={callback} key={'hide'} />,
     <RefreshCompanyButton company={company} callback={callback}
                           key={'refresh'} />,
     <PortfolioOperation isBuy callback={callback} key={'buy'} fixedValues={{
