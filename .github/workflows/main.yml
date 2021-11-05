@@ -25,11 +25,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Install
+      - name: Install & Build
         run: yarn install
-
-      - name: Build
-        run: yarn build
         
       - name: Test
         run: cd ./engine && yarn test:cov
