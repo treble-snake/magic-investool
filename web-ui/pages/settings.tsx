@@ -2,39 +2,21 @@ import React, {useState} from 'react';
 import {fetcher} from '../libs/api';
 import {ApiError} from '../components/error/ApiError';
 import useSWR from 'swr';
-import {Button, Empty, message, Spin, Tag, Typography} from 'antd';
+import {Card, Empty, Spin, Tag} from 'antd';
 import {SettingsData} from './api/settings';
-
-const {Title} = Typography;
-
-function ClearHiddenTickersButton({callback}: { callback: Function }) {
-  // TODO: create some "use request" hook
-  const [loading, setLoading] = useState(false);
-  const sendRequest = async () => {
-    setLoading(true);
-    try {
-      await fetcher(`/api/clearHidden`);
-      message.success('Operation complete!');
-      callback();
-    } catch (e) {
-      message.error('Operation failed');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return <Button onClick={sendRequest} loading={loading} disabled={loading}>
-    Remove all
-  </Button>;
-}
+import {DeleteOutlined} from '@ant-design/icons';
+import {
+  OperationButton,
+  sendSimpleRequest
+} from '../components/common/OperationButton';
 
 export default function Settings() {
+  const [loading, setLoading] = useState(false);
   const {
     data,
     error,
     mutate
   } = useSWR<SettingsData>('/api/settings', fetcher);
-  const [loading, setLoading] = useState(false);
 
   if (error) {
     return <ApiError error={error} />;
@@ -44,28 +26,21 @@ export default function Settings() {
     return <Spin size={'large'} />;
   }
 
-  // TODO: create some "use request" hook
   const sendRequest = async (ticker: string) => {
-    if (loading) {
-      return;
-    }
-
-    setLoading(true);
-    try {
-      await fetcher(`/api/hide/${ticker}`);
-      message.success('Operation complete!');
-      mutate();
-    } catch (e) {
-      message.error('Operation failed');
-    } finally {
-      setLoading(false);
+    if (!loading) {
+      return sendSimpleRequest(`/api/hide/${ticker}`, mutate, setLoading);
     }
   };
 
+  const clearButton = <OperationButton url={`/api/clearHidden`}
+                                       name={'Remove all'}
+                                       icon={<DeleteOutlined />}
+                                       onSuccess={mutate} />;
   return <>
-    <Title level={3}>Hidden tickers</Title>
-
-    <div style={{marginBottom: 15}}>
+    <Card title={'Hidden tickers'}
+          style={{maxWidth: 500}}
+          extra={clearButton}
+    >
       {
         data.hiddenTickers.length > 0 ?
           data.hiddenTickers.map((it) => {
@@ -76,7 +51,6 @@ export default function Settings() {
           }) :
           <Empty />
       }
-    </div>
-    <ClearHiddenTickersButton callback={mutate} />
+    </Card>
   </>;
 }

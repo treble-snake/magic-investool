@@ -7,7 +7,7 @@ import useSWR from 'swr';
 import {ChangelogItem} from '../../pages/api/magic-formula/changelog';
 import {fetcher} from '../../libs/api';
 
-export const Wrapper = ({children}: any) => {
+export const MainLayout = ({children}: any) => {
   const router = useRouter();
   const {data: unseen} =
     useSWR<ChangelogItem[]>('/api/magic-formula/changelog/unseen', fetcher);

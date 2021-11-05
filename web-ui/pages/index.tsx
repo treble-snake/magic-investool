@@ -3,22 +3,26 @@ import useSWR from 'swr';
 import {fetcher} from '../libs/api';
 import {ApiError} from '../components/error/ApiError';
 import {Button, Col, Empty, Row, Space, Spin, Typography} from 'antd';
-import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
 import {DashboardData} from './api/dashboard';
 import {CompanyCard} from '../components/company-card/CompanyCard';
 import {useState} from 'react';
 import {UiCompanyStock} from './api/magic-formula';
 import {UiPortfolioCompany} from './api/portfolio';
+import {useHiddenSwitch} from '../components/common/useHiddenSwitch';
+import {Hidden} from '../libs/types';
+import {concat, reduce} from 'ramda';
 
-const Home: NextPage = () => {
+const Dashboard: NextPage = () => {
   const [nextMonth, setNextMonth] = useState(false);
-  const [isHiddenShown, setShowHidden] = useState(false);
-
   const {
     data,
     error,
     mutate
   } = useSWR<DashboardData>('/api/dashboard?nextMonth=' + nextMonth, fetcher);
+
+  const {isHiddenShown, HiddenSwitch} = useHiddenSwitch(
+    reduce<Hidden[], Hidden[]>(concat, [], Object.values(data?.suggestions || {})));
+
   if (error) {
     return <ApiError error={error} />;
   }
@@ -56,11 +60,7 @@ const Home: NextPage = () => {
                 onClick={() => setNextMonth(true)}>
           Next month
         </Button>
-        <Button onClick={() => setShowHidden(!isHiddenShown)}
-                icon={isHiddenShown ? <EyeInvisibleOutlined /> :
-                  <EyeOutlined />}>
-          {isHiddenShown ? 'Hide' : 'Show'} hidden tickers
-        </Button>
+        {HiddenSwitch}
       </Space>
       <Typography.Title level={3}>To Buy More</Typography.Title>
       <div>
@@ -74,4 +74,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Dashboard;

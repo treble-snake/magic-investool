@@ -1,16 +1,14 @@
 import useSWR from 'swr';
 import {fetcher} from '../../libs/api';
-import {Button, Space, Spin, Table, Tag} from 'antd';
+import {Space, Spin, Table, Tag} from 'antd';
 import {comparator} from 'ramda';
-import {UiCompanyStock, MagicData} from '../api/magic-formula';
+import {MagicData, UiCompanyStock} from '../api/magic-formula';
 import {ApiError} from '../../components/error/ApiError';
 import {
   CheckCircleTwoTone,
   DownloadOutlined,
-  ReloadOutlined,
   EyeInvisibleTwoTone,
-  EyeInvisibleOutlined,
-  EyeOutlined
+  ReloadOutlined
 } from '@ant-design/icons';
 import {objectComparator} from '../../libs/objectComparator';
 import {SectorTag} from '../../components/sector/SectorTag';
@@ -19,18 +17,10 @@ import {CompanyCard} from '../../components/company-card/CompanyCard';
 import {CompanyActions} from '../../components/company-actions/CompanyActions';
 import {DetailsLink} from '../../components/DetailsLink';
 import {ActionButton} from '../../components/magic-formula/ActionButton';
-import {useState} from 'react';
 import {TickerTag} from '../../components/company/TickerTag';
+import {useHiddenSwitch} from '../../components/common/useHiddenSwitch';
 
 const {Column} = Table;
-
-// function Ticker({company}: { company: UiCompanyStock }) {
-//   const color = company.owned ? 'default' : (
-//     company.hidden ? 'red' : 'blue'
-//   );
-//
-//   return <Tag color={color}>{company.ticker}</Tag>;
-// }
 
 // TODO: duplicate code with Portfolio
 function CompanyName({company}: { company: UiCompanyStock }) {
@@ -51,13 +41,14 @@ function CompanyName({company}: { company: UiCompanyStock }) {
 }
 
 export default function MagicFormula() {
-  const [isHiddenShown, setShowHidden] = useState(false);
-
   const {
     data,
     error,
     mutate
   } = useSWR<MagicData>('/api/magic-formula', fetcher);
+
+  const {isHiddenShown, HiddenSwitch} = useHiddenSwitch(data?.magic || []);
+
   // TODO: API results code duplication
   if (error) {
     return <ApiError error={error} />;
@@ -67,7 +58,6 @@ export default function MagicFormula() {
     return <Spin size={'large'} />;
   }
 
-  const hiddenQty = data.magic.filter(it => it.hidden).length;
   return (
     <>
       <Space style={{marginBottom: 15}}>
@@ -76,16 +66,7 @@ export default function MagicFormula() {
         <ActionButton text={'Update financial data'}
                       url={'/api/magic-formula/update'}
                       icon={<ReloadOutlined />} callback={mutate} />
-        {
-          hiddenQty > 0 ?
-            <Button onClick={() => setShowHidden(!isHiddenShown)}
-                    icon={isHiddenShown ? <EyeInvisibleOutlined /> :
-                      <EyeOutlined />}>
-              {isHiddenShown ? 'Hide' : 'Show'} {hiddenQty} hidden tickers
-            </Button>
-            : null
-        }
-
+        {HiddenSwitch}
       </Space>
 
       <Table
@@ -102,18 +83,20 @@ export default function MagicFormula() {
         <Column<UiCompanyStock> title={'Rank'} key={'rank'}
                                 sorter={comparator((a, b) => a.rank.total < b.rank.total)}
                                 defaultSortOrder={'ascend'}
-                                render={(_, item) => <Tag>{item.rank.total}</Tag>}
+                                render={(_, item) =>
+                                  <Tag>{item.rank.total}</Tag>}
         />
 
         <Column<UiCompanyStock> title={'Ticker'} dataIndex={'ticker'}
                                 sorter={objectComparator('ticker')}
-                                render={(_, item) => <TickerTag company={item} />}
+                                render={(_, item) => <TickerTag
+                                  company={item} />}
         />
 
         <Column<UiCompanyStock> title={'Name'} dataIndex={'name'}
                                 sorter={objectComparator('name')}
                                 render={(_, item) =>
-                                <CompanyName company={item} />}
+                                  <CompanyName company={item} />}
         />
 
         <Column<UiCompanyStock> title={'Sector'} dataIndex={'sector'}
@@ -128,8 +111,8 @@ export default function MagicFormula() {
 
         <Column<UiCompanyStock> title={'Actions'} dataIndex={'Actions'}
                                 render={(_, item) =>
-                                <CompanyActions company={item}
-                                                callback={mutate} />}
+                                  <CompanyActions company={item}
+                                                  callback={mutate} />}
         />
 
       </Table>

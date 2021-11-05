@@ -2,10 +2,10 @@ import type {NextApiRequest, NextApiResponse} from 'next';
 import {CompanyStock, defaultContext, rankOperations} from '@investool/engine';
 import {indexBy, map, pipe, prop} from 'ramda';
 import {appendFlagHidden} from '../../../libs/utils/appendFlagHidden';
+import {Hidden} from '../../../libs/types';
 
-export type UiCompanyStock = CompanyStock & {
+export type UiCompanyStock = CompanyStock & Hidden & {
   owned: boolean;
-  hidden: boolean;
 };
 export type MagicData = {
   magic: UiCompanyStock[]
