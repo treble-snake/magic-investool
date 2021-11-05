@@ -23,7 +23,7 @@ import {RefreshCompanyButton} from '../company-actions/RefreshCompanyButton';
 type Props = {
   company: UiCompanyStock | UiPortfolioCompany,
   actionsCallback: Function,
-  showHeader?: boolean
+  showActions?: boolean
 }
 
 const {Item} = Descriptions;
@@ -49,32 +49,35 @@ const InsightColors = Object.freeze({
   [InsightRecommendationType.Unknown]: '#6c6c6c',
 });
 
-export const CompanyCard = ({company, actionsCallback, showHeader}: Props) => {
+export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
   const valuationType = company.valuation.data.type || ValuationType.Unknown;
   const ValuationIcon = ValuationIcons[company.valuation.data.type];
   const valuationColor = ValuationColors[company.valuation.data.type];
 
   const insightType = company.recommendation.data.insight.type || InsightRecommendationType.Unknown;
   const insightColor = InsightColors[insightType];
+  const withActions = (prop: any) => showActions ? prop : undefined;
 
-  const title = <>
+  const title = withActions(<>
     <TickerTag company={company} />
     <DetailsLink ticker={company.ticker}>
       {company.name}
     </DetailsLink>
-  </>;
-  const extra = <>
+  </>);
+  const extra = withActions(<>
     <LastUpdated date={company.lastUpdated} showDiff />
     <RefreshCompanyButton company={company}
-                                      callback={actionsCallback} />
-    </>;
+                          callback={actionsCallback} />
+  </>);
 
-  return <Card title={showHeader ? title : null}
-               extra={showHeader ? extra : null}
-               style={showHeader ? {marginBottom: 15} : {}}
+  return <Card title={title}
+               extra={extra}
+               style={withActions({marginBottom: 15})}
                size={'small'}
-               actions={[<CompanyActions key={'actions'} company={company}
-                                         callback={actionsCallback} />]}
+               actions={withActions([
+                 <CompanyActions key={'actions'} company={company}
+                                 callback={actionsCallback} />
+               ])}
   >
     <Descriptions size={'small'} layout={'vertical'}>
       <Item><SectorTag sector={company.sector} showQty={false} /></Item>

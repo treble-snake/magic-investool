@@ -38,7 +38,7 @@ const Dashboard: NextPage = () => {
 
     return <Row gutter={16}>
       {items.map((it) => <Col span={8} key={it.ticker}>
-        <CompanyCard showHeader company={it} actionsCallback={mutate} />
+        <CompanyCard showActions company={it} actionsCallback={mutate} />
       </Col>)}
     </Row>;
   }
