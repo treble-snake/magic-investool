@@ -4,7 +4,6 @@ import {getCompanies} from './data-source/methods/getCompanies';
 import {parseHtml} from './data-source/helpers/parseHtml';
 import {compareState} from './utils/compareState';
 import {logger} from '../common/logging/logger';
-import {creatReport} from './utils/creatReport';
 import {CompanyStock} from '../common/types/companies.types';
 import {indexBy, prop} from 'ramda';
 import {AppContext} from '../context/context';
@@ -30,11 +29,9 @@ export const magicFormulaOperations = (context: AppContext) => ({
     }
 
     logger.info('Changes detected, making updates');
-    // report and changelog in the background
+    // save changelog in the background
     context.mfChangelogStorage.save(changes)
       .catch(e => logger.warn('Failed to write changelog', e));
-    creatReport(changes)
-      .catch(e => logger.warn('Failed to create a report', e));
 
     logger.info('Fetching financial data');
     const enrichmentOps = enrichmentOperations(context);

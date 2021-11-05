@@ -1,6 +1,7 @@
 import {FileStorage, makeFileStorage} from '../../storage/file';
-import {HISTORY_FILENAME} from '../../common/config';
 import {HistoryRecord, HistoryStorage} from './HistoryStorage.types';
+
+const HISTORY_FILENAME = 'history.json';
 
 export const fileHistoryStorage = (
   fileStorage: FileStorage<HistoryRecord[]> = makeFileStorage(HISTORY_FILENAME)

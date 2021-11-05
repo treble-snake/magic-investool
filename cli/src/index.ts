@@ -72,12 +72,6 @@ prompt([
     default: `${process.cwd()}/.investool-data/storage`,
     message: 'Directory to store JSON files with data. Will be created if doesn\'t exist.'
   }),
-  askEnv({
-    type: 'input',
-    name: 'ENV_REPORT_DIR',
-    default: `${process.cwd()}/.investool-data/reports`,
-    message: 'Directory to store TXT files with Magic Formula changelogs. Will be created if doesn\'t exist.'
-  }),
 ])
   .then(async (answers) => {
     if (answers.proceed === false) {
@@ -93,14 +87,6 @@ prompt([
       const storageResult = await mkdirp(path.join(answers.ENV_STORAGE_DIR, dir));
       console.log(`Storage dir ${dir}: ${storageResult || 'exists'}`);
     }
-
-    console.log(`\nCreating reports dir at ${answers.ENV_REPORT_DIR}`);
-    if(!path.isAbsolute(answers.ENV_REPORT_DIR)) {
-      answers.ENV_REPORT_DIR = path.join(process.cwd(), answers.ENV_REPORT_DIR);
-    }
-    console.log(`Reports dir ${answers.ENV_REPORT_DIR}: ${
-      (await mkdirp(answers.ENV_REPORT_DIR)) || 'exists'
-    }`);
 
     console.log('\nComposing configs');
     const env = Object.entries(answers).reduce((acc, [name, value]) => {

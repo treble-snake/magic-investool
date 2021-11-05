@@ -1,6 +1,5 @@
 import {PortfolioCompany} from '../../common/types/companies.types';
 import {FileStorage, makeFileStorage} from '../../storage/file';
-import {PORTFOLIO_FILENAME} from '../../common/config';
 import {PortfolioStorage} from './PortfolioStorage.types';
 import {omit} from 'ramda';
 
@@ -8,6 +7,8 @@ type PortfolioData = {
   companies: PortfolioCompany[];
   lastUpdate: string;
 }
+
+const PORTFOLIO_FILENAME = 'portfolio.json';
 
 export const filePortfolioStorage = (
   fileStorage: FileStorage<PortfolioData> = makeFileStorage(PORTFOLIO_FILENAME)

@@ -4,7 +4,6 @@ dist
 coverage
 *.log
 .env
-reports
 tmp
 _persistance_
 

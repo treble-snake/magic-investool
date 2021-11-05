@@ -1,5 +1,4 @@
 import {FileStorage, makeFileStorage} from '../../storage/file';
-import {MAGIC_FORMULA_FILENAME} from '../../common/config';
 import {MagicFormulaStorage} from './MagicFormulaStorage.types';
 import {CompanyStock} from '../../common/types/companies.types';
 
@@ -7,6 +6,8 @@ type MagicFormulaData = {
   companies: CompanyStock[];
   lastUpdate: string;
 }
+
+const MAGIC_FORMULA_FILENAME = 'mfState.json';
 
 export const fileMagicFormulaStorage = (
   storage: FileStorage<MagicFormulaData> = makeFileStorage(MAGIC_FORMULA_FILENAME)

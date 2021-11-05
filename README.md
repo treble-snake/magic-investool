@@ -35,9 +35,3 @@ it will be used instead of external API call
 
 Storage:
 * STORAGE_DIR - folder to store data in JSON format
-* REPORT_DIR - folder to write MagicFormula change reports in txt format
-
-Deprecated?:
-* PORTFOLIO_FILENAME - (default: portfolio.json)
-* HISTORY_FILENAME - (default: history.json)
-* MAGIC_FORMULA_FILENAME = (default: mfState.json)
