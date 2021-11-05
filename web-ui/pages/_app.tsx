@@ -1,10 +1,10 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import {Wrapper} from '../components/wrapper/Wrapper';
+import {MainLayout} from '../components/wrapper/MainLayout';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Wrapper>
+  return <MainLayout>
     <Component {...pageProps} />
-  </Wrapper>;
+  </MainLayout>;
 }
 export default MyApp

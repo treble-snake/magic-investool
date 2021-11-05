@@ -18,6 +18,7 @@ import {DetailsLink} from '../DetailsLink';
 import {TickerTag} from '../company/TickerTag';
 import {UiCompanyStock} from '../../pages/api/magic-formula';
 import {UiPortfolioCompany} from '../../pages/api/portfolio';
+import {RefreshCompanyButton} from '../company-actions/RefreshCompanyButton';
 
 type Props = {
   company: UiCompanyStock | UiPortfolioCompany,
@@ -57,18 +58,23 @@ export const CompanyCard = ({company, actionsCallback, showHeader}: Props) => {
   const insightColor = InsightColors[insightType];
 
   const title = <>
-    <LastUpdated date={company.lastUpdated} showDiff={false} />
-    <TickerTag company={company}/>
+    <TickerTag company={company} />
     <DetailsLink ticker={company.ticker}>
       {company.name}
     </DetailsLink>
   </>;
-  const extra = <CompanyActions company={company} callback={actionsCallback} />;
+  const extra = <>
+    <LastUpdated date={company.lastUpdated} showDiff />
+    <RefreshCompanyButton company={company}
+                                      callback={actionsCallback} />
+    </>;
 
   return <Card title={showHeader ? title : null}
                extra={showHeader ? extra : null}
                style={showHeader ? {marginBottom: 15} : {}}
                size={'small'}
+               actions={[<CompanyActions key={'actions'} company={company}
+                                         callback={actionsCallback} />]}
   >
     <Descriptions size={'small'} layout={'vertical'}>
       <Item><SectorTag sector={company.sector} showQty={false} /></Item>
