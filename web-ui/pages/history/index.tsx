@@ -1,22 +1,23 @@
 import useSWR from 'swr';
 import {fetcher} from '../../libs/api';
-import {Spin, Table, Tag} from 'antd';
+import {Button, Space, Spin, Table, Tag} from 'antd';
+import {EditOutlined, DeleteOutlined} from '@ant-design/icons';
 import {ApiError} from '../../components/error/ApiError';
 import {objectComparator,} from '../../libs/objectComparator';
-import {LastUpdated} from '../../components/LastUpdated';
 import {DetailsLink} from '../../components/DetailsLink';
 import {HistoryData} from '../api/history';
 import {HistoryRecord} from '@investool/engine/dist/portfoio/storage/HistoryStorage.types';
 import {toDate} from '../../libs/date';
+import React from 'react';
+import {ApiButton} from '../../components/common/ApiButton';
+import {PortfolioOperation} from '../../components/company-actions/transaction/PortfolioOperation';
+import moment from 'moment';
+import {TransactionModal} from '../../components/company-actions/transaction/TransactionModal';
 
 const {Column} = Table;
 
 export default function History() {
-  const {
-    data,
-    error,
-    mutate
-  } = useSWR<HistoryData>('/api/history', fetcher);
+  const {data, error, mutate} = useSWR<HistoryData>('/api/history', fetcher);
   // TODO: API results code duplication
   if (error) {
     return <ApiError error={error} />;
@@ -28,8 +29,15 @@ export default function History() {
 
   return (
     <>
+      <Space style={{marginBottom: 15}}>
+        <PortfolioOperation onSuccess={mutate} isBuy
+                            presetValues={{date: moment()}} lockValues={false} />
+        <PortfolioOperation onSuccess={mutate}
+                            presetValues={{date: moment()}} lockValues={false} />
+      </Space>
+
       <Table dataSource={data.history}
-        // rowKey={'ticker'}
+             rowKey={'id'}
              size={'small'}
              pagination={false}
       >
@@ -62,7 +70,37 @@ export default function History() {
 
         <Column<HistoryRecord> title={'Qty x Price'} dataIndex={'price'}
                                sorter={objectComparator('price')}
-                               render={(value, item) => <Tag>{item.qty} x ${value}</Tag>}
+                               render={(value, item) => <Tag>{item.qty} x
+                                 ${value}</Tag>}
+        />
+
+        <Column<HistoryRecord> title={'Actions'}
+                               render={(_, item) => <Space>
+                                 <TransactionModal
+                                   url={`/api/history/${item.id}`}
+                                   method={'PUT'}
+                                   onSuccess={mutate}
+                                   title={'Edit Transaction'}
+                                   presetValues={{
+                                     ticker: item.ticker,
+                                     qty: item.qty,
+                                     price: item.price,
+                                     date: moment(item.date)
+                                   }}
+                                   lockedValues={['ticker']}
+                                 >
+                                   {({onClick}: any) => (
+                                     <Button icon={<EditOutlined />}
+                                             onClick={onClick} />
+                                   )}
+                                 </TransactionModal>
+
+                                 <ApiButton confirm
+                                   url={`/api/history/${item.id}`}
+                                   method={'DELETE'}
+                                   onSuccess={mutate}
+                                   danger icon={<DeleteOutlined />} />
+                               </Space>}
         />
 
       </Table>

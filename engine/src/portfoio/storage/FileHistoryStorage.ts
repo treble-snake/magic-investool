@@ -1,5 +1,6 @@
 import {FileStorage, makeFileStorage} from '../../storage/file';
 import {HistoryRecord, HistoryStorage} from './HistoryStorage.types';
+import {nanoid} from 'nanoid';
 
 const HISTORY_FILENAME = 'history.json';
 
@@ -11,13 +12,29 @@ export const fileHistoryStorage = (
       const data = await fileStorage.read();
       return data ?? [];
     },
-    save(records: HistoryRecord[]) {
-      return fileStorage.write(records);
-    },
     async addRecord(record: HistoryRecord) {
       const data = await this.findAll();
-      data.push(record);
-      return this.save(data);
+      data.push({
+        ...record,
+        id: nanoid()
+      });
+      return fileStorage.write(data);
+    },
+    async deleteRecord(id: string) {
+      const items = await this.findAll();
+      return fileStorage.write(items.filter(it => it.id !== id));
+    },
+    async updateRecord(id: string, update: Partial<Omit<HistoryRecord, 'id'>>) {
+      const items = await this.findAll();
+      const found = items.find(it => it.id === id);
+      if (!found) {
+        return;
+      }
+
+      return fileStorage.write(items.filter(it => it.id !== id).concat({
+        ...found,
+        ...update
+      }));
     }
   };
 };

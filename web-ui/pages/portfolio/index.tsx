@@ -11,8 +11,9 @@ import {LastUpdated} from '../../components/LastUpdated';
 import {CompanyCard} from '../../components/company-card/CompanyCard';
 import {CompanyActions} from '../../components/company-actions/CompanyActions';
 import {DetailsLink} from '../../components/DetailsLink';
-import {PortfolioOperation} from '../../components/company-actions/PortfolioOperation';
+import {PortfolioOperation} from '../../components/company-actions/transaction/PortfolioOperation';
 import {TickerTag} from '../../components/company/TickerTag';
+import moment from 'moment';
 
 const {Column} = Table;
 
@@ -49,9 +50,10 @@ export default function Portfolio() {
 
   return (
     <>
-      <div style={{marginBottom: 15}}>
-        <PortfolioOperation callback={mutate} isBuy />
-      </div>
+      <Space style={{marginBottom: 15}}>
+        <PortfolioOperation onSuccess={mutate} isBuy
+                            presetValues={{date: moment()}} lockValues={false} />
+      </Space>
       <Table dataSource={data.companies} rowKey={'ticker'}
              size={'small'} pagination={false}
              expandable={{
@@ -61,8 +63,9 @@ export default function Portfolio() {
              }}
       >
         <Column<UiPortfolioCompany> title={'Ticker'} dataIndex={'ticker'}
-                                  sorter={objectComparator('ticker')}
-                                  render={(_, item) => <TickerTag company={item}/>}
+                                    sorter={objectComparator('ticker')}
+                                    render={(_, item) => <TickerTag
+                                      company={item} />}
         />
 
         <Column<UiPortfolioCompany> title={'Name'} dataIndex={'name'}
@@ -72,37 +75,40 @@ export default function Portfolio() {
         />
 
         <Column<UiPortfolioCompany> title={'Sector'} dataIndex={'sector'}
-                                  sorter={(a, b) => {
-                                    if (a.sector === b.sector) {
-                                      return 0;
-                                    }
-                                    const sectorA = data.sectors.find(it => it.name === a.sector)!;
-                                    const sectorB = data.sectors.find(it => it.name === b.sector)!;
-                                    if (sectorA.qty === sectorB.qty) {
-                                      return sectorA.name > sectorB.name ? 1 : -1;
-                                    }
+                                    sorter={(a, b) => {
+                                      if (a.sector === b.sector) {
+                                        return 0;
+                                      }
+                                      const sectorA = data.sectors.find(it => it.name === a.sector)!;
+                                      const sectorB = data.sectors.find(it => it.name === b.sector)!;
+                                      if (sectorA.qty === sectorB.qty) {
+                                        return sectorA.name > sectorB.name ? 1 : -1;
+                                      }
 
-                                    return sectorA.qty - sectorB.qty;
-                                  }}
-                                  render={(name) => <SectorTag sector={name} />}
+                                      return sectorA.qty - sectorB.qty;
+                                    }}
+                                    render={(name) => <SectorTag
+                                      sector={name} />}
         />
 
         <Column<UiPortfolioCompany> title={'Purchased at'}
-                                  dataIndex={'purchaseDate'}
-                                  sorter={objectComparator('purchaseDate')}
-                                  defaultSortOrder={'ascend'}
-                                  render={(date) => toDate(new Date(date))}
+                                    dataIndex={'purchaseDate'}
+                                    sorter={objectComparator('purchaseDate')}
+                                    defaultSortOrder={'ascend'}
+                                    render={(date) => toDate(new Date(date))}
         />
 
-        <Column<UiPortfolioCompany> title={'Data from'} dataIndex={'lastUpdated'}
-                                  sorter={objectComparator('lastUpdated')}
-                                  render={(date) => <LastUpdated date={date} />}
+        <Column<UiPortfolioCompany> title={'Data from'}
+                                    dataIndex={'lastUpdated'}
+                                    sorter={objectComparator('lastUpdated')}
+                                    render={(date) => <LastUpdated
+                                      date={date} />}
         />
 
         <Column<UiPortfolioCompany> title={'Actions'} dataIndex={'Actions'}
-                                  render={(_, item) =>
-                                    <CompanyActions company={item}
-                                                    callback={mutate} />}
+                                    render={(_, item) =>
+                                      <CompanyActions company={item}
+                                                      callback={mutate} />}
         />
       </Table>
     </>

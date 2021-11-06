@@ -6,6 +6,7 @@ coverage
 .env
 tmp
 _persistance_
+.investool-data
 
 # TODO: remove
 cron*.sh

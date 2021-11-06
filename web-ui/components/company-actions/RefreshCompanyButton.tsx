@@ -1,5 +1,5 @@
 import {ReloadOutlined} from '@ant-design/icons';
-import {OperationButton} from '../common/OperationButton';
+import {ApiButton} from '../common/ApiButton';
 import {CoreCompany} from '@investool/engine';
 
 type Props = {
@@ -8,8 +8,8 @@ type Props = {
 };
 
 export const RefreshCompanyButton = ({company, callback}: Props) => {
-  return <OperationButton url={`/api/refresh/${company.ticker}`}
-                          onSuccess={callback}
-                          type={'primary'} ghost icon={<ReloadOutlined />}
+  return <ApiButton url={`/api/refresh/${company.ticker}`}
+                    onSuccess={callback}
+                    type={'primary'} ghost icon={<ReloadOutlined />}
   />;
 };

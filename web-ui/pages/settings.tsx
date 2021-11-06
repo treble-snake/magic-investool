@@ -6,9 +6,9 @@ import {Card, Empty, Spin, Tag} from 'antd';
 import {SettingsData} from './api/settings';
 import {DeleteOutlined} from '@ant-design/icons';
 import {
-  OperationButton,
+  ApiButton,
   sendSimpleRequest
-} from '../components/common/OperationButton';
+} from '../components/common/ApiButton';
 
 export default function Settings() {
   const [loading, setLoading] = useState(false);
@@ -32,10 +32,10 @@ export default function Settings() {
     }
   };
 
-  const clearButton = <OperationButton url={`/api/clearHidden`}
-                                       name={'Remove all'}
-                                       icon={<DeleteOutlined />}
-                                       onSuccess={mutate} />;
+  const clearButton = <ApiButton url={`/api/clearHidden`}
+                                 name={'Remove all'}
+                                 icon={<DeleteOutlined />}
+                                 onSuccess={mutate} />;
   return <>
     <Card title={'Hidden tickers'}
           style={{maxWidth: 500}}

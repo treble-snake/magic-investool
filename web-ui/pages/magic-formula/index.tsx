@@ -16,9 +16,9 @@ import {LastUpdated} from '../../components/LastUpdated';
 import {CompanyCard} from '../../components/company-card/CompanyCard';
 import {CompanyActions} from '../../components/company-actions/CompanyActions';
 import {DetailsLink} from '../../components/DetailsLink';
-import {ActionButton} from '../../components/magic-formula/ActionButton';
 import {TickerTag} from '../../components/company/TickerTag';
 import {useHiddenSwitch} from '../../components/common/useHiddenSwitch';
+import {ApiButton} from '../../components/common/ApiButton';
 
 const {Column} = Table;
 
@@ -61,11 +61,10 @@ export default function MagicFormula() {
   return (
     <>
       <Space style={{marginBottom: 15}}>
-        <ActionButton text={'Sync MagicFormula'} url={'/api/magic-formula/sync'}
-                      icon={<DownloadOutlined />} callback={mutate} />
-        <ActionButton text={'Update financial data'}
-                      url={'/api/magic-formula/update'}
-                      icon={<ReloadOutlined />} callback={mutate} />
+        <ApiButton url={'/api/magic-formula/sync'} onSuccess={mutate}
+                   name={'Sync MagicFormula'} icon={<DownloadOutlined />}/>
+        <ApiButton url={'/api/magic-formula/update'} onSuccess={mutate}
+                   name={'Update financial data'} icon={<ReloadOutlined />}/>
         {HiddenSwitch}
       </Space>
 
