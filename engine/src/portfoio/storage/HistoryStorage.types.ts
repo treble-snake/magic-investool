@@ -4,6 +4,7 @@ export enum ActionType {
 }
 
 export type HistoryRecord = {
+  id: string,
   ticker: string;
   name: string;
   date: string;
@@ -15,7 +16,9 @@ export type HistoryRecord = {
 export interface HistoryStorage {
   findAll(): Promise<HistoryRecord[]>;
 
-  save(records: HistoryRecord[]): Promise<void>;
+  addRecord(record: Omit<HistoryRecord, 'id'>): Promise<void>;
 
-  addRecord(record: HistoryRecord): Promise<void>;
+  deleteRecord(id: string): Promise<void>;
+
+  updateRecord(id: string, record: Partial<Omit<HistoryRecord, 'id'>>): Promise<void>;
 }

@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@investool/engine": "file:../engine",
     "antd": "^4.16.13",
     "moment": "^2.29.1",

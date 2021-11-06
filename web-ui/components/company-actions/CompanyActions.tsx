@@ -1,9 +1,10 @@
 import {CompanyStock} from '@investool/engine/dist/types';
 import {PortfolioCompany} from '@investool/engine';
-import {PortfolioOperation} from './PortfolioOperation';
+import {PortfolioOperation} from './transaction/PortfolioOperation';
 import {RefreshCompanyButton} from './RefreshCompanyButton';
 import {Space} from 'antd';
 import {HideCompanyButton} from './HideCompanyButton';
+import moment from 'moment';
 
 type Props = {
   company: CompanyStock | PortfolioCompany,
@@ -15,17 +16,18 @@ export const CompanyActions = ({company, callback}: Props) => {
     <HideCompanyButton company={company} callback={callback} key={'hide'} />,
     <RefreshCompanyButton company={company} callback={callback}
                           key={'refresh'} />,
-    <PortfolioOperation isBuy callback={callback} key={'buy'} fixedValues={{
+    <PortfolioOperation isBuy onSuccess={callback} key={'buy'} presetValues={{
       ticker: company.ticker,
-      qty: undefined
+      date: moment()
     }} />
   ];
 
   if ('sharesQty' in company) {
     buttons.push(
-      <PortfolioOperation key={'sell'} callback={callback} fixedValues={{
+      <PortfolioOperation key={'sell'} onSuccess={callback} presetValues={{
         ticker: company.ticker,
-        qty: company.sharesQty
+        qty: company.sharesQty,
+        date: moment()
       }} />
     );
   }

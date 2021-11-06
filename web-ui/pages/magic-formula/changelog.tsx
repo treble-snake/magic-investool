@@ -7,8 +7,8 @@ import {ChangelogResponse} from '../api/magic-formula/changelog';
 import {toDate} from '../../libs/date';
 import {ChangelogCard} from '../../components/magic-formula/ChangelogCard';
 import styles from './changelog.module.css';
-import {ActionButton} from '../../components/magic-formula/ActionButton';
 import {DeleteOutlined} from '@ant-design/icons';
+import {ApiButton} from '../../components/common/ApiButton';
 
 const {Column} = Table;
 
@@ -37,12 +37,6 @@ export default function MagicFormula() {
 
   return (
     <>
-      {/*<div style={{marginBottom: 15}}>*/}
-      {/*  <ActionButton text={'Sync MagicFormula'} url={'/api/magic-formula/sync'}*/}
-      {/*                icon={<DownloadOutlined/>} callback={mutate}/>*/}
-      {/*  <ActionButton text={'Update financial data'} url={'/api/magic-formula/update'}*/}
-      {/*                icon={<ReloadOutlined />} callback={mutate}/>*/}
-      {/*</div>*/}
       <Table dataSource={data}
              rowKey={'id'}
              size={'small'}
@@ -62,14 +56,12 @@ export default function MagicFormula() {
                                       }}
         />
 
-
         <Column<ChangelogResponse[0]> title={'Actions'} key={'Actions'}
                                       className={styles.column}
-                                      render={(_, item) => <ActionButton
+                                      render={(_, item) => <ApiButton confirm
                                         url={`/api/magic-formula/changelog/${item.id}`}
-                                        method={'DELETE'}
-                                        text={'Delete'} callback={mutate}
-                                        icon={<DeleteOutlined />}
+                                        method={'DELETE'} onSuccess={mutate}
+                                        danger icon={<DeleteOutlined />}
                                       />}
         />
 
