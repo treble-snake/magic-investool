@@ -26,16 +26,16 @@ export async function sendSimpleRequest(
 type ApiButtonProps = ButtonProps & {
   url: string,
   method?: string,
-  name?: string,
+  text?: string,
   onSuccess: Function,
   confirm?: boolean
 };
 
-// TODO: change `name` to `tooltip`
-// TODO: use `children` instead of `name`
+// Maybe: change `name` to `tooltip`
+// Maybe: use `children` instead of `name`
 
 export function ApiButton(props: ApiButtonProps) {
-  const {url, onSuccess, name, method, ...rest} = props;
+  const {url, onSuccess, text, method, ...rest} = props;
   const [loading, setLoading] = useState(false);
   const sendRequest = props.confirm ?
     () => confirm({
@@ -48,6 +48,6 @@ export function ApiButton(props: ApiButtonProps) {
 
   return <Button {...rest} onClick={sendRequest} loading={loading}
                  disabled={loading}>
-    {name}
+    {text}
   </Button>;
 }

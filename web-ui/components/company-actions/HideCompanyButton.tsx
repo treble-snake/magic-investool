@@ -11,7 +11,7 @@ type Props = {
 
 export const HideCompanyButton = ({company, callback}: Props) => {
   const isHidden = 'hidden' in company && company.hidden;
-  // TODO: add Tooltip to OperationButton ?
+  // Maybe: add Tooltip to OperationButton ?
   return <Tooltip title={isHidden ? 'Show' : 'Hide'}>
     <ApiButton url={`/api/hide/${company.ticker}`}
                onSuccess={callback}

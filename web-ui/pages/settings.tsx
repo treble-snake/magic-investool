@@ -33,7 +33,7 @@ export default function Settings() {
   };
 
   const clearButton = <ApiButton url={`/api/clearHidden`}
-                                 name={'Remove all'}
+                                 text={'Remove all'}
                                  icon={<DeleteOutlined />}
                                  onSuccess={mutate} />;
   return <>
