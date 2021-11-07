@@ -1,14 +1,12 @@
-import useSWR from 'swr';
-import {fetcher} from '../../libs/api';
-import {Badge, Spin, Table, Tag} from 'antd';
+import {Badge, Table, Tag} from 'antd';
 import {comparator} from 'ramda';
-import {ApiError} from '../../components/error/ApiError';
 import {ChangelogResponse} from '../api/magic-formula/changelog';
 import {toDate} from '../../libs/date';
 import {ChangelogCard} from '../../components/magic-formula/ChangelogCard';
 import styles from './changelog.module.css';
 import {DeleteOutlined} from '@ant-design/icons';
 import {ApiButton} from '../../components/common/ApiButton';
+import {DisplayData} from '../../components/common/DataDisplay';
 
 const {Column} = Table;
 
@@ -21,26 +19,13 @@ function renderDate(_: any, item: ChangelogResponse[0]) {
 }
 
 export default function MagicFormula() {
-  const {
-    data,
-    error,
-    mutate
-  } = useSWR<ChangelogResponse>('/api/magic-formula/changelog', fetcher);
-  // TODO: API results code duplication
-  if (error) {
-    return <ApiError error={error} />;
-  }
-
-  if (!data) {
-    return <Spin size={'large'} />;
-  }
-
-  return (
-    <>
-      <Table dataSource={data}
-             rowKey={'id'}
-             size={'small'}
-             pagination={false}
+  return <DisplayData<ChangelogResponse>
+    apiUrl={'/api/magic-formula/changelog'}>
+    {({data, mutate}) => {
+      return (<Table dataSource={data}
+                     rowKey={'id'}
+                     size={'small'}
+                     pagination={false}
       >
         <Column<ChangelogResponse[0]> title={'Date'} dataIndex={'date'}
                                       className={styles.column}
@@ -59,13 +44,16 @@ export default function MagicFormula() {
         <Column<ChangelogResponse[0]> title={'Actions'} key={'Actions'}
                                       className={styles.column}
                                       render={(_, item) => <ApiButton confirm
-                                        url={`/api/magic-formula/changelog/${item.id}`}
-                                        method={'DELETE'} onSuccess={mutate}
-                                        danger icon={<DeleteOutlined />}
+                                                                      url={`/api/magic-formula/changelog/${item.id}`}
+                                                                      method={'DELETE'}
+                                                                      onSuccess={mutate}
+                                                                      danger
+                                                                      icon={
+                                                                        <DeleteOutlined />}
                                       />}
         />
 
-      </Table>
-    </>
-  );
+      </Table>);
+    }}
+  </DisplayData>;
 }
