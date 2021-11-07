@@ -1,77 +1,69 @@
 import type {NextPage} from 'next';
-import useSWR from 'swr';
-import {fetcher} from '../libs/api';
-import {ApiError} from '../components/error/ApiError';
-import {Button, Col, Empty, Row, Space, Spin, Typography} from 'antd';
+import {Button, Col, Empty, Row, Space, Typography} from 'antd';
 import {DashboardData} from './api/dashboard';
 import {CompanyCard} from '../components/company-card/CompanyCard';
 import {useState} from 'react';
 import {UiCompanyStock} from './api/magic-formula';
 import {UiPortfolioCompany} from './api/portfolio';
-import {useHiddenSwitch} from '../components/common/useHiddenSwitch';
 import {Hidden} from '../libs/types';
 import {concat, reduce} from 'ramda';
+import {DisplayData} from '../components/common/DataDisplay';
+import {HiddenTickersSwitch} from '../components/common/HiddenTickersSwitch';
 
 const Dashboard: NextPage = () => {
   const [nextMonth, setNextMonth] = useState(false);
-  const {
-    data,
-    error,
-    mutate
-  } = useSWR<DashboardData>('/api/dashboard?nextMonth=' + nextMonth, fetcher);
+  const [isHiddenShown, setShowHidden] = useState(false);
 
-  const {isHiddenShown, HiddenSwitch} = useHiddenSwitch(
-    reduce<Hidden[], Hidden[]>(concat, [], Object.values(data?.suggestions || {})));
+  return <DisplayData<DashboardData>
+    apiUrl={'/api/dashboard?nextMonth=' + nextMonth}>
+    {({data, mutate}) => {
+      function list(items: (UiCompanyStock | UiPortfolioCompany)[]) {
+        if (items.length === 0) {
+          return <Empty />;
+        }
 
-  if (error) {
-    return <ApiError error={error} />;
-  }
+        return <Row gutter={16}>
+          {items.map((it) => <Col span={8} key={it.ticker}>
+            <CompanyCard showActions company={it} actionsCallback={mutate} />
+          </Col>)}
+        </Row>;
+      }
 
-  if (!data) {
-    return <Spin size={'large'} />;
-  }
+      const allItems = reduce<Hidden[], Hidden[]>(concat, [], Object.values(data?.suggestions || {}));
+      const suggestions: DashboardData['suggestions'] = {
+        ...data.suggestions,
+        toBuy: data.suggestions.toBuy.filter(it => isHiddenShown || !it.hidden),
+        toBuyMore: data.suggestions.toBuyMore.filter(it => isHiddenShown || !it.hidden),
+      };
 
-  function list(items: (UiCompanyStock | UiPortfolioCompany)[]) {
-    if (items.length === 0) {
-      return <Empty />;
-    }
+      return (
+        <>
+          <Space style={{marginBottom: 15, marginTop: 15}}>
+            <Button size={'large'} type={nextMonth ? 'default' : 'primary'}
+                    onClick={() => setNextMonth(false)}>
+              This month
+            </Button>
+            <Button size={'large'} type={nextMonth ? 'primary' : 'dashed'}
+                    onClick={() => setNextMonth(true)}>
+              Next month
+            </Button>
+            <HiddenTickersSwitch list={allItems} state={isHiddenShown}
+                                 setState={setShowHidden} />
+          </Space>
+          <Typography.Title level={3}>To Buy More</Typography.Title>
+          <div>
+            {list(suggestions.toBuyMore)}
+          </div>
+          <Typography.Title level={3}>To Sell</Typography.Title>
+          {list(suggestions.toSell)}
+          <Typography.Title level={3}>To Buy New Ones</Typography.Title>
+          {list(suggestions.toBuy)}
+        </>
+      );
+    }}
+  </DisplayData>;
 
-    return <Row gutter={16}>
-      {items.map((it) => <Col span={8} key={it.ticker}>
-        <CompanyCard showActions company={it} actionsCallback={mutate} />
-      </Col>)}
-    </Row>;
-  }
 
-  const suggestions: DashboardData['suggestions'] = {
-    ...data.suggestions,
-    toBuy: data.suggestions.toBuy.filter(it => isHiddenShown || !it.hidden),
-    toBuyMore: data.suggestions.toBuyMore.filter(it => isHiddenShown || !it.hidden),
-  };
-
-  return (
-    <>
-      <Space style={{marginBottom: 15, marginTop: 15}}>
-        <Button size={'large'} type={nextMonth ? 'default' : 'primary'}
-                onClick={() => setNextMonth(false)}>
-          This month
-        </Button>
-        <Button size={'large'} type={nextMonth ? 'primary' : 'dashed'}
-                onClick={() => setNextMonth(true)}>
-          Next month
-        </Button>
-        {HiddenSwitch}
-      </Space>
-      <Typography.Title level={3}>To Buy More</Typography.Title>
-      <div>
-        {list(suggestions.toBuyMore)}
-      </div>
-      <Typography.Title level={3}>To Sell</Typography.Title>
-      {list(suggestions.toSell)}
-      <Typography.Title level={3}>To Buy New Ones</Typography.Title>
-      {list(suggestions.toBuy)}
-    </>
-  );
 };
 
 export default Dashboard;
