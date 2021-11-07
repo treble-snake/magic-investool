@@ -62,9 +62,9 @@ export default function MagicFormula() {
     <>
       <Space style={{marginBottom: 15}}>
         <ApiButton url={'/api/magic-formula/sync'} onSuccess={mutate}
-                   name={'Sync MagicFormula'} icon={<DownloadOutlined />}/>
+                   text={'Sync MagicFormula'} icon={<DownloadOutlined />}/>
         <ApiButton url={'/api/magic-formula/update'} onSuccess={mutate}
-                   name={'Update financial data'} icon={<ReloadOutlined />}/>
+                   text={'Update financial data'} icon={<ReloadOutlined />}/>
         {HiddenSwitch}
       </Space>
 
