@@ -5,7 +5,7 @@ import {replaceRevenue} from './utils/replaceRevenue';
 import {defaultContext} from '../context/context';
 import {rankOperations} from '../evaluation/rankOperations';
 
-const storage = new JsonFileStorage<any>('_persistance_/storage/rankedMagicFormula.json');
+const storage = new JsonFileStorage<any>('.investool-data/storage/rankedMagicFormula.json');
 
 run(async () => {
   const context = defaultContext();
