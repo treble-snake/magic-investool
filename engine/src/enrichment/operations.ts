@@ -2,7 +2,7 @@ import {AppContext} from '../context/context';
 import {CompanyStock, CoreCompany} from '../common/types/companies.types';
 import {enrichCompanyWithYahoo} from './YahooHelpers';
 import {logger} from '../common/logging/logger';
-import {makeEmptyCompany} from './makeEmptyCompany';
+import {EnrichableCompany, makeEmptyCompany} from './makeEmptyCompany';
 import {differenceInHours} from 'date-fns';
 import {getCompanyData} from './yahoo/methods/getCompanyData';
 import {getInsightData} from './yahoo/methods/getInsightData';
@@ -51,12 +51,12 @@ export const enrichmentOperations = (context: AppContext) => ({
    * @param company - at least ticker should be defined
    * @param forceUpdate - tries to get frmo cache first if false, skips cache check if true
    */
-  async enrichCompany(
-    company: Partial<CoreCompany> & Pick<CoreCompany, 'ticker'>,
+  async enrichCompany <T extends EnrichableCompany> (
+    company: T,
     forceUpdate = false
   ) {
     if (!company.ticker) {
-      throw new Error('Given company does not have a ticker');
+      throw new Error(`Given company (${company.name}) does not have a ticker`);
     }
 
     // TODO: cache gets called twice (1st time in fetchData())

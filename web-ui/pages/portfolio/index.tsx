@@ -6,13 +6,32 @@ import {SectorTag} from '../../components/sector/SectorTag';
 import {LastUpdated} from '../../components/LastUpdated';
 import {CompanyCard} from '../../components/company-card/CompanyCard';
 import {CompanyActions} from '../../components/company-actions/CompanyActions';
-import {PortfolioOperation} from '../../components/company-actions/transaction/PortfolioOperation';
+import {
+  PortfolioOperation
+} from '../../components/company-actions/transaction/PortfolioOperation';
 import {TickerTag} from '../../components/company/TickerTag';
 import moment from 'moment';
 import {DisplayData} from '../../components/common/DataDisplay';
 import {TableCompanyName} from '../../components/common/TableCompanyName';
+import {ApiButton} from '../../components/common/ApiButton';
+import React from 'react';
+import {ReloadOutlined} from '@ant-design/icons';
+import {ProfitLossTag} from '../../components/company/ProfitLossTag';
+import {getTotalPL} from '../../libs/utils/getTotalPL';
 
 const {Column} = Table;
+
+function plComparator(a: UiPortfolioCompany, b: UiPortfolioCompany) {
+  if (!a.price || !a.breakEvenPrice) {
+    return -1;
+  }
+
+  if (!b.price || !b.breakEvenPrice) {
+    return 1;
+  }
+
+  return a.price / a.breakEvenPrice > b.price / b.breakEvenPrice ? 1 : -1;
+}
 
 function CompanyName({company}: { company: UiPortfolioCompany }) {
   return <TableCompanyName company={company} icons={
@@ -23,12 +42,22 @@ function CompanyName({company}: { company: UiPortfolioCompany }) {
 export default function Portfolio() {
   return <DisplayData<PortfolioData> apiUrl={'/api/portfolio'}>
     {({data, mutate}) => {
+      const totalPL = getTotalPL(data.companies);
       return (
         <>
           <Space style={{marginBottom: 15}}>
             <PortfolioOperation onSuccess={mutate} isBuy
                                 presetValues={{date: moment()}}
                                 lockValues={false} />
+            <ApiButton url={'/api/portfolio/update'} onSuccess={mutate}
+                       text={'Update financial data'}
+                       icon={<ReloadOutlined />} />
+            <Tag color={totalPL > 0 ? 'green' : 'red'}>
+              {'Total Unrealised P/L: '}
+              {totalPL > 0 ? '+' : '-'}
+              {'$'}
+              {Math.round(Math.abs(totalPL) * 100) / 100}
+            </Tag>
           </Space>
 
           <Table dataSource={data.companies} rowKey={'ticker'}
@@ -44,6 +73,12 @@ export default function Portfolio() {
                                         render={(_, item) => (
                                           <TickerTag company={item} />
                                         )}
+            />
+
+            <Column<UiPortfolioCompany> title={'P/L'} dataIndex={'ProfitLoss'}
+                                        sorter={plComparator}
+                                        render={(_, item) => (
+                                          <ProfitLossTag company={item} />)}
             />
 
             <Column<UiPortfolioCompany> title={'Name'} dataIndex={'name'}

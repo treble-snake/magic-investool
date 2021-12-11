@@ -12,6 +12,10 @@ export const fileHistoryStorage = (
       const data = await fileStorage.read();
       return data ?? [];
     },
+    async findByTicker(ticker: string) {
+      const data = await this.findAll();
+      return data.filter(it => it.ticker === ticker);
+    },
     async addRecord(record: HistoryRecord) {
       const data = await this.findAll();
       data.push({

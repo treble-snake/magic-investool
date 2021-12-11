@@ -1,11 +1,19 @@
 import {CompanyStock, CoreCompany} from '../common/types/companies.types';
-import {InsightRecommendationType, ValuationType} from '../common/types/ranking.types';
+import {
+  InsightRecommendationType,
+  ValuationType
+} from '../common/types/ranking.types';
 import {subYears} from 'date-fns';
 
-export const makeEmptyCompany = (core: Partial<CoreCompany> & Pick<CoreCompany, 'ticker'>): CompanyStock => {
+export type EnrichableCompany =
+  Partial<CoreCompany>
+  & Pick<CoreCompany, 'ticker'>;
+
+export const makeEmptyCompany = <T extends EnrichableCompany>(core: T): T & CompanyStock => {
   return {
     sector: '',
     sectorScore: 0,
+    price: null,
     industry: '',
     country: '',
     revenue: {

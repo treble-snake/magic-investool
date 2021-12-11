@@ -18,6 +18,7 @@ export type CompanyStock = CoreCompany & {
   sector: string;
   sectorScore: number;
   country: string;
+  price: number | null;
   revenue: CompanyIndicator<RevenueData>;
   valuation: CompanyIndicator<ValuationData>;
   recommendation: CompanyIndicator<RecommendationData>;
@@ -25,6 +26,8 @@ export type CompanyStock = CoreCompany & {
 }
 
 export type PortfolioCompany = CompanyStock & {
+  /** Last purchase */
   purchaseDate: string;
   sharesQty: number;
+  breakEvenPrice: number;
 }

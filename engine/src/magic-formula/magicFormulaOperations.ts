@@ -8,7 +8,6 @@ import {CompanyStock} from '../common/types/companies.types';
 import {indexBy, prop} from 'ramda';
 import {AppContext} from '../context/context';
 import {enrichmentOperations} from '../enrichment/operations';
-import {rankOperations} from '../evaluation/rankOperations';
 import {isAfter} from 'date-fns';
 
 const getNewItems = async () => {
@@ -46,8 +45,7 @@ export const magicFormulaOperations = (context: AppContext) => ({
     );
 
     logger.info('Calculating scores and ranks');
-    const ranked = await rankOperations(context).scoreAndRank(enrichedCompanies);
-    await mfStorage.save(ranked);
+    await mfStorage.save(enrichedCompanies);
   },
   async updateAll() {
     const {mfStorage} = context;
@@ -58,8 +56,7 @@ export const magicFormulaOperations = (context: AppContext) => ({
     const enrichedCompanies = await Promise.all(
       state.map((it) => enrichmentOps.enrichCompany(it)));
 
-    logger.info('Calculating scores and ranks');
-    await mfStorage.save(await rankOperations(context).scoreAndRank(enrichedCompanies));
+    await mfStorage.save(enrichedCompanies);
   },
   async getUnseenChanges(thresholdSec = 0) {
     const [entries, {prev, current}] = await Promise.all([
