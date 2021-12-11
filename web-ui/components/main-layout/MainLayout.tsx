@@ -6,11 +6,24 @@ import {useRouter} from 'next/router';
 import useSWR from 'swr';
 import {ChangelogItem} from '../../pages/api/magic-formula/changelog';
 import {fetcher} from '../../libs/api';
+import {PortfolioData} from '../../pages/api/portfolio';
+import {getTotalPL} from '../../libs/utils/getTotalPL';
+import React from 'react';
+import {CaretDownOutlined, CaretUpOutlined} from '@ant-design/icons';
 
 export const MainLayout = ({children}: any) => {
   const router = useRouter();
   const {data: unseen} =
     useSWR<ChangelogItem[]>('/api/magic-formula/changelog/unseen', fetcher);
+  // TODO: might be a simpler endpoint
+  const {data: portfolio} =
+    useSWR<PortfolioData>('/api/portfolio', fetcher);
+
+  const plIcon = !portfolio ? null : (
+    getTotalPL(portfolio.companies) > 0 ?
+      <CaretUpOutlined style={{color: '#52c41a'}} /> :
+      <CaretDownOutlined style={{color: 'red'}} />
+  );
 
   return <div className={styles.main}>
     <Head>
@@ -18,7 +31,6 @@ export const MainLayout = ({children}: any) => {
       <meta name="description" content="Not an investment advice" />
       <link rel="icon" href="/favicon.ico" />
     </Head>
-
     <Layout>
       <Layout.Header>
         <Menu theme="dark" mode="horizontal" selectedKeys={[router.asPath]}>
@@ -27,6 +39,7 @@ export const MainLayout = ({children}: any) => {
           </Menu.Item>
           <Menu.Item key="/portfolio">
             <Link href={'/portfolio'}>Portfolio</Link>
+            {plIcon}
           </Menu.Item>
           <Menu.Item key="/magic-formula">
             <Link href={'/magic-formula'}>Magic Formula</Link>

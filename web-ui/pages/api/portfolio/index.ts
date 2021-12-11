@@ -4,9 +4,9 @@ import {
   PortfolioCompany,
   portfolioOperations
 } from '@investool/engine';
-import {Hidden, Unpacked} from '../../libs/types';
+import {Hidden, Unpacked} from '../../../libs/types';
 import {indexBy, map, pipe, prop} from 'ramda';
-import {appendFlagHidden} from '../../libs/utils/appendFlagHidden';
+import {appendFlagHidden} from '../../../libs/utils/appendFlagHidden';
 
 export type UiPortfolioCompany = PortfolioCompany & Hidden & {
   hasMagic: boolean;

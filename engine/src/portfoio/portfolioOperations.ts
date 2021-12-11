@@ -1,8 +1,10 @@
-import {ActionType} from './storage/HistoryStorage.types';
+import {ActionType, HistoryRecord} from './storage/HistoryStorage.types';
 import {AppContext} from '../context/context';
 import {enrichmentOperations} from '../enrichment/operations';
 import {countBy} from 'ramda';
 import {CompanyStock} from '../common/types/companies.types';
+import {logger} from '../common/logging/logger';
+import {getBreakEvenPrice} from './getBreakEvenPrice';
 
 export type SectorQty = { name: string, qty: number };
 
@@ -23,21 +25,32 @@ export const portfolioOperations = (context: AppContext) => ({
       qty: toRemove.sharesQty
     });
 
+    // can't partially sell now, so no need to recalculate BEP
     return portfolioStorage.remove(ticker);
   },
   async buy(ticker: string, qty: number, pricePerShare: number, date?: Date) {
     const {portfolioStorage, historyStorage} = context;
-    const existing = await portfolioStorage.findByTicker(ticker);
-    const purchaseDate = (date ?? new Date()).toISOString();
     let name = ticker;
+    const purchaseDate = (date ?? new Date()).toISOString();
+    const existing = await portfolioStorage.findByTicker(ticker);
+    const newHistoryRecord = {
+      ticker,
+      name,
+      type: ActionType.BUY,
+      date: purchaseDate,
+      price: pricePerShare,
+      qty
+    } as HistoryRecord;
 
     if (existing) {
       name = existing.name;
-      await portfolioStorage
-        .updateOne(ticker, {
-          sharesQty: existing.sharesQty + qty,
-          purchaseDate
-        });
+      const history = await historyStorage.findByTicker(ticker);
+      const breakEvenPrice = getBreakEvenPrice(history.concat(newHistoryRecord));
+      await portfolioStorage.updateOne(ticker, {
+        sharesQty: existing.sharesQty + qty,
+        purchaseDate,
+        breakEvenPrice
+      });
     } else {
       const enriched = await enrichmentOperations(context)
         .enrichCompany({ticker});
@@ -45,18 +58,12 @@ export const portfolioOperations = (context: AppContext) => ({
       await portfolioStorage.add({
         ...enriched,
         sharesQty: qty,
-        purchaseDate
+        purchaseDate,
+        breakEvenPrice: pricePerShare
       });
     }
 
-    await historyStorage.addRecord({
-      ticker,
-      name,
-      type: ActionType.BUY,
-      date: purchaseDate,
-      price: pricePerShare,
-      qty
-    });
+    await historyStorage.addRecord({...newHistoryRecord, name});
   },
   async getSectors() {
     const companies = await context.portfolioStorage.findAll();
@@ -64,5 +71,16 @@ export const portfolioOperations = (context: AppContext) => ({
       .reduce((acc, [name, qty]) => {
         return acc.concat({name, qty});
       }, [] as SectorQty[]);
+  },
+  async updateAll() {
+    const {portfolioStorage} = context;
+    const enrichmentOps = enrichmentOperations(context);
+    const portfolio = await portfolioStorage.findAll();
+
+    logger.info('Fetching financial data for portfolio');
+    const enrichedCompanies = await Promise.all(portfolio
+      .map(it => enrichmentOps.enrichCompany(it)));
+
+    await portfolioStorage.save(enrichedCompanies);
   }
 });

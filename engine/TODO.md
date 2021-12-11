@@ -1,3 +1,4 @@
+* add short-living in-memory cache for external requests
 * add import-alias
 * some revenue data is not annual
 * Cache cleanup

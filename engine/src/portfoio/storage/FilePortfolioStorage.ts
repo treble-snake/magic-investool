@@ -3,7 +3,7 @@ import {FileStorage, makeFileStorage} from '../../storage/file';
 import {PortfolioStorage} from './PortfolioStorage.types';
 import {omit} from 'ramda';
 
-type PortfolioData = {
+export type PortfolioData = {
   companies: PortfolioCompany[];
   lastUpdate: string;
 }

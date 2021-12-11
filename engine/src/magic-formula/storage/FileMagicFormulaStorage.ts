@@ -1,6 +1,10 @@
 import {FileStorage, makeFileStorage} from '../../storage/file';
 import {MagicFormulaStorage} from './MagicFormulaStorage.types';
-import {CompanyStock} from '../../common/types/companies.types';
+import {
+  CompanyStock,
+  PortfolioCompany
+} from '../../common/types/companies.types';
+import {omit} from 'ramda';
 
 type MagicFormulaData = {
   companies: CompanyStock[];
@@ -22,6 +26,16 @@ export const fileMagicFormulaStorage = (
         lastUpdate: new Date().toISOString(),
         companies
       });
-    }
+    },
+    async updateOne(ticker: string, company: Partial<PortfolioCompany>) {
+      const all = await this.findAll();
+      const existing = all.find(it => it.ticker === ticker);
+      if (!existing) {
+        return null;
+      }
+      Object.assign(existing, omit(['ticker'], company));
+      await this.save(all);
+      return existing;
+    },
   };
 };

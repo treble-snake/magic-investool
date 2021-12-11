@@ -62,12 +62,13 @@ export const enrichCompanyWithYahoo = (
   basic: BasicResult,
   insights: InsightResult
 ): Omit<CompanyStock, 'rank' | 'ticker' | 'lastUpdated'> => {
-  const {quoteType, assetProfile, incomeStatementHistory} = basic;
+  const {quoteType, assetProfile, incomeStatementHistory, price} = basic;
 
   return {
     name: quoteType.longName,
     sector: assetProfile.sector,
     sectorScore: 0,
+    price: price?.regularMarketPrice?.raw || null,
     industry: assetProfile.industry,
     country: assetProfile.country,
     revenue: processRevenue(incomeStatementHistory.incomeStatementHistory),

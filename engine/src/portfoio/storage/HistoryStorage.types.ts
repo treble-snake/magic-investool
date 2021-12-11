@@ -16,6 +16,8 @@ export type HistoryRecord = {
 export interface HistoryStorage {
   findAll(): Promise<HistoryRecord[]>;
 
+  findByTicker(ticker: string): Promise<HistoryRecord[]>;
+
   addRecord(record: Omit<HistoryRecord, 'id'>): Promise<void>;
 
   deleteRecord(id: string): Promise<void>;

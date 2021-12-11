@@ -12,7 +12,8 @@ import {findOverdueItems} from '../portfoio/findOverdueItems';
 const DEFAULT_BUY_SIZE = 6;
 
 export const rankOperations = (context: AppContext) => ({
-  async scoreAndRank<T extends CompanyStock>(companies: T[]) {
+  async scoreAndRank<T extends CompanyStock>(companies: T[]): Promise<T[]> {
+    // TODO: sectors are user-specific, must be an input argument
     const sectors = await portfolioOperations(context).getSectors();
     const sectorsTotal = sum(sectors.map(prop('qty')));
     const sectorPercentage = mapObjIndexed(
