@@ -2,8 +2,8 @@ import {Space} from 'antd';
 import React from 'react';
 import {EyeInvisibleTwoTone} from '@ant-design/icons';
 import {UiCompanyStock} from '../../pages/api/magic-formula';
-import {UiPortfolioCompany} from '../../pages/api/portfolio';
 import {DetailsLink} from '../DetailsLink';
+import {UiPortfolioCompany} from '../../libs/cross-platform/types';
 
 type Props = {
   company: UiCompanyStock | UiPortfolioCompany;

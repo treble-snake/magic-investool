@@ -1,4 +1,4 @@
-import {UiPortfolioCompany} from '../../pages/api/portfolio';
+import {UiPortfolioCompany} from '../cross-platform/types';
 
 // TODO: memoize
 export const getTotalPL = (companies: UiPortfolioCompany[]) => {

@@ -1,0 +1,1 @@
+process.env.STORAGE_DIR = './test/fixtures';

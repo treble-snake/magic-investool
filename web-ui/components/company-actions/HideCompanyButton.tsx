@@ -2,7 +2,7 @@ import {CoreCompany} from '@investool/engine';
 import {Tooltip} from 'antd';
 import {EyeInvisibleOutlined, EyeOutlined} from '@ant-design/icons';
 import {ApiButton} from '../common/ApiButton';
-import {Hidden} from '../../libs/types';
+import {Hidden} from '../../libs/cross-platform/types';
 
 type Props = {
   company: CoreCompany & Partial<Hidden>,

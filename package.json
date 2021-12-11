@@ -1,6 +1,6 @@
 {
   "name": "@investool/root",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.7",
   "scripts": {
     "install": "cd ./engine && yarn && yarn build && cd ../cli && yarn && yarn build && cd ../web-ui && yarn && yarn build",
     "postinstall": "yarn upgrade @investool/engine",

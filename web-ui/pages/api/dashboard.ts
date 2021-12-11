@@ -2,9 +2,9 @@ import moment from 'moment';
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {defaultContext, rankOperations} from '@investool/engine';
 import {mapObjIndexed} from 'ramda';
-import {appendFlagHidden} from '../../libs/utils/appendFlagHidden';
-import {UiPortfolioCompany} from './portfolio';
+import {appendFlagHidden} from '../../libs/cross-platform/appendFlagHidden';
 import {UiCompanyStock} from './magic-formula';
+import {UiPortfolioCompany} from '../../libs/cross-platform/types';
 
 export type DashboardData = {
   isMagicFormulaEmpty: boolean,

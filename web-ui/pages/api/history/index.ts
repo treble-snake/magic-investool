@@ -1,9 +1,8 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {defaultContext} from '@investool/engine';
-import {Unpacked} from '../../../libs/types';
 
 export type HistoryData = {
-  history: Unpacked<ReturnType<ReturnType<typeof defaultContext>['historyStorage']['findAll']>>
+  history: Awaited<ReturnType<ReturnType<typeof defaultContext>['historyStorage']['findAll']>>
 };
 
 export default async function handler(

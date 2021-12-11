@@ -1,0 +1,6 @@
+static
+server-dist
+
+src/libs/cross-platform
+src/routes/api
+.env

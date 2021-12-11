@@ -1,8 +1,8 @@
 import {ProfitLossTag} from '../company/ProfitLossTag';
 import {formatMoney} from '../../libs/utils/formatMoney';
 import {Tag} from 'antd';
-import {UiPortfolioCompany} from '../../pages/api/portfolio';
 import {UiCompanyStock} from '../../pages/api/magic-formula';
+import {UiPortfolioCompany} from '../../libs/cross-platform/types';
 
 type Props = {
   company: UiPortfolioCompany | UiCompanyStock,
