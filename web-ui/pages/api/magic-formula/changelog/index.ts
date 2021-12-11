@@ -1,11 +1,9 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
-import {defaultContext} from '@investool/engine';
-import {Unpacked} from '../../../../libs/types';
+import {defaultContext, magicFormulaOperations} from '@investool/engine';
 import {indexBy, prop} from 'ramda';
-import {magicFormulaOperations} from '@investool/engine';
 
 export type ChangelogItem =
-  Unpacked<ReturnType<ReturnType<typeof defaultContext>['mfChangelogStorage']['findAll']>>[0];
+  Awaited<ReturnType<ReturnType<typeof defaultContext>['mfChangelogStorage']['findAll']>>[0];
 
 export type ChangelogResponse = Array<ChangelogItem & {
   unseen: boolean

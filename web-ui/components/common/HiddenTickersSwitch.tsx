@@ -1,4 +1,4 @@
-import {Hidden} from '../../libs/types';
+import {Hidden} from '../../libs/cross-platform/types';
 import {Checkbox} from 'antd';
 
 type Props = {

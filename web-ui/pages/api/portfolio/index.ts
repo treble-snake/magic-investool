@@ -4,17 +4,13 @@ import {
   PortfolioCompany,
   portfolioOperations
 } from '@investool/engine';
-import {Hidden, Unpacked} from '../../../libs/types';
+import {UiPortfolioCompany} from '../../../libs/cross-platform/types';
 import {indexBy, map, pipe, prop} from 'ramda';
-import {appendFlagHidden} from '../../../libs/utils/appendFlagHidden';
-
-export type UiPortfolioCompany = PortfolioCompany & Hidden & {
-  hasMagic: boolean;
-};
+import {appendFlagHidden} from '../../../libs/cross-platform/appendFlagHidden';
 
 export type PortfolioData = {
   companies: UiPortfolioCompany[],
-  sectors: Unpacked<ReturnType<ReturnType<typeof portfolioOperations>['getSectors']>>
+  sectors: Awaited<ReturnType<ReturnType<typeof portfolioOperations>['getSectors']>>
 }
 
 export default async function handler(

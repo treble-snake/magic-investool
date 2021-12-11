@@ -1,3 +1,9 @@
+let BASE_URL = '';
+if (typeof window !== 'undefined') {
+  BASE_URL = window.standalone?.baseUrl ?? window.location.origin;
+  console.debug(`Setting base URL to ${BASE_URL}`);
+}
+
 // TODO: use Axios?
 export const fetcher = async (
   url: string,
@@ -10,7 +16,7 @@ export const fetcher = async (
     ...options
   } : options;
 
-  const res = await fetch(url, fetchOptions);
+  const res = await fetch(new URL(url, BASE_URL).toString(), fetchOptions);
   if (res.status >= 400) {
     console.debug('Failed request\'s response:', res);
     throw new Error(res.status + ': ' + res.statusText);

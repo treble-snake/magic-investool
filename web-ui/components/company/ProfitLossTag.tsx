@@ -1,6 +1,6 @@
 import {Tag} from 'antd';
 import React from 'react';
-import {UiPortfolioCompany} from '../../pages/api/portfolio';
+import {UiPortfolioCompany} from '../../libs/cross-platform/types';
 
 type Props = {
   company: UiPortfolioCompany,

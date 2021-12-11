@@ -1,8 +1,8 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {CompanyStock, defaultContext, rankOperations} from '@investool/engine';
 import {indexBy, map, pipe, prop} from 'ramda';
-import {appendFlagHidden} from '../../../libs/utils/appendFlagHidden';
-import {Hidden} from '../../../libs/types';
+import {appendFlagHidden} from '../../../libs/cross-platform/appendFlagHidden';
+import {Hidden} from '../../../libs/cross-platform/types';
 
 export type UiCompanyStock = CompanyStock & Hidden & {
   owned: boolean;

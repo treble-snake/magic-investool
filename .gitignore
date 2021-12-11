@@ -6,7 +6,10 @@ coverage
 .env
 tmp
 .investool-data
+.DS_Store
 
 # TODO: remove
 cron*.sh
 cron_log.txt
+nextron
+electorn-app

@@ -1,6 +1,6 @@
 import {Space, Table, Tag, Tooltip} from 'antd';
 import {toDate} from '../../libs/date';
-import {PortfolioData, UiPortfolioCompany} from '../api/portfolio';
+import {PortfolioData} from '../api/portfolio';
 import {objectComparator} from '../../libs/objectComparator';
 import {SectorTag} from '../../components/sector/SectorTag';
 import {LastUpdated} from '../../components/LastUpdated';
@@ -19,6 +19,7 @@ import {QuestionCircleOutlined, ReloadOutlined} from '@ant-design/icons';
 import {ProfitLossTag} from '../../components/company/ProfitLossTag';
 import {getTotalPL} from '../../libs/utils/getTotalPL';
 import {formatMoney} from '../../libs/utils/formatMoney';
+import {UiPortfolioCompany} from '../../libs/cross-platform/types';
 
 const {Column} = Table;
 

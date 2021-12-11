@@ -1,7 +1,7 @@
-import {UiPortfolioCompany} from '../../pages/api/portfolio';
 import {UiCompanyStock} from '../../pages/api/magic-formula';
 import {CompanyCard} from '../company-card/CompanyCard';
 import {Col, Empty, Row} from 'antd';
+import {UiPortfolioCompany} from '../../libs/cross-platform/types';
 
 type Props = {
   companies: (UiPortfolioCompany | UiCompanyStock)[],

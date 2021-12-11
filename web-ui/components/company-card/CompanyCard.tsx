@@ -17,11 +17,11 @@ import {CompanyActions} from '../company-actions/CompanyActions';
 import {DetailsLink} from '../DetailsLink';
 import {TickerTag} from '../company/TickerTag';
 import {UiCompanyStock} from '../../pages/api/magic-formula';
-import {UiPortfolioCompany} from '../../pages/api/portfolio';
 import {RefreshCompanyButton} from '../company-actions/RefreshCompanyButton';
 import React from 'react';
 import {PurchasePerformance} from './PurchasePerformance';
 import {formatMoney} from '../../libs/utils/formatMoney';
+import {UiPortfolioCompany} from '../../libs/cross-platform/types';
 
 type Props = {
   company: UiCompanyStock | UiPortfolioCompany,

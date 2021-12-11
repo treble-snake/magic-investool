@@ -1,7 +1,7 @@
 import {UiCompanyStock} from '../../pages/api/magic-formula';
-import {UiPortfolioCompany} from '../../pages/api/portfolio';
 import {Tag, Typography} from 'antd';
 import {PresetColorType, PresetStatusColorType} from 'antd/lib/_util/colors';
+import {UiPortfolioCompany} from '../../libs/cross-platform/types';
 
 const {Text} = Typography;
 
