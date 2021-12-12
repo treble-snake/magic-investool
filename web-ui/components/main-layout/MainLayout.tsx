@@ -11,6 +11,21 @@ import {getTotalPL} from '../../libs/utils/getTotalPL';
 import React from 'react';
 import {CaretDownOutlined, CaretUpOutlined} from '@ant-design/icons';
 
+const getProfitLossIcon = (data?: PortfolioData) => {
+  if (!data) {
+    return null;
+  }
+
+  const {plSum, hasMissingValues} = getTotalPL(data.companies);
+  if (hasMissingValues) {
+    return null;
+  }
+
+  return plSum > 0 ?
+    <CaretUpOutlined style={{color: '#52c41a'}} /> :
+    <CaretDownOutlined style={{color: 'red'}} />;
+};
+
 export const MainLayout = ({children}: any) => {
   const router = useRouter();
   const {data: unseen} =
@@ -18,12 +33,6 @@ export const MainLayout = ({children}: any) => {
   // TODO: might be a simpler endpoint
   const {data: portfolio} =
     useSWR<PortfolioData>('/api/portfolio', fetcher);
-
-  const plIcon = !portfolio ? null : (
-    getTotalPL(portfolio.companies) > 0 ?
-      <CaretUpOutlined style={{color: '#52c41a'}} /> :
-      <CaretDownOutlined style={{color: 'red'}} />
-  );
 
   return <div className={styles.main}>
     <Head>
@@ -39,7 +48,7 @@ export const MainLayout = ({children}: any) => {
           </Menu.Item>
           <Menu.Item key="/portfolio">
             <Link href={'/portfolio'}>Portfolio</Link>
-            {plIcon}
+            {getProfitLossIcon(portfolio)}
           </Menu.Item>
           <Menu.Item key="/magic-formula">
             <Link href={'/magic-formula'}>Magic Formula</Link>
