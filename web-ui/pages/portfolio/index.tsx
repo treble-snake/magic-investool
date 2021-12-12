@@ -1,4 +1,4 @@
-import {Space, Table, Tag} from 'antd';
+import {Space, Table, Tag, Tooltip} from 'antd';
 import {toDate} from '../../libs/date';
 import {PortfolioData, UiPortfolioCompany} from '../api/portfolio';
 import {objectComparator} from '../../libs/objectComparator';
@@ -15,7 +15,7 @@ import {DisplayData} from '../../components/common/DataDisplay';
 import {TableCompanyName} from '../../components/common/TableCompanyName';
 import {ApiButton} from '../../components/common/ApiButton';
 import React from 'react';
-import {ReloadOutlined} from '@ant-design/icons';
+import {QuestionCircleOutlined, ReloadOutlined} from '@ant-design/icons';
 import {ProfitLossTag} from '../../components/company/ProfitLossTag';
 import {getTotalPL} from '../../libs/utils/getTotalPL';
 
@@ -42,7 +42,7 @@ function CompanyName({company}: { company: UiPortfolioCompany }) {
 export default function Portfolio() {
   return <DisplayData<PortfolioData> apiUrl={'/api/portfolio'}>
     {({data, mutate}) => {
-      const totalPL = getTotalPL(data.companies);
+      const {plSum, hasMissingValues} = getTotalPL(data.companies);
       return (
         <>
           <Space style={{marginBottom: 15}}>
@@ -52,12 +52,21 @@ export default function Portfolio() {
             <ApiButton url={'/api/portfolio/update'} onSuccess={mutate}
                        text={'Update financial data'}
                        icon={<ReloadOutlined />} />
-            <Tag color={totalPL > 0 ? 'green' : 'red'}>
-              {'Total Unrealised P/L: '}
-              {totalPL > 0 ? '+' : '-'}
-              {'$'}
-              {Math.round(Math.abs(totalPL) * 100) / 100}
-            </Tag>
+
+            <Tooltip title={hasMissingValues ?
+            'This value is incomplete, some items are missing pricing data' :
+            'This is an approximate vlaue, don\'t tale it too seriously'}>
+              <Tag
+                color={hasMissingValues ? 'default' : (plSum > 0 ? 'green' : 'red')}>
+                {'Total Unrealised P/L: '}
+                {plSum > 0 ? '+' : '-'}
+                {'$'}
+                {Math.round(Math.abs(plSum) * 100) / 100}
+                {' '}
+                <QuestionCircleOutlined />
+              </Tag>
+            </Tooltip>
+
           </Space>
 
           <Table dataSource={data.companies} rowKey={'ticker'}
