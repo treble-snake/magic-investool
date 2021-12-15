@@ -5,6 +5,8 @@ type UserSettingsData = {
   hiddenTickers: string[];
 }
 
+// TODO: rename to just hidden tickers ?
+
 const USER_SETTINGS_FILENAME = 'userSettings.json';
 
 export const fileUserSettingsStorage = (

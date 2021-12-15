@@ -4,8 +4,7 @@ import {enrichCompanyWithYahoo} from './YahooHelpers';
 import {logger} from '../common/logging/logger';
 import {EnrichableCompany, makeEmptyCompany} from './makeEmptyCompany';
 import {differenceInHours} from 'date-fns';
-import {getCompanyData} from './yahoo/methods/getCompanyData';
-import {getInsightData} from './yahoo/methods/getInsightData';
+import {yahooApi} from './yahoo/yahooApi';
 
 const getTimestamp = (company: CompanyStock) => {
   if ('lastUpdated' in company && company.lastUpdated) {
@@ -22,7 +21,9 @@ const fetchData = async (ticker: string, forceUpdate: boolean, context: AppConte
     const cached = await context.yahooCache.get(ticker);
     if (cached) {
       const cacheAge = differenceInHours(new Date(), new Date(cached.lastUpdated));
-      if (cacheAge <= context.config.FINANCE_CACHE_THRESHOLD_HRS) {
+      const threshold = await context.userAccountStorage.getAccountData()
+        .then(it => it.yahooCacheThreshold);
+      if (cacheAge <= threshold) {
         logger.debug(`Using fresh enough (${cacheAge}h) cache values for ${ticker}`);
         return cached;
       }
@@ -32,15 +33,17 @@ const fetchData = async (ticker: string, forceUpdate: boolean, context: AppConte
 
   // TODO: don't fail all if only 1 req failed
   // TODO: decouple API data source, read from context
+  const api = yahooApi(context);
   const [basic, insights] = await Promise.all([
-    getCompanyData(ticker),
-    getInsightData(ticker)
+    api.getCompanyData(ticker),
+    api.getInsightData(ticker)
   ]);
 
   const result = {basic, insights, lastUpdated: new Date().toISOString()};
   context.yahooCache
     .set(ticker, result)
-    .catch(e => console.warn(`Failed to write to cache for ${ticker}`, e));
+    .then(() => logger.info(`Cache updated for ${ticker}`))
+    .catch(e => logger.warn(`Failed to write to cache for ${ticker}`, e));
 
   return result;
 };
@@ -62,7 +65,7 @@ export const enrichmentOperations = (context: AppContext) => ({
     // TODO: cache gets called twice (1st time in fetchData())
     const data = await fetchData(company.ticker, forceUpdate, context)
       .catch(e => {
-        logger.warn(`Unable to get data for ${company.ticker}, fallback to cache`, e);
+        logger.warn(`Unable to get data for ${company.ticker}, fallback to cache.`, e);
         return context.yahooCache.get(company.ticker)
       });
 

@@ -10,16 +10,24 @@ import {AppContext} from '../context/context';
 import {enrichmentOperations} from '../enrichment/operations';
 import {isAfter} from 'date-fns';
 
-const getNewItems = async () => {
-  const token = await login(MF_AUTH_EMAIL, MF_AUTH_PASSWORD);
+const getNewItems = async (mfLogin: string, mfPassword: string) => {
+  const token = await login(mfLogin, mfPassword);
   const html = await getCompanies(token);
   return parseHtml(html);
 };
 
 export const magicFormulaOperations = (context: AppContext) => ({
   async refresh() {
-    const {mfStorage} = context;
-    const [items, state] = await Promise.all([getNewItems(), mfStorage.findAll()]);
+    const {mfStorage, userAccountStorage} = context;
+    const {
+      magicFormulaLogin,
+      magicFormulaPassword
+    } = await userAccountStorage.getAccountData();
+
+    const [items, state] = await Promise.all([
+      getNewItems(magicFormulaLogin, magicFormulaPassword),
+      mfStorage.findAll()
+    ]);
     const changes = compareState(state, items);
 
     if (changes.removed.length + changes.added.length === 0) {

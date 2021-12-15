@@ -1,6 +1,9 @@
 import {AppContext} from '../../src/context/context';
 import * as config from '../../src/common/config';
 import {emptyCache} from './emptyCache';
+import {
+  UserAccountStorage
+} from '../../src/user-settings/UserAccountStorage.types';
 
 export const fakeContext = (override?: Partial<AppContext>): AppContext => {
   return {
@@ -11,6 +14,11 @@ export const fakeContext = (override?: Partial<AppContext>): AppContext => {
     historyStorage: {} as any,
     mfStorage: {} as any,
     userSettingsStorage: {} as any,
+    userAccountStorage: {
+      getAccountData() {
+        return Promise.resolve({});
+      }
+    } as UserAccountStorage,
     ...override
-  }
+  };
 };

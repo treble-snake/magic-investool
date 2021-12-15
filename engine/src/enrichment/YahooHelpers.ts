@@ -1,19 +1,13 @@
-import {CompanyStock, CoreCompany} from '../common/types/companies.types';
-import {getCompanyData} from './yahoo/methods/getCompanyData';
-import {getInsightData} from './yahoo/methods/getInsightData';
+import {CompanyStock} from '../common/types/companies.types';
 import {Result as BasicResult} from './yahoo/types/ticker';
 import {Result as InsightResult} from './yahoo/types/insight';
 import {prop, sort} from 'ramda';
-import {logger} from '../common/logging/logger';
 import {
   CompanyIndicator,
   RecommendationData,
   RevenueData,
   ValuationData
 } from '../common/types/ranking.types';
-import {makeEmptyCompany} from './makeEmptyCompany';
-import {AppContext} from '../context/context';
-import {differenceInHours} from 'date-fns';
 
 const processRevenue = (incomeHistory: any[]): CompanyIndicator<RevenueData> => {
   const data = sort(prop('timestamp'), incomeHistory.map((it) => ({
