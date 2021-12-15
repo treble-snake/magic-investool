@@ -1,5 +1,5 @@
+import {CompanyStock} from '@investool/engine';
 import {identity, indexBy} from 'ramda';
-import {CompanyStock} from '../../../engine/src';
 
 export const appendFlagHidden = (hiddenList: string[]) => {
   const hiddenById = indexBy(identity, hiddenList);

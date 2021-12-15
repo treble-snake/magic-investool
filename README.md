@@ -23,15 +23,8 @@ Clone the repo. Run (you can use npm):
 ## Advanced Configuration
 Happens via environment variables (you can utilise `.env` files).
 
-Magic Formula:
-* MF_AUTH_EMAIL - magic formula account's email
-* MF_AUTH_PASSWORD - magic formula account's password
+Storage:
+* STORAGE_DIR (required) - folder to store data in JSON format
 
 Financial Data:
-* YAHOO_API_KEY - API key for Yahoo Finance API
-* BASE_YAHOO_URL (default: https://yfapi.net) - Yahoo Finance API origin 
-* FINANCE_CACHE_THRESHOLD_HRS (default: 24) - if cache has data within given amount of hours,
-it will be used instead of external API call
-
-Storage:
-* STORAGE_DIR - folder to store data in JSON format
+* BASE_YAHOO_URL (default: https://yfapi.net) - Yahoo Finance API origin
