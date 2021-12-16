@@ -12,7 +12,7 @@ import React from 'react';
 import {CaretDownOutlined, CaretUpOutlined} from '@ant-design/icons';
 
 const getProfitLossIcon = (data?: PortfolioData) => {
-  if (!data) {
+  if (!data?.companies || data.companies.length === 0) {
     return null;
   }
 

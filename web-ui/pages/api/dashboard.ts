@@ -7,6 +7,7 @@ import {UiPortfolioCompany} from './portfolio';
 import {UiCompanyStock} from './magic-formula';
 
 export type DashboardData = {
+  isMagicFormulaEmpty: boolean,
   // These typings are not exactly correct, but help simplifying the code
   suggestions: {
     toBuyMore: (UiPortfolioCompany | UiCompanyStock)[];
@@ -24,13 +25,15 @@ export default async function handler(
     undefined;
 
   const context = defaultContext();
-  const [suggestions, hiddenTickers] = await Promise.all([
+  const [magic, suggestions, hiddenTickers] = await Promise.all([
+    context.mfStorage.findAll(),
     rankOperations(context).makeSuggestion({size: 9, customDate}),
     context.userSettingsStorage.getHiddenTickers()
   ]);
 
   const result = mapObjIndexed(appendFlagHidden(hiddenTickers), suggestions);
   return res.status(200).json({
+    isMagicFormulaEmpty: magic.length === 0,
     suggestions: result as DashboardData['suggestions']
   });
 };

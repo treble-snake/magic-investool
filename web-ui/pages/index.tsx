@@ -2,13 +2,15 @@ import type {NextPage} from 'next';
 import {Button, Col, Empty, Row, Space, Typography} from 'antd';
 import {DashboardData} from './api/dashboard';
 import {CompanyCard} from '../components/company-card/CompanyCard';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {UiCompanyStock} from './api/magic-formula';
 import {UiPortfolioCompany} from './api/portfolio';
 import {Hidden} from '../libs/types';
 import {concat, reduce} from 'ramda';
 import {DisplayData} from '../components/common/DataDisplay';
 import {HiddenTickersSwitch} from '../components/common/HiddenTickersSwitch';
+import {ApiButton} from '../components/common/ApiButton';
+import {DownloadOutlined} from '@ant-design/icons';
 
 const Dashboard: NextPage = () => {
   const [nextMonth, setNextMonth] = useState(false);
@@ -17,6 +19,14 @@ const Dashboard: NextPage = () => {
   return <DisplayData<DashboardData>
     apiUrl={'/api/dashboard?nextMonth=' + nextMonth}>
     {({data, mutate}) => {
+      if (data.isMagicFormulaEmpty) {
+        return <Empty
+          description={'Your Magic Formula list is empty.'}>
+          <ApiButton url={'/api/magic-formula/sync'} onSuccess={mutate}
+                     text={'Sync MagicFormula'} icon={<DownloadOutlined />} />
+        </Empty>;
+      }
+
       function list(items: (UiCompanyStock | UiPortfolioCompany)[]) {
         if (items.length === 0) {
           return <Empty />;
