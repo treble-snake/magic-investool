@@ -8,11 +8,12 @@ export async function sendSimpleRequest(
   url: string,
   onSuccess: Function,
   setLoading: (x: boolean) => void,
-  method?: string
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+  body?: any
 ) {
   setLoading(true);
   try {
-    await fetcher(url, undefined, {method});
+    await fetcher(url, body, {method});
     message.success('Operation complete!');
     onSuccess();
   } catch (e) {
@@ -25,7 +26,7 @@ export async function sendSimpleRequest(
 
 type ApiButtonProps = ButtonProps & {
   url: string,
-  method?: string,
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
   text?: string,
   onSuccess: Function,
   confirm?: boolean
