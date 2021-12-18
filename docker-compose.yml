@@ -1,0 +1,8 @@
+version: "3"
+services:
+  investool:
+    build: .
+    ports:
+      - "${PORT:-3000}:3000"
+    volumes:
+      - "${STORAGE_DIR:-.investool-data/storage}:/app/.investool-data/storage"

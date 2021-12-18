@@ -10,7 +10,9 @@ export type YahooCacheItem = {
   insights: InsightYahooResult;
 }
 
-export const makeDefaultYahooCache = (cacheDir = 'yahoo-cache') => {
+export const YAHOO_CACHE_DIR = 'yahoo-cache';
+
+export const makeDefaultYahooCache = (cacheDir = YAHOO_CACHE_DIR) => {
   // TODO: what if the folder doesn't exist
   return new JsonFileCache<YahooCacheItem>(path.join(STORAGE_DIR, cacheDir));
 };

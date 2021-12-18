@@ -53,21 +53,6 @@ prompt([
   },
   askEnv({
     type: 'input',
-    name: 'ENV_MF_AUTH_EMAIL',
-    message: 'Email used as a login for https://www.magicformulainvesting.com account:'
-  }),
-  askEnv({
-    type: 'input',
-    name: 'ENV_MF_AUTH_PASSWORD',
-    message: 'Password for https://www.magicformulainvesting.com account:'
-  }),
-  askEnv({
-    type: 'input',
-    name: 'ENV_YAHOO_API_KEY',
-    message: 'API key for Yahoo Finance API:'
-  }),
-  askEnv({
-    type: 'input',
     name: 'ENV_STORAGE_DIR',
     default: `${process.cwd()}/.investool-data/storage`,
     message: 'Directory to store JSON files with data. Will be created if doesn\'t exist.'
