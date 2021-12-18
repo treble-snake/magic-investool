@@ -10,21 +10,34 @@ Financial Data Source: https://www.yahoofinanceapi.com/
 
 **Warning:** keep in mind Yahoo API has a limit of requests per day. 
 
-## Prerequisites
+## Running
+### From source code
+**Prerequisites:**
 * Node >= 14
 * Yarn v1 or NPM
 
-## Running
-Clone the repo. Run (you can use npm):
+Clone the repo. Run (you can use npm instead of yarn):
 * `yarn install`
 * `yarn setup` - follow the configuration instructions
-* `yarn start` - Web UI should be up and running on http://localhost:3000 by default
+* `<PORT=3000> yarn start` - Web UI should be up and running on http://localhost:3000 by default
 
-## Advanced Configuration
-Happens via environment variables (you can utilise `.env` files).
-
-Storage:
+Environment variables (you can utilise `.env` files):
 * STORAGE_DIR (required) - folder to store data in JSON format
-
-Financial Data:
+* PORT (default: 3000) - port to serve Web UI from
 * BASE_YAHOO_URL (default: https://yfapi.net) - Yahoo Finance API origin
+
+### In Docker
+**Prerequisites:**
+* Docker
+
+Clone the repo. Run:
+```
+<PORT=3000> <STORAGE_DIR=.investool-data/storage> docker-compose up
+```
+Web UI should be up and running on http://localhost:3000 by default.
+
+Environment variables:
+* STORAGE_DIR (default: <PROJECT_ROOT>/.investool-data/storage) - 
+  folder to store data in JSON format; 
+  will be mounted as a volume to the docker container. 
+* PORT (default: 3000) - port to serve Web UI from

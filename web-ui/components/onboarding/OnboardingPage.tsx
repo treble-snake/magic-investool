@@ -30,7 +30,7 @@ export function OnboardingPage() {
           <b>Note:</b> keep in mind that free usage plan of the Yahoo API have
           limited usage quota per day. So the tool will cache the data to
           reduce amount of calls. Choose how many hours are you comfortable with
-          for caching. You can force-update individual company's data anyway.
+          for caching. You can force-update individual company`&apos;s data anyway.
         </li>
       </ul>
     </Typography.Paragraph>
