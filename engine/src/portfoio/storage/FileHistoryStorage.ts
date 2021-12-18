@@ -26,19 +26,27 @@ export const fileHistoryStorage = (
     },
     async deleteRecord(id: string) {
       const items = await this.findAll();
-      return fileStorage.write(items.filter(it => it.id !== id));
+      const found = items.find(it => it.id === id);
+      if (!found) {
+        return null;
+      }
+      await fileStorage.write(items.filter(it => it.id !== id));
+      return found;
     },
     async updateRecord(id: string, update: Partial<Omit<HistoryRecord, 'id'>>) {
       const items = await this.findAll();
       const found = items.find(it => it.id === id);
       if (!found) {
-        return;
+        return null;
       }
 
-      return fileStorage.write(items.filter(it => it.id !== id).concat({
-        ...found,
-        ...update
-      }));
+      const updatedRecord: HistoryRecord = {...found, ...update};
+      await fileStorage.write(items.filter(it => it.id !== id).concat(updatedRecord));
+      return updatedRecord;
+    },
+    async findById(id: string) {
+      const items = await this.findAll();
+      return items.find(it => it.id === id) ?? null;
     }
   };
 };

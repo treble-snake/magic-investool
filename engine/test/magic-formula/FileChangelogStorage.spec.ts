@@ -18,7 +18,7 @@ describe('FileChangelogStorage', () => {
     expect(await storage.findAll()).toEqual([
       {
         id: expect.any(String),
-        date: expect.stringContaining(format(Date.now(), 'yyyy-MM-dd')),
+        date: expect.stringContaining(new Date().toISOString().split('T')[0]),
         added: [{ticker: 'ADD', name: 'ADD Inc'}],
         removed: [{ticker: 'REM', name: 'REM Inc'}],
       }
