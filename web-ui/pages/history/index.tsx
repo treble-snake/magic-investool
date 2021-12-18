@@ -1,15 +1,21 @@
-import {Button, Space, Table, Tag} from 'antd';
+import {Alert, Button, Space, Table, Tag} from 'antd';
 import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
 import {objectComparator,} from '../../libs/objectComparator';
 import {DetailsLink} from '../../components/DetailsLink';
 import {HistoryData} from '../api/history';
-import {HistoryRecord} from '@investool/engine/dist/portfoio/storage/HistoryStorage.types';
+import {
+  HistoryRecord
+} from '@investool/engine/dist/portfoio/storage/HistoryStorage.types';
 import {toDate} from '../../libs/date';
 import React from 'react';
 import {ApiButton} from '../../components/common/ApiButton';
-import {PortfolioOperation} from '../../components/company-actions/transaction/PortfolioOperation';
+import {
+  PortfolioOperation
+} from '../../components/company-actions/transaction/PortfolioOperation';
 import moment from 'moment';
-import {TransactionModal} from '../../components/company-actions/transaction/TransactionModal';
+import {
+  TransactionModal
+} from '../../components/company-actions/transaction/TransactionModal';
 import {DisplayData} from '../../components/common/DataDisplay';
 
 const {Column} = Table;
@@ -25,6 +31,9 @@ export default function History() {
           <PortfolioOperation onSuccess={mutate}
                               presetValues={{date: moment()}}
                               lockValues={false} />
+
+          <Alert message="History changes will affect your portfolio state!"
+                 type="warning" showIcon />
         </Space>
 
         <Table dataSource={data.history}
@@ -78,7 +87,7 @@ export default function History() {
                                        price: item.price,
                                        date: moment(item.date)
                                      }}
-                                     lockedValues={['ticker']}
+                                     lockedValues={['ticker', 'date']}
                                    >
                                      {({onClick}: any) => (
                                        <Button icon={<EditOutlined />}

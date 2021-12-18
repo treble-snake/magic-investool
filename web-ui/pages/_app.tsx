@@ -6,6 +6,7 @@ import React, {Component} from 'react';
 import {DisplayData} from '../components/common/DataDisplay';
 import {AccountData} from './api/account';
 import {OnboardingPage} from '../components/onboarding/OnboardingPage';
+import {Alert} from 'antd';
 
 function MyApp({Component, pageProps}: AppProps) {
   return <DisplayData<AccountData>
@@ -23,7 +24,9 @@ function MyApp({Component, pageProps}: AppProps) {
       }
 
       return <MainLayout>
-        {content}
+        <Alert.ErrorBoundary>
+          {content}
+        </Alert.ErrorBoundary>
       </MainLayout>;
     }}
   </DisplayData>;
