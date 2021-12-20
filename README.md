@@ -2,13 +2,10 @@
 
 **Not an investment advice!**
 
-The project is WiP, README is under construction.
+*The project is WiP, README is under construction.*
 
-Magic Formula Data Source: https://www.magicformulainvesting.com/
-
-Financial Data Source: https://www.yahoofinanceapi.com/
-
-**Warning:** keep in mind Yahoo API has a limit of requests per day. 
+This is a small helper tool for people who use 
+[Magic Formula](https://www.magicformulainvesting.com/) investment strategy.
 
 ## Running
 ### From source code
