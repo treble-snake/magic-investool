@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: CI tests
 
 # Controls when the workflow will run
 on:
@@ -27,6 +27,6 @@ jobs:
 
       - name: Install & Build
         run: yarn install
-        
+
       - name: Test
         run: cd ./engine && yarn test:cov

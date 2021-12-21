@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   investool:
-    build: .
+    image: ghcr.io/treble-snake/magic-investool:latest
     ports:
       - "${PORT:-3000}:3000"
     volumes:
