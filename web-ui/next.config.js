@@ -9,6 +9,7 @@ module.exports = (phase, {defaultConfig}) => {
   /** @type {import('next').NextConfig} */
   return {
     ...defaultConfig,
-    reactStrictMode: true
+    reactStrictMode: true,
+    swcMinify: true,
   };
 };
