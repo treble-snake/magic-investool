@@ -1,11 +1,10 @@
 import {login} from './data-source/methods/login';
-import {MF_AUTH_EMAIL, MF_AUTH_PASSWORD} from './data-source/config';
 import {getCompanies} from './data-source/methods/getCompanies';
 import {parseHtml} from './data-source/helpers/parseHtml';
 import {compareState} from './utils/compareState';
 import {logger} from '../common/logging/logger';
 import {CompanyStock} from '../common/types/companies.types';
-import {indexBy, prop} from 'ramda';
+import {indexBy, prop, sortBy} from 'ramda';
 import {AppContext} from '../context/context';
 import {enrichmentOperations} from '../enrichment/operations';
 import {isAfter} from 'date-fns';
@@ -37,7 +36,7 @@ export const magicFormulaOperations = (context: AppContext) => ({
 
     logger.info('Changes detected, making updates');
     // save changelog in the background
-    context.mfChangelogStorage.save(changes)
+    context.mfChangelogStorage.add(changes)
       .catch(e => logger.warn('Failed to write changelog', e));
 
     logger.info('Fetching financial data');
@@ -76,5 +75,14 @@ export const magicFormulaOperations = (context: AppContext) => ({
       prev :
       current;
     return entries.filter(it => isAfter(new Date(it.date), shouldBeAfter));
+  },
+  async cleanup(limit = 0) {
+    if (limit <= 0) {
+      return context.mfChangelogStorage.save([]);
+    }
+    const entries = await context.mfChangelogStorage.findAll();
+    const length = entries.length;
+    return context.mfChangelogStorage.save(
+      sortBy(prop('date'), entries).slice(length - limit, length));
   }
 });

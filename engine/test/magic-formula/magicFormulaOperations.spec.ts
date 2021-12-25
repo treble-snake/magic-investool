@@ -60,6 +60,44 @@ describe('magic formula operations', () => {
       expect(await ops.getUnseenChanges(60)).toEqual([newEntry]);
     });
 
+    describe('cleanup', () => {
+      function generate5entries() {
+        const entries = [];
+        const date = Date.now();
+        for (let i = 0; i < 5; i++) {
+          entries.push(entry('id' + i, date + i * 1000));
+        }
+        return entries;
+      }
 
+      it('should remove everything on cleanup if the limit is 0', async () => {
+        const {ops, fakeStorage} = makeOps({entries: generate5entries()});
+        await ops.cleanup(0);
+        expect(fakeStorage.data?.entries).toEqual([]);
+      });
+
+      it('should keep only N newest items on cleanup', async () => {
+        const {ops, fakeStorage} = makeOps({entries: generate5entries()});
+        await ops.cleanup(2);
+        expect(fakeStorage.data?.entries).toEqual([
+          // only the newest should remain
+          expect.objectContaining({id: 'id3'}),
+          expect.objectContaining({id: 'id4'}),
+        ]);
+      });
+
+      it('should work if sort order is messed up in the storage', async () => {
+        const sorted = generate5entries();
+        const entries = [sorted[3], sorted[2], sorted[0], sorted[4], sorted[1]];
+
+        const {ops, fakeStorage} = makeOps({entries});
+        await ops.cleanup(2);
+        expect(fakeStorage.data?.entries).toEqual([
+          // only the newest should remain
+          expect.objectContaining({id: 'id3'}),
+          expect.objectContaining({id: 'id4'}),
+        ]);
+      });
+    });
   });
 });

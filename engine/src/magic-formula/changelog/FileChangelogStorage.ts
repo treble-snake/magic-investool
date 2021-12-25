@@ -30,7 +30,16 @@ export const fileChangelogStorage = (
       const data = await storage.read();
       return data?.entries ?? [];
     },
-    async save(change: StateComparison) {
+    async save(entries: ChangelogEntry[]): Promise<void> {
+      const data = await storage.read();
+      return storage.write({
+        lastSeen: 0,
+        prevLastSeen: 0,
+        ...data,
+        entries
+      });
+    },
+    async add(change: StateComparison) {
       const current = await this.findAll();
       const now = new Date();
       const entry: ChangelogEntry = {

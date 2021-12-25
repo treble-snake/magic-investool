@@ -9,7 +9,7 @@ import {makeStorage} from './utils';
 describe('FileChangelogStorage', () => {
   it('should save a changelog entry', async () => {
     const storage = fileChangelogStorage(makeStorage());
-    await storage.save({
+    await storage.add({
       added: [{ticker: 'ADD', name: 'ADD Inc'}],
       removed: [{ticker: 'REM', name: 'REM Inc'}],
       combined: []

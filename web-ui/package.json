@@ -21,8 +21,8 @@
     "swr": "^1.1.1"
   },
   "devDependencies": {
-    "@types/ramda": "^0.27.60",
-    "@types/react": "^17.0.37",
+    "@types/ramda": "^0.27.62",
+    "@types/react": "^17.0.38",
     "eslint": "^8.5.0",
     "eslint-config-next": "^12.0.7",
     "typescript": "4.5.4"

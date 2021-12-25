@@ -16,6 +16,12 @@ export default async function handler(
   res: NextApiResponse<ChangelogResponse>
 ) {
   const context = defaultContext();
+
+  // separate endpoint maybe?
+  if (req.method === 'DELETE') {
+    await magicFormulaOperations(context).cleanup(10);
+  }
+
   const [items, unseen] = await Promise.all([
     context.mfChangelogStorage.findAll(),
     magicFormulaOperations(context).getUnseenChanges(60)

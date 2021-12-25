@@ -11,11 +11,11 @@ export type ChangelogEntry = {
 export interface ChangelogStorage {
   findAll(): Promise<ChangelogEntry[]>;
 
-  save(change: StateComparison): Promise<ChangelogEntry>;
+  add(change: StateComparison): Promise<ChangelogEntry>;
 
   delete(id: ChangelogEntry['id']): Promise<void>;
 
-  // TODO: clear(upTo?: Date): Promise<void>;
+  save(entries: ChangelogEntry[]): Promise<void>;
 
   lastSeenAt(): Promise<{prev: Date, current: Date}>;
 

@@ -19,15 +19,15 @@
     "@types/cookie": "^0.4.1",
     "@types/html-escaper": "^3.0.0",
     "@types/jest": "^27.0.3",
-    "@types/jsdom": "^16.2.13",
+    "@types/jsdom": "^16.2.14",
     "@types/node": "16.11.12",
-    "@types/ramda": "^0.27.60",
+    "@types/ramda": "^0.27.62",
     "dotenv": "^10.0.0",
     "jest": "27.4.5",
     "rimraf": "^3.0.2",
     "ts-jest": "^27.1.2",
     "ts-node": "^10.4.0",
-    "typescript": "4.5.3"
+    "typescript": "4.5.4"
   },
   "dependencies": {
     "cookie": "^0.4.1",
@@ -36,6 +36,6 @@
     "jsdom": "^19.0.0",
     "nanoid": "^3.1.30",
     "ramda": "^0.27.1",
-    "undici": "^4.11.3"
+    "undici": "^4.12.1"
   }
 }
