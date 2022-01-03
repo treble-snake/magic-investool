@@ -18,6 +18,7 @@ import React from 'react';
 import {QuestionCircleOutlined, ReloadOutlined} from '@ant-design/icons';
 import {ProfitLossTag} from '../../components/company/ProfitLossTag';
 import {getTotalPL} from '../../libs/utils/getTotalPL';
+import {formatMoney} from '../../libs/utils/formatMoney';
 
 const {Column} = Table;
 
@@ -61,7 +62,7 @@ export default function Portfolio() {
                 {'Total Unrealised P/L: '}
                 {plSum > 0 ? '+' : '-'}
                 {'$'}
-                {Math.round(Math.abs(plSum) * 100) / 100}
+                {formatMoney(Math.abs(plSum))}
                 {' '}
                 <QuestionCircleOutlined />
               </Tag>

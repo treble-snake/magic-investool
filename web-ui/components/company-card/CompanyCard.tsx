@@ -8,7 +8,7 @@ import {
   QuestionOutlined,
   VerticalAlignMiddleOutlined
 } from '@ant-design/icons';
-import {Card, Descriptions, Statistic, Tag, Timeline} from 'antd';
+import {Card, Descriptions, Statistic, Timeline} from 'antd';
 import {omit} from 'ramda';
 import {SectorTag} from '../sector/SectorTag';
 import {LastUpdated} from '../LastUpdated';
@@ -20,7 +20,7 @@ import {UiCompanyStock} from '../../pages/api/magic-formula';
 import {UiPortfolioCompany} from '../../pages/api/portfolio';
 import {RefreshCompanyButton} from '../company-actions/RefreshCompanyButton';
 import React from 'react';
-import {ProfitLossTag} from '../company/ProfitLossTag';
+import {PurchasePerformance} from './PurchasePerformance';
 
 type Props = {
   company: UiCompanyStock | UiPortfolioCompany,
@@ -50,21 +50,6 @@ const InsightColors = Object.freeze({
   [InsightRecommendationType.Hold]: '#1a3a8d',
   [InsightRecommendationType.Unknown]: '#6c6c6c',
 });
-
-function ProfitLossData({company}: Pick<Props, 'company'>) {
-  if (!('breakEvenPrice' in company)) {
-    return null;
-  }
-
-  return <>
-    <div style={{marginTop: 5}}>
-      <ProfitLossTag company={company} prefixed />
-    </div>
-    <div style={{marginTop: 5}}>
-      <Tag>BEP: ${company.breakEvenPrice || '?'}</Tag>
-    </div>
-  </>;
-}
 
 export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
   const valuationType = company.valuation.data.type || ValuationType.Unknown;
@@ -100,7 +85,7 @@ export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
     <Descriptions size={'small'} layout={'vertical'}>
       <Item contentStyle={{display: 'block'}}>
         <SectorTag sector={company.sector} showQty={false} />
-        <ProfitLossData company={company} />
+        <PurchasePerformance company={company} />
       </Item>
       <Item contentStyle={{textAlign: 'center'}}>
         <Statistic
