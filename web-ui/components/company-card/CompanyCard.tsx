@@ -21,6 +21,7 @@ import {UiPortfolioCompany} from '../../pages/api/portfolio';
 import {RefreshCompanyButton} from '../company-actions/RefreshCompanyButton';
 import React from 'react';
 import {PurchasePerformance} from './PurchasePerformance';
+import {formatMoney} from '../../libs/utils/formatMoney';
 
 type Props = {
   company: UiCompanyStock | UiPortfolioCompany,
@@ -95,7 +96,7 @@ export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
           valueRender={() => (<>
             {Math.round(company.valuation.data.percentage * 100)}%
             <br />
-            ${company.price || '-'}
+            ${company.price ? formatMoney(company.price) : '-'}
           </>)}
         />
       </Item>
