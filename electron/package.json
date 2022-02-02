@@ -1,6 +1,6 @@
 {
   "name": "@investool/standalone",
-  "version": "1.0.0-alpha.7.1",
+  "version": "1.0.0-alpha.8",
   "description": "Magic Investool as a standalone app",
   "main": "server-dist/main.js",
   "scripts": {
@@ -41,19 +41,5 @@
     "ts-node": "^10.4.0",
     "typescript": "^4.5.5"
   },
-  "repository": "https://github.com/treble-snake/magic-investool",
-  "build": {
-    "appId": "org.treblesnake.investool",
-    "productName": "Magic Investool",
-    "files": [
-      "server-dist/**/*",
-      "static/**/*"
-    ],
-    "directories": {
-      "buildResources": "resources"
-    },
-    "publish": {
-      "provider":  "github"
-    }
-  }
+  "repository": "https://github.com/treble-snake/magic-investool"
 }

@@ -11,20 +11,17 @@ The idea is to have your Magic Formula portfolio, history and suggestions
 (enriched with financial data) in one place.
 
 ## Running
-### From source code
-**Prerequisites:**
-* Node >= 14
-* Yarn v1 or NPM
+### Standalone App
+You can download the latest built app from the [Releases](https://github.com/treble-snake/magic-investool/releases) page.
 
-Clone the repo. Run (you can use npm instead of yarn):
-* `yarn install`
-* `yarn setup` - follow the configuration instructions
-* `<PORT=3000> yarn start` - Web UI should be up and running on http://localhost:3000 by default
+Currently, only MacOS is supported.
 
-Environment variables (you can utilise `.env` files):
-* STORAGE_DIR (required) - folder to store data in JSON format
-* PORT (default: 3000) - port to serve Web UI from
-* BASE_YAHOO_URL (default: https://yfapi.net) - Yahoo Finance API origin
+Unfortunately, code signing and atuo-updates are not available at the moment. 
+
+#### Building from sources
+App is based on Electron, the code is under `electron/` folder.
+
+Detailed instructions: TBD.
 
 ### In Docker
 **Prerequisites:**
@@ -64,3 +61,18 @@ Environment variables:
   folder to store data in JSON format; 
   will be mounted as a volume to the docker container. 
 * PORT (default: 3000) - port to serve Web UI from
+
+### From source code
+**Prerequisites:**
+* Node >= 14
+* Yarn v1 or NPM
+
+Clone the repo. Run (you can use npm instead of yarn):
+* `yarn install`
+* `yarn setup` - follow the configuration instructions
+* `<PORT=3000> yarn start` - Web UI should be up and running on http://localhost:3000 by default
+
+Environment variables (you can utilise `.env` files):
+* STORAGE_DIR (required) - folder to store data in JSON format
+* PORT (default: 3000) - port to serve Web UI from
+* BASE_YAHOO_URL (default: https://yfapi.net) - Yahoo Finance API origin

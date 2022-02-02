@@ -4,7 +4,6 @@ dist
 coverage
 *.log
 .env
-tmp
 .investool-data
 .DS_Store
 
