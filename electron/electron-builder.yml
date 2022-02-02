@@ -1,0 +1,10 @@
+appId: org.treblesnake.investool
+productName: Magic Investool
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - server-dist/**/*
+  - static/**/*
+publish:
+  provider: github
