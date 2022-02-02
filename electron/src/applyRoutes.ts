@@ -5,7 +5,6 @@ const getHandler = async (file: string) => {
   const handle = (await import(file)).default;
   // Next.js adapter
   return (req: Request, res: Response) => {
-    // req.method
     req.query = {...req.query, ...req.params};
     return handle(req, res);
   };
@@ -24,13 +23,11 @@ export const applyRoutes = (
     const {__handler, ...children} = node;
     if (node.__handler) {
       server.all(path, await getHandler(node.__handler));
-      // console.warn(`Handler for |${path}| applied`);
     }
 
     // making sure dynamic routes applied last
     const pathNames = Object.keys(children).sort().reverse();
     return Promise.all(pathNames.map(async (key) => {
-        // console.warn('Processing ' + `${path}${key}`);
         const childNode = node[key];
         if (isNode(childNode)) {
           return applyRoute(childNode, `${path}${key}/`);
