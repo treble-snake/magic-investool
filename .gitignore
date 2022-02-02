@@ -11,4 +11,3 @@ coverage
 cron*.sh
 cron_log.txt
 nextron
-electorn-app
