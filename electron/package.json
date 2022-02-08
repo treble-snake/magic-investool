@@ -1,6 +1,6 @@
 {
   "name": "@investool/standalone",
-  "version": "1.0.0-alpha.8",
+  "version": "1.0.0-alpha.9",
   "description": "Magic Investool as a standalone app",
   "main": "server-dist/main.js",
   "scripts": {
