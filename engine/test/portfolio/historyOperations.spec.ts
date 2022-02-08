@@ -1,8 +1,4 @@
-import {portfolioOperations} from '../../src/portfoio/portfolioOperations';
-import {
-  CoreCompany,
-  PortfolioCompany
-} from '../../src/common/types/companies.types';
+import {PortfolioCompany} from '../../src/common/types/companies.types';
 import {
   filePortfolioStorage
 } from '../../src/portfoio/storage/FilePortfolioStorage';
@@ -17,6 +13,7 @@ import {
   HistoryRecord
 } from '../../src/portfoio/storage/HistoryStorage.types';
 import {historyOperations} from '../../src';
+import {mockYahooApi} from '../utils/yahooApiMocks';
 
 
 describe('history operations', () => {
@@ -72,6 +69,7 @@ describe('history operations', () => {
     });
 
     it('should restore removed company in portfolio when removing a sell', async () => {
+      mockYahooApi('BANG');
       const context = createContext([
         {ticker: 'ABC', name: 'Abc', sharesQty: 142}
       ], [
@@ -133,6 +131,7 @@ describe('history operations', () => {
     });
 
     it('should set purchase date of the latest buy when recreating item', async () => {
+      mockYahooApi('BANG');
       const context = createContext([], [
         {
           id: 'id1',
@@ -222,6 +221,7 @@ describe('history operations', () => {
     });
 
     it('should restore portfolio item if shares come back from 0', async () => {
+      mockYahooApi('BANG');
       const context = createContext([], [
         {id: 'id1', qty: 10, ticker: 'BANG', type: ActionType.BUY, price: 100},
         {id: 'id2', qty: 10, ticker: 'BANG', type: ActionType.BUY, price: 200},
