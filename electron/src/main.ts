@@ -9,11 +9,15 @@ function createWindow(backendPort: string | number) {
   const mainWindow = new BrowserWindow({
     width: 1400,
     height: 1000,
+    show: false,
     webPreferences: {
       preload: path.resolve(__dirname, 'prepareFrontend.js'),
       additionalArguments: [`--backendPort=${backendPort}`]
     }
   });
+
+  mainWindow.maximize();
+  mainWindow.show();
 
   loadURL(mainWindow);
   if (process.env.DEBUG) {
