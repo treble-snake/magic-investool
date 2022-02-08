@@ -1,6 +1,6 @@
 import {DisplayData} from '../common/DataDisplay';
 import {AccountData} from '../../pages/api/account';
-import {Button, Form, Input, Tooltip, Typography} from 'antd';
+import {Button, Form, Input, Select, Tooltip, Typography} from 'antd';
 import React, {useState} from 'react';
 import {QuestionCircleOutlined} from '@ant-design/icons';
 import {sendSimpleRequest} from '../common/ApiButton';
@@ -59,14 +59,14 @@ export const AccountForm = () => {
           </Form.Item>
 
           <Form.Item
-            label="Yahoo Finance API key"
-            name="yahooApiKey"
+            label="Yahoo Finance API keys"
+            name="yahooApiKeys"
             rules={[{
               required: true,
-              message: 'Please input magic formula login'
+              message: 'Please input at least one API key'
             }]}
           >
-            <Input />
+            <Select mode={'tags'} />
           </Form.Item>
 
           <Form.Item

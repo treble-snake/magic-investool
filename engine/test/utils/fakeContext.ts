@@ -4,6 +4,20 @@ import {emptyCache} from './emptyCache';
 import {
   UserAccountStorage
 } from '../../src/user-settings/UserAccountStorage.types';
+import {fakeFileStorage} from './fakeFileStorage';
+import {
+  fileUserAccountStorage
+} from '../../src/user-settings/FileUserAccountStorage';
+
+export const fakeApiKeys = (keys: string[]) => {
+  const fakeAccountFile = fakeFileStorage({
+    yahooApiKeys: keys.map(value => ({value}))
+  } as any);
+
+  return {
+    userAccountStorage: fileUserAccountStorage(fakeAccountFile)
+  };
+};
 
 export const fakeContext = (override?: Partial<AppContext>): AppContext => {
   return {
@@ -15,8 +29,8 @@ export const fakeContext = (override?: Partial<AppContext>): AppContext => {
     mfStorage: {} as any,
     userSettingsStorage: {} as any,
     userAccountStorage: {
-      getAccountData() {
-        return Promise.resolve({});
+      getYahooKeys() {
+        return Promise.resolve(['test-key']);
       }
     } as UserAccountStorage,
     ...override

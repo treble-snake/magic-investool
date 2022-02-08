@@ -4,20 +4,18 @@ import {
   PortfolioCompany
 } from '../../src/common/types/companies.types';
 import {
-  filePortfolioStorage, PortfolioData
+  filePortfolioStorage,
+  PortfolioData
 } from '../../src/portfoio/storage/FilePortfolioStorage';
 import {makeEmptyCompany} from '../../src/enrichment/makeEmptyCompany';
 import {
   fileHistoryStorage
 } from '../../src/portfoio/storage/FileHistoryStorage';
-import {MockAgent, setGlobalDispatcher} from 'undici';
-import {BASE_YAHOO_URL} from '../../src/common/config';
-import {dummyQuoteSummary} from '../data-source/yahoo/dummyQuoteSummary';
-import {dummyInsight} from '../data-source/yahoo/dummyInsight';
 import {fakeFileStorage} from '../utils/fakeFileStorage';
 import {fakeContext} from '../utils/fakeContext';
 import {FileStorage} from '../../src/storage/file';
 import {HistoryRecord} from '../../src/portfoio/storage/HistoryStorage.types';
+import {mockYahooApi} from '../utils/yahooApiMocks';
 
 function getOperations(
   portfolio: FileStorage<PortfolioData>,
@@ -99,19 +97,7 @@ describe('portfolio operations', () => {
         ]
       });
       const history = fakeFileStorage([]);
-
-      const mockAgent = new MockAgent({connections: 1});
-      const mockClient = mockAgent.get(BASE_YAHOO_URL);
-      setGlobalDispatcher(mockAgent);
-
-      mockClient.intercept({
-        path: /finance\/quoteSummary/,
-        method: 'GET',
-      }).reply(200, dummyQuoteSummary('BANG'));
-      mockClient.intercept({
-        path: /finance\/insights/,
-        method: 'GET',
-      }).reply(200, dummyInsight('BANG'));
+      mockYahooApi('BANG');
 
       await portfolioOperations({
         ...fakeContext(),

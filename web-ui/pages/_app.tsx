@@ -14,7 +14,8 @@ function MyApp({Component, pageProps}: AppProps) {
     {({data, mutate}) => {
       let content;
       if (
-        !data.yahooApiKey ||
+        !data.yahooApiKeys ||
+        data.yahooApiKeys.length === 0 ||
         !data.magicFormulaLogin ||
         !data.magicFormulaPassword
       ) {
