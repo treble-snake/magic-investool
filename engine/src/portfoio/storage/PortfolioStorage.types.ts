@@ -12,4 +12,8 @@ export interface PortfolioStorage {
   add(company: PortfolioCompany): Promise<PortfolioCompany>;
 
   remove(ticker: string): Promise<void>;
+
+  setPriceAlert(ticker: string, price: number): Promise<void>;
+
+  removePriceAlert(ticker: string): Promise<void>;
 }

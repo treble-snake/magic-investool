@@ -1,76 +1,41 @@
 import {fakeFileStorage} from '../utils/fakeFileStorage';
-import {fileHistoryStorage} from '../../src/portfoio/storage/FileHistoryStorage';
-import {ActionType} from '../../src/portfoio/storage/HistoryStorage.types';
-import exp from 'constants';
+import {
+  filePortfolioStorage
+} from '../../src/portfoio/storage/FilePortfolioStorage';
+import {PortfolioCompany} from '../../src';
 
-describe('FileHistoryStorage', () => {
-  const TEST_RECORD = Object.freeze({
-    type: ActionType.SELL,
-    qty: 123,
-    name: 'Abc Inc',
-    price: 321,
-    date: '2021-01-02',
-    ticker: 'ABC'
+describe('FilePortfolioStorage', () => {
+  const COMPANY_DATA = {
+    ticker: 'BANG',
+    price: 80,
+    breakEvenPrice: 100
+  } as PortfolioCompany;
+  const makeStorage = () => filePortfolioStorage(fakeFileStorage({
+    lastUpdate: '',
+    companies: [COMPANY_DATA]
+  }));
+
+  it('should do nothing if ticker doesnt exist', async () => {
+    const storage = makeStorage();
+    await storage.setPriceAlert('TEST', 100);
+    expect(await storage.findByTicker('BANG')).toEqual(COMPANY_DATA);
   });
 
-  it('should add a record', async () => {
-    const storage = fileHistoryStorage(fakeFileStorage([]));
-    await storage.addRecord(TEST_RECORD);
-
-    expect(await storage.findAll()).toEqual([
-      expect.objectContaining({id: expect.stringContaining(''), ...TEST_RECORD})
-    ]);
-  });
-
-  it('should delete a record', async () => {
-    const storage = fileHistoryStorage(fakeFileStorage([]));
-    await storage.addRecord(TEST_RECORD);
-    await storage.addRecord({...TEST_RECORD, type: ActionType.BUY});
-    const items = await storage.findAll();
-    await storage.deleteRecord(items[1].id);
-
-    expect(await storage.findAll()).toEqual([
-      expect.objectContaining(TEST_RECORD)
-    ]);
-  });
-
-  it('should not delete a record if ID is non-existing', async () => {
-    const storage = fileHistoryStorage(fakeFileStorage([]));
-    await storage.addRecord(TEST_RECORD);
-    await storage.deleteRecord('');
-
-    expect(await storage.findAll()).toEqual([
-      expect.objectContaining(TEST_RECORD)
-    ]);
-  });
-
-  it('should edit a record by id', async () => {
-    const storage = fileHistoryStorage(fakeFileStorage([]));
-    await storage.addRecord(TEST_RECORD);
-    await storage.addRecord({...TEST_RECORD, type: ActionType.BUY});
-    const items = await storage.findAll();
-    await storage.updateRecord(items[0].id, {
-      qty: 666,
-      price: 100500
+  it('should set price alert', async () => {
+    const storage = makeStorage();
+    await storage.setPriceAlert('BANG', 100);
+    expect(await storage.findByTicker('BANG')).toEqual({
+      ...COMPANY_DATA,
+      priceAlert: {price: 100}
     });
-
-    expect(await storage.findAll()).toEqual(expect.arrayContaining([
-      expect.objectContaining({
-        ...TEST_RECORD,
-        qty: 666,
-        price: 100500
-      }),
-      expect.objectContaining({...TEST_RECORD, type: ActionType.BUY}),
-    ]));
   });
 
-  it('should not edit anything with non-existing ID', async () => {
-    const storage = fileHistoryStorage(fakeFileStorage([]));
-    await storage.addRecord(TEST_RECORD);
-    await storage.updateRecord('', {qty: 77777});
-
-    expect(await storage.findAll()).toEqual([
-      expect.objectContaining(TEST_RECORD)
-    ]);
+  it('should remove price alert', async () => {
+    const storage = makeStorage();
+    await storage.setPriceAlert('BANG', 100);
+    await storage.removePriceAlert('BANG');
+    expect(await storage.findByTicker('BANG')).toEqual({
+      ...COMPANY_DATA,
+    });
   });
 });
