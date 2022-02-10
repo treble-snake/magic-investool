@@ -25,9 +25,14 @@ export type CompanyStock = CoreCompany & {
   rank: Rank;
 }
 
+export type PriceAlert = {
+  price: number;
+}
+
 export type PortfolioCompany = CompanyStock & {
   /** Last purchase */
   purchaseDate: string;
   sharesQty: number;
   breakEvenPrice: number;
+  priceAlert?: PriceAlert;
 }

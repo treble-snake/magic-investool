@@ -55,6 +55,13 @@ export const filePortfolioStorage = (
       all.push(company);
       await this.save(all);
       return company;
+    },
+    async setPriceAlert(ticker: string, price: number): Promise<void> {
+      await this.updateOne(ticker, {priceAlert: {price}});
+    },
+    async removePriceAlert(ticker: string): Promise<void> {
+      await this.updateOne(ticker, {priceAlert: undefined});
     }
+
   };
 };
