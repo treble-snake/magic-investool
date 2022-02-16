@@ -1,6 +1,15 @@
 import {DisplayData} from '../common/DataDisplay';
 import {AccountData} from '../../pages/api/account';
-import {Button, Checkbox, Form, Input, Select, Tooltip, Typography} from 'antd';
+import {
+  Alert,
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  Select,
+  Tooltip,
+  Typography
+} from 'antd';
 import React, {useState} from 'react';
 import {QuestionCircleOutlined} from '@ant-design/icons';
 import {sendSimpleRequest} from '../common/ApiButton';
@@ -86,12 +95,17 @@ export const AccountForm = () => {
             <Input type={'number'} />
           </Form.Item>
 
-          <Typography.Title level={5}>
-            Price notifications{' '}
-            <Tooltip title={'Only available in the standalone version'}>
-              <QuestionCircleOutlined/>
-            </Tooltip>
-          </Typography.Title>
+          <Typography.Title level={5}>Price notifications</Typography.Title>
+          <Form.Item>
+            <Alert type={'warning'} showIcon
+                   message={<>
+                     <div>Only available in the standalone version now.</div>
+                     <div>Restart the app to apply settings after saving them.
+                       Sorry 😬
+                     </div>
+                   </>}
+            />
+          </Form.Item>
 
           <Form.Item
             valuePropName="checked"

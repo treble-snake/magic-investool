@@ -1,6 +1,6 @@
 import {fakeFileStorage} from '../utils/fakeFileStorage';
 import {
-  fileUserAccountStorage
+  fileUserAccountStorage, InternalAccountData
 } from '../../src/user-settings/FileUserAccountStorage';
 
 const fakeData = () => ({
@@ -8,7 +8,10 @@ const fakeData = () => ({
   magicFormulaLogin: 'magicFormulaLogin',
   yahooCacheThreshold: 777,
   magicFormulaPassword: 'magicFormulaPassword',
-});
+  priceNotificationsEnabled: false,
+  priceSchedulerIntervalMin: 60,
+  priceSchedulerEnabled: false
+} as InternalAccountData);
 
 describe('FileUserAccountStorage', () => {
   it('should return account data', async () => {
