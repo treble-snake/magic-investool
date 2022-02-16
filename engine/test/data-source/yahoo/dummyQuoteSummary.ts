@@ -1,3 +1,5 @@
+export const DUMMY_PRICE = 777;
+
 export const dummyQuoteSummary = (ticker: string) => {
   return {
     "quoteSummary": {
@@ -2654,7 +2656,7 @@ export const dummyQuoteSummary = (ticker: string) => {
               "longFmt": "2"
             },
             "regularMarketPrice": {
-              "raw": 46.17,
+              "raw": DUMMY_PRICE,
               "fmt": "46.17"
             },
             "regularMarketDayHigh": {
@@ -9161,7 +9163,7 @@ export const dummyQuoteSummary = (ticker: string) => {
           "financialData": {
             "maxAge": 86400,
             "currentPrice": {
-              "raw": 46.17,
+              "raw": DUMMY_PRICE,
               "fmt": "46.17"
             },
             "targetHighPrice": {

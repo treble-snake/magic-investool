@@ -3,6 +3,9 @@ export type AccountData = {
   yahooCacheThreshold: number;
   magicFormulaLogin: string;
   magicFormulaPassword: string;
+  priceSchedulerEnabled: boolean;
+  priceSchedulerIntervalMin: number;
+  priceNotificationsEnabled: boolean;
 };
 
 export interface UserAccountStorage {

@@ -82,5 +82,34 @@ export const portfolioOperations = (context: AppContext) => ({
       .map(it => enrichmentOps.enrichCompany(it)));
 
     await portfolioStorage.save(enrichedCompanies);
+  },
+  async checkPrices() {
+    const enrichmentOps = enrichmentOperations(context);
+    const portfolio = await context.portfolioStorage.findAll();
+
+    const alertsTriggered: string[] = [];
+    const enrichedCompanies = await Promise.all(portfolio.map(async (it) => {
+      if (!it.priceAlert?.price) {
+        return it;
+      }
+
+      const oldPrice = it.price ?? 0;
+      const alertPrice = it.priceAlert.price;
+      // alert won't be triggered anyway, so no need to waste an API call
+      if (oldPrice >= alertPrice) {
+        return it;
+      }
+
+      // TODO: might be only 1 yahoo request, not both (basic + insights)
+      const updated = await enrichmentOps.enrichCompany(it);
+      if ((updated.price ?? 0) >= alertPrice) {
+        alertsTriggered.push(it.ticker);
+      }
+
+      return updated;
+    }));
+
+    await context.portfolioStorage.save(enrichedCompanies);
+    return alertsTriggered;
   }
 });

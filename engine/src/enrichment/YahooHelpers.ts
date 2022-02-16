@@ -62,7 +62,7 @@ export const enrichCompanyWithYahoo = (
     name: quoteType.longName,
     sector: assetProfile.sector,
     sectorScore: 0,
-    price: price?.regularMarketPrice?.raw || null,
+    price: price?.regularMarketPrice?.raw || null, // TODO: take a look at "financialData" obj
     industry: assetProfile.industry,
     country: assetProfile.country,
     revenue: processRevenue(incomeStatementHistory.incomeStatementHistory),

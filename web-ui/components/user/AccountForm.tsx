@@ -1,6 +1,6 @@
 import {DisplayData} from '../common/DataDisplay';
 import {AccountData} from '../../pages/api/account';
-import {Button, Form, Input, Select, Tooltip, Typography} from 'antd';
+import {Button, Checkbox, Form, Input, Select, Tooltip, Typography} from 'antd';
 import React, {useState} from 'react';
 import {QuestionCircleOutlined} from '@ant-design/icons';
 import {sendSimpleRequest} from '../common/ApiButton';
@@ -13,6 +13,14 @@ export const AccountForm = () => {
     <Tooltip
       title={'Since you have limited API calls with Yahoo, it\'s recommended to cache the data.\n' +
         'Set for how many hours you are comfortable with.'}>
+    <QuestionCircleOutlined />
+  </Tooltip>
+  </span>;
+
+  const priceCheckIntervalTooltip = <span>
+    Price check interval, minutes{' '}
+    <Tooltip
+      title={'Keep in mind it\'ll use up Yahoo API key daily quota'}>
     <QuestionCircleOutlined />
   </Tooltip>
   </span>;
@@ -76,6 +84,37 @@ export const AccountForm = () => {
             wrapperCol={{span: 2}}
           >
             <Input type={'number'} />
+          </Form.Item>
+
+          <Typography.Title level={5}>
+            Price notifications{' '}
+            <Tooltip title={'Only available in the standalone version'}>
+              <QuestionCircleOutlined/>
+            </Tooltip>
+          </Typography.Title>
+
+          <Form.Item
+            valuePropName="checked"
+            label={'Enable periodic price checks'}
+            name={'priceSchedulerEnabled'}
+          >
+            <Checkbox />
+          </Form.Item>
+
+          <Form.Item
+            label={priceCheckIntervalTooltip}
+            name="priceSchedulerIntervalMin"
+            wrapperCol={{span: 2}}
+          >
+            <Input type={'number'} />
+          </Form.Item>
+
+          <Form.Item
+            valuePropName="checked"
+            label={'Enable price in-app notifications'}
+            name={'priceNotificationsEnabled'}
+          >
+            <Checkbox />
           </Form.Item>
 
           <Form.Item wrapperCol={{offset: 4, span: 8}}>
