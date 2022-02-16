@@ -24,7 +24,8 @@
     "electron-serve": "^1.1.0",
     "express": "^4.17.2",
     "moment": "^2.29.1",
-    "ramda": "^0.28.0"
+    "ramda": "^0.28.0",
+    "toad-scheduler": "^1.6.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",

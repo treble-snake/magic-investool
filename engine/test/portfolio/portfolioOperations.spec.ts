@@ -16,6 +16,7 @@ import {fakeContext} from '../utils/fakeContext';
 import {FileStorage} from '../../src/storage/file';
 import {HistoryRecord} from '../../src/portfoio/storage/HistoryStorage.types';
 import {mockYahooApi} from '../utils/yahooApiMocks';
+import {DUMMY_PRICE} from '../data-source/yahoo/dummyQuoteSummary';
 
 function getOperations(
   portfolio: FileStorage<PortfolioData>,
@@ -24,7 +25,7 @@ function getOperations(
     ...fakeContext(),
     portfolioStorage: filePortfolioStorage(portfolio),
     historyStorage: fileHistoryStorage(history)
-  })
+  });
 }
 
 
@@ -229,6 +230,48 @@ describe('portfolio operations', () => {
           breakEvenPrice: 75
         } as PortfolioCompany)
       ]);
+    });
+  });
+
+  describe('checkPrices', function () {
+    function prepareContext(alertPrevPrice = 10) {
+      mockYahooApi('ALERT', 'NO_ALERT');
+      const portfolio = fakeFileStorage({
+        lastUpdate: 'xxx', companies: [
+          makeEmptyCompany({
+            ticker: 'ALERT',
+            price: alertPrevPrice,
+            priceAlert: {price: 20}
+          }),
+          makeEmptyCompany({ticker: 'NO_ALERT', price: 100}),
+        ] as PortfolioCompany[]
+      });
+
+      return {
+        ...fakeContext(),
+        portfolioStorage: filePortfolioStorage(portfolio),
+      };
+    }
+
+    it('should update only alerted companies', async () => {
+      const context = prepareContext();
+      await portfolioOperations(context).checkPrices();
+
+      const alert = await context.portfolioStorage.findByTicker('ALERT');
+      const noAlert = await context.portfolioStorage.findByTicker('NO_ALERT')
+
+      expect(alert?.price).toEqual(DUMMY_PRICE);
+      expect(noAlert?.price).toEqual(100);
+    });
+
+    it('should return tickers for triggered alerts', async () => {
+      const triggered = await portfolioOperations(prepareContext()).checkPrices();
+      expect(triggered).toEqual(['ALERT']);
+    });
+
+    it('should not trigger alerts if the price is already higher', async () => {
+      const triggered = await portfolioOperations(prepareContext(50)).checkPrices();
+      expect(triggered).toEqual([]);
     });
   });
 });

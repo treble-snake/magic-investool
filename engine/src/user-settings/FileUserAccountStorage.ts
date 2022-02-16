@@ -19,7 +19,10 @@ const DEFAULTS: InternalAccountData = Object.freeze({
   yahooApiKeys: [],
   magicFormulaLogin: '',
   magicFormulaPassword: '',
-  yahooCacheThreshold: 24
+  yahooCacheThreshold: 24,
+  priceSchedulerEnabled: false,
+  priceSchedulerIntervalMin: 120,
+  priceNotificationsEnabled: false
 });
 
 const compareApiKeys = (a: ApiKey, b: ApiKey) => {
@@ -50,7 +53,7 @@ const mergeKeys = (input: undefined | string[], current: ApiKey[]): ApiKey[] => 
   if (!filteredCurrent) {
     return input.map(value => ({value}));
   }
-  // add only keys missing in the sotrage
+  // add only keys missing in the storage
   const indexedCurrent = indexBy(prop('value'), filteredCurrent);
   const newInput = input.filter(it => !indexedCurrent[it]);
 
