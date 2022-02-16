@@ -12,7 +12,11 @@ export function activateMainWindow() {
 }
 
 export const createTrayIcon = () => {
-  const image = nativeImage.createFromPath(path.resolve(__dirname, '../../resources/tray@3x.png'));
+  console.debug('Setting up tray icon');
+  const iconPath = path.resolve(__dirname, '../../resources/tray@3x.png');
+  const image = nativeImage.createFromPath(iconPath);
+  console.debug(`Icon file:`, iconPath);
+  console.debug('Icon image empty?', image.isEmpty());
   const tray = new Tray(image);
   const contextMenu = Menu.buildFromTemplate([
     {label: 'Show main window', type: 'normal', click: activateMainWindow},

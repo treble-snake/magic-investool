@@ -4,6 +4,7 @@ import {existsSync, mkdirSync} from 'fs';
 import {prepareStorage} from '@investool/engine/dist/cli/utils/prepareStorage';
 
 export const ensureStorage = () => {
+  console.debug(`Storage dir from environment:`, process.env.STORAGE_DIR);
   if (!process.env.STORAGE_DIR) {
     console.debug('No storage dir set via environment variables, use app default');
     const storageDir = path.join(app.getPath('userData'), 'investool-data');

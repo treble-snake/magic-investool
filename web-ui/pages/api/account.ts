@@ -12,7 +12,6 @@ export default async function handler(
 ) {
   const {userAccountStorage} = defaultContext();
   if (req.method === 'POST') {
-    console.debug('Saving account data', req.body);
     await userAccountStorage.patchAccountData(req.body);
   }
 
