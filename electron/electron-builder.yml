@@ -6,5 +6,6 @@ directories:
 files:
   - server-dist/**/*
   - static/**/*
+  - resources/**/*
 publish:
   provider: github

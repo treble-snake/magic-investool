@@ -3,7 +3,6 @@ import {startServer} from './server';
 import {createTrayIcon} from './standalone/tray';
 import {createMainWindow} from './standalone/mainWindow';
 import {ensureStorage} from './standalone/storage';
-import {setupScheduledJobs} from './standalone/sheduler';
 
 let tray = null;
 
@@ -17,6 +16,11 @@ app.whenReady()
     backendPort = port;
     tray = createTrayIcon();
     createMainWindow();
+
+    // Have to use dynamic imports so ensureStorage() could kick in
+    // before we import engine parts that require STORAGE_DIR to be set
+    // Not ideal
+    const {setupScheduledJobs} = await import('./standalone/scheduler');
     setupScheduledJobs().catch(e => console.error('Failed to setup jobs', e));
 
     app.on('activate', () => {
