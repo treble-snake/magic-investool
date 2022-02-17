@@ -14,7 +14,7 @@ The idea is to have your Magic Formula portfolio, history and suggestions
 ### Standalone App
 You can download the latest built app from the [Releases](https://github.com/treble-snake/magic-investool/releases) page.
 
-Currently, only MacOS is supported.
+Currently, MacOS and Windows are supported.
 
 Unfortunately, code signing and atuo-updates are not available at the moment. 
 
