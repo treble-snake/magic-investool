@@ -24,7 +24,7 @@ app.whenReady()
     setupScheduledJobs().catch(e => console.error('Failed to setup jobs', e));
 
     app.on('activate', () => {
-      app.dock.show();
+      app.dock?.show();
       if (BrowserWindow.getAllWindows().length === 0) {
         createMainWindow();
       }
@@ -36,7 +36,7 @@ app.on('will-quit', () => {
 });
 
 app.on('window-all-closed', function () {
-  app.dock.hide();
+  app.dock?.hide();
   // // if (process.platform !== 'darwin') {
   // app.quit();
   // // }
