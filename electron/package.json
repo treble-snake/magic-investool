@@ -4,6 +4,7 @@
   "description": "Magic Investool as a standalone app",
   "main": "server-dist/main.js",
   "scripts": {
+    "install": "cd ../engine && yarn && yarn build",
     "postinstall": "electron-builder install-app-deps",
     "start": "yarn compile && DEBUG=true electron -r dotenv/config .",
     "test": "jest --maxWorkers=1",
@@ -14,6 +15,7 @@
     "app:publish": "electron-builder --publish always",
     "build:server": "yarn upgrade @investool/engine && rm -rf src/routes/api && rm -rf src/libs/cross-platform && cp -r ../web-ui/pages/api src/routes/api && cp -r ../web-ui/libs/cross-platform src/libs/cross-platform && yarn compile",
     "build:ui": "cd ../web-ui && yarn && yarn build && yarn export && rm -rf ../electron/static && cp -r ./out ../electron/static",
+    "build": "yarn build:server && yarn build:ui",
     "build:all": "yarn build:server && yarn build:ui && yarn app:dist"
   },
   "author": "Cap <treble.snake@gmail.com>",
