@@ -7,6 +7,7 @@
     "dist/"
   ],
   "scripts": {
+    "debug": "node --require ts-node/register -r dotenv/config --inspect",
     "go": "ts-node -r dotenv/config",
     "build": "rimraf dist/ && tsc -p tsconfig-build.json --declaration",
     "test": "jest --maxWorkers=1",

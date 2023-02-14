@@ -1,1 +1,1 @@
-export const AUTH_COOKIE = '.ASPXAUTH';
+export const AUTH_COOKIE = 'mfi';
