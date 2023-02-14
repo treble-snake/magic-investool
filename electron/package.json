@@ -13,10 +13,11 @@
     "app:pack": "electron-builder --dir",
     "app:dist": "electron-builder",
     "app:publish": "electron-builder --publish always",
+    "build:engine": "cd ../engine && yarn && yarn build",
     "build:server": "yarn upgrade @investool/engine && rm -rf src/routes/api && rm -rf src/libs/cross-platform && cp -r ../web-ui/pages/api src/routes/api && cp -r ../web-ui/libs/cross-platform src/libs/cross-platform && yarn compile",
     "build:ui": "cd ../web-ui && yarn && yarn build && yarn export && rm -rf ../electron/static && cp -r ./out ../electron/static",
     "build": "yarn build:server && yarn build:ui",
-    "build:all": "yarn build:server && yarn build:ui && yarn app:dist"
+    "build:all": "yarn build:engine && yarn build:server && yarn build:ui && yarn app:dist"
   },
   "author": "Cap <treble.snake@gmail.com>",
   "license": "MIT",
@@ -35,8 +36,8 @@
     "@types/jest": "^27.4.0",
     "@types/ramda": "^0.27.64",
     "dotenv": "^15.0.1",
-    "electron": "^17.0.0",
-    "electron-builder": "^22.14.5",
+    "electron": "^23.0.0",
+    "electron-builder": "^23.6.0",
     "jest": "^27.4.7",
     "next": "^12.0.10",
     "rimraf": "^3.0.2",
