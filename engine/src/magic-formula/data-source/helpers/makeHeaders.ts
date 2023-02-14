@@ -1,9 +1,8 @@
 import cookie from 'cookie';
 import {AUTH_COOKIE} from '../constants';
-import {IncomingHttpHeaders} from 'http';
 
 export const makeHeaders = (token?: string) => {
-  const headers: IncomingHttpHeaders = {
+  const headers: Record<string, string> = {
     'content-type': 'application/x-www-form-urlencoded'
   };
 
