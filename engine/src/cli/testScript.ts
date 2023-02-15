@@ -1,18 +1,25 @@
 import {run} from './utils/run';
-import {magicFormulaOperations} from '../magic-formula/magicFormulaOperations';
 import {defaultContext} from '../context/context';
 import {enrichmentOperations} from '../enrichment/operations';
-import {compose, map, omit, pick} from 'ramda';
-import {portfolioOperations} from '../portfoio/portfolioOperations';
-import {rankOperations} from '../evaluation/rankOperations';
 
 
 run(async () => {
   const context = defaultContext();
 
-  // const data =
-  //   await enrichmentOperations(context).enrichCompany({ticker: 'QDEL'}, false);
+  const data =
+    await enrichmentOperations(context).enrichCompany({ticker: 'SIGA'}, false);
 
-  await magicFormulaOperations(context)
-    .refresh();
+  console.warn(data);
+  // await magicFormulaOperations(context)
+  //   .refresh();
+
+  // console.warn(
+  //   parseHtml(
+  //     await getCompanies(
+  //       await login(
+  //         MF_AUTH_EMAIL, MF_AUTH_PASSWORD
+  //       )
+  //     )
+  //   )
+  // );
 });

@@ -6,4 +6,6 @@ if (!STORAGE_DIR) {
 }
 
 // APIs
+/** @deprecated */
 export const BASE_YAHOO_URL = process.env.BASE_YAHOO_URL || 'https://yfapi.net';
+export const BASE_ALPHAVANTAGE_URL = process.env.BASE_ALPHAVANTAGE_URL || 'https://www.alphavantage.co';

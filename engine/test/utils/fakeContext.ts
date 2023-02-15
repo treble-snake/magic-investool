@@ -1,9 +1,6 @@
 import {AppContext} from '../../src/context/context';
 import * as config from '../../src/common/config';
 import {emptyCache} from './emptyCache';
-import {
-  UserAccountStorage
-} from '../../src/user-settings/UserAccountStorage.types';
 import {fakeFileStorage} from './fakeFileStorage';
 import {
   fileUserAccountStorage
@@ -28,11 +25,7 @@ export const fakeContext = (override?: Partial<AppContext>): AppContext => {
     historyStorage: {} as any,
     mfStorage: {} as any,
     userSettingsStorage: {} as any,
-    userAccountStorage: {
-      getYahooKeys() {
-        return Promise.resolve(['test-key']);
-      }
-    } as UserAccountStorage,
+    userAccountStorage: {} as any,
     ...override
   };
 };

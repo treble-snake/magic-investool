@@ -10,7 +10,17 @@ export type EnrichableCompany =
   & Pick<CoreCompany, 'ticker'>;
 
 export const makeEmptyCompany = <T extends EnrichableCompany>(core: T): T & CompanyStock => {
+  const lastYear = subYears(new Date(), 1).toISOString();
   return {
+    // new
+    basics: {
+      marketCap: 0,
+      peRatio: 0
+    },
+    lastUpdates: {
+      alphavantageFundamentals: lastYear
+    },
+    // old, TODO: evaluate
     sector: '',
     sectorScore: 0,
     price: null,
@@ -43,7 +53,7 @@ export const makeEmptyCompany = <T extends EnrichableCompany>(core: T): T & Comp
       },
       score: 0
     },
-    lastUpdated: subYears(new Date(), 1).toISOString(),
+    lastUpdated: lastYear,
     rank: {
       byRecommendation: 0,
       byRevenue: 0,

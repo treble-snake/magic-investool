@@ -1,8 +1,10 @@
 export type AccountData = {
-  yahooApiKeys: string[];
-  yahooCacheThreshold: number;
+  alphavantageApiKey: string;
+  // TODO: do we need this?
+  alphavantageCacheThreshold: number;
   magicFormulaLogin: string;
   magicFormulaPassword: string;
+  // TODO: re-evaluate
   priceSchedulerEnabled?: boolean;
   priceSchedulerIntervalMin?: number;
   priceNotificationsEnabled?: boolean;
@@ -12,8 +14,4 @@ export interface UserAccountStorage {
   getAccountData(): Promise<AccountData>;
 
   patchAccountData(data: Partial<AccountData>): Promise<AccountData>;
-
-  reportYahooKey(key: string, reason?: string): Promise<void>;
-
-  getYahooKeys(): Promise<string[]>;
 }

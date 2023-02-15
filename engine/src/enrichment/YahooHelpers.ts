@@ -70,3 +70,5 @@ export const enrichCompanyWithYahoo = (
     recommendation: mapRecommendation(basic, insights),
   };
 };
+
+// todo: delete file
