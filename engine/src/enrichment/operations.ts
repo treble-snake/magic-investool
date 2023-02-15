@@ -1,10 +1,8 @@
 import {AppContext} from '../context/context';
-import {CompanyStock, CoreCompany} from '../common/types/companies.types';
-import {enrichCompanyWithYahoo} from './YahooHelpers';
+import {CompanyStock} from '../common/types/companies.types';
 import {logger} from '../common/logging/logger';
 import {EnrichableCompany, makeEmptyCompany} from './makeEmptyCompany';
-import {differenceInHours} from 'date-fns';
-import {yahooApi} from './yahoo/yahooApi';
+import {alphavantageApi} from './alphavantage/alphavantageApi';
 
 const getTimestamp = (company: CompanyStock) => {
   if ('lastUpdated' in company && company.lastUpdated) {
@@ -14,39 +12,39 @@ const getTimestamp = (company: CompanyStock) => {
   return 0;
 };
 
-const fetchData = async (ticker: string, forceUpdate: boolean, context: AppContext) => {
-  logger.info(`Enriching ${ticker}`);
-
-  if (!forceUpdate) {
-    const cached = await context.yahooCache.get(ticker);
-    if (cached) {
-      const cacheAge = differenceInHours(new Date(), new Date(cached.lastUpdated));
-      const threshold = await context.userAccountStorage.getAccountData()
-        .then(it => it.yahooCacheThreshold);
-      if (cacheAge <= threshold) {
-        logger.debug(`Using fresh enough (${cacheAge}h) cache values for ${ticker}`);
-        return cached;
-      }
-    }
-    logger.debug(`Couldn\'t find info in the cache for ${ticker}`);
-  }
-
-  // TODO: don't fail all if only 1 req failed
-  // TODO: decouple API data source, read from context
-  const api = yahooApi(context);
-  const [basic, insights] = await Promise.all([
-    api.getCompanyData(ticker),
-    api.getInsightData(ticker)
-  ]);
-
-  const result = {basic, insights, lastUpdated: new Date().toISOString()};
-  context.yahooCache
-    .set(ticker, result)
-    .then(() => logger.info(`Cache updated for ${ticker}`))
-    .catch(e => logger.warn(`Failed to write to cache for ${ticker}`, e));
-
-  return result;
-};
+// const fetchData = async (ticker: string, forceUpdate: boolean, context: AppContext) => {
+//   logger.info(`Enriching ${ticker}`);
+//
+//   if (!forceUpdate) {
+//     const cached = await context.yahooCache.get(ticker);
+//     if (cached) {
+//       const cacheAge = differenceInHours(new Date(), new Date(cached.lastUpdated));
+//       const threshold = await context.userAccountStorage.getAccountData()
+//         .then(it => it.yahooCacheThreshold);
+//       if (cacheAge <= threshold) {
+//         logger.debug(`Using fresh enough (${cacheAge}h) cache values for ${ticker}`);
+//         return cached;
+//       }
+//     }
+//     logger.debug(`Couldn\'t find info in the cache for ${ticker}`);
+//   }
+//
+//   // TODO: don't fail all if only 1 req failed
+//   // TODO: decouple API data source, read from context
+//   const api = yahooApi(context);
+//   const [basic, insights] = await Promise.all([
+//     api.getCompanyData(ticker),
+//     api.getInsightData(ticker)
+//   ]);
+//
+//   const result = {basic, insights, lastUpdated: new Date().toISOString()};
+//   context.yahooCache
+//     .set(ticker, result)
+//     .then(() => logger.info(`Cache updated for ${ticker}`))
+//     .catch(e => logger.warn(`Failed to write to cache for ${ticker}`, e));
+//
+//   return result;
+// };
 
 export const enrichmentOperations = (context: AppContext) => ({
   /**
@@ -62,23 +60,40 @@ export const enrichmentOperations = (context: AppContext) => ({
       throw new Error(`Given company (${company.name}) does not have a ticker`);
     }
 
-    // TODO: cache gets called twice (1st time in fetchData())
-    const data = await fetchData(company.ticker, forceUpdate, context)
-      .catch(e => {
-        logger.warn(`Unable to get data for ${company.ticker}, fallback to cache.`, e);
-        return context.yahooCache.get(company.ticker)
-      });
+    try {
+      const alphaVantageApi = alphavantageApi(context);
+      const basic = await alphaVantageApi.getCompanyOverview(company.ticker);
 
-    if (data) {
       return {
         ...makeEmptyCompany(company),
-        ...enrichCompanyWithYahoo(data.basic, data.insights),
-        lastUpdated: data.lastUpdated
-      };
-    }
+        basics: {
+          peRatio: Number.parseFloat(basic.PERatio) || 0,
+          marketCap: Number.parseInt(basic.MarketCapitalization, 10) || 0
+        },
+        name: basic.Name,
+        lastUpdates: {
+          alphavantageFundamentals: new Date().toISOString()
+        },
+        sector: basic.Sector,
+      } as CompanyStock;
 
-    logger.warn(`No data were found for ${company.ticker}, fallback to empty`);
-    return makeEmptyCompany(company);
+      // const data = await fetchData(company.ticker, forceUpdate, context)
+      //   .catch(e => {
+      //     logger.warn(`Unable to get data for ${company.ticker}, fallback to cache.`, e);
+      //     return context.yahooCache.get(company.ticker)
+      //   });
+      //
+      // if (data) {
+      //   return {
+      //     ...makeEmptyCompany(company),
+      //     ...enrichCompanyWithYahoo(data.basic, data.insights),
+      //     lastUpdated: data.lastUpdated
+      //   };
+      // }
+    } catch (e) {
+      logger.error(`Error looking for ${company.ticker} data: ${e}`)
+      return makeEmptyCompany(company);
+    }
 
   },
   async enrichOutdated(current: CompanyStock[], batchSize = 5) {

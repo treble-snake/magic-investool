@@ -12,17 +12,49 @@ export type CoreCompany = {
 }
 
 export type CompanyStock = CoreCompany & {
-  lastUpdated: string;
-  industry: string;
-  // TODO: maybe use CompanyIndicator for sector?
+
   sector: string;
-  sectorScore: number;
-  country: string;
+
+  /**
+   * Currently coming from AlphaVantage
+   */
+  basics?: BasicCompanyInfo;
+
+  lastUpdates?: {
+    alphavantageFundamentals: string;
+  }
+
   price: number | null;
-  revenue: CompanyIndicator<RevenueData>;
-  valuation: CompanyIndicator<ValuationData>;
-  recommendation: CompanyIndicator<RecommendationData>;
+
   rank: Rank;
+
+  /** @deprecated */
+  lastUpdated: string;
+  /** @deprecated */
+  industry: string;
+  /** @deprecated */
+  sectorScore: number;
+  /** @deprecated */
+  country: string;
+
+  /** @deprecated */
+  revenue: CompanyIndicator<RevenueData>;
+  /** @deprecated */
+  valuation: CompanyIndicator<ValuationData>;
+  /** @deprecated */
+  recommendation: CompanyIndicator<RecommendationData>;
+}
+
+// From alphavantage
+export type BasicCompanyInfo = {
+  peRatio: number;
+  marketCap: number;
+  // /** Prediction of the price in the future */
+  // analystTargetPrice: number;
+  // highestPrice52Weeks: number;
+  // lowestPrice52Weeks: number,
+  // avgPrice50Days: number;
+  // avgPrice200Days: number;
 }
 
 export type PriceAlert = {
