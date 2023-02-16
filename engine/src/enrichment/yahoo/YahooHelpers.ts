@@ -1,13 +1,13 @@
-import {CompanyStock} from '../common/types/companies.types';
-import {Result as BasicResult} from './yahoo/types/ticker';
-import {Result as InsightResult} from './yahoo/types/insight';
+import {CompanyStock} from '../../common/types/companies.types';
+import {Result as BasicResult} from './types/ticker';
+import {Result as InsightResult} from './types/insight';
 import {prop, sort} from 'ramda';
 import {
   CompanyIndicator,
   RecommendationData,
   RevenueData,
   ValuationData
-} from '../common/types/ranking.types';
+} from '../../common/types/ranking.types';
 
 const processRevenue = (incomeHistory: any[]): CompanyIndicator<RevenueData> => {
   const data = sort(prop('timestamp'), incomeHistory.map((it) => ({

@@ -23,7 +23,6 @@ export type AppContext = {
   mfStorage: MagicFormulaStorage,
   mfChangelogStorage: ChangelogStorage,
   userSettingsStorage: UserSettingsStorage,
-  yahooCache: KeyValueCache<YahooCacheItem>,
   userAccountStorage: UserAccountStorage,
   config: typeof config
 };
@@ -35,7 +34,6 @@ export const defaultContext = (): AppContext => {
     mfStorage: fileMagicFormulaStorage(),
     mfChangelogStorage: fileChangelogStorage(),
     userSettingsStorage: fileUserSettingsStorage(),
-    yahooCache: makeDefaultYahooCache(),
     userAccountStorage: fileUserAccountStorage(),
     config
   };

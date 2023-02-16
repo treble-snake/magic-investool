@@ -4,9 +4,11 @@ export type CompanyIndicator<T> = {
 }
 
 export type RevenueData = Array<{
+  /** @deprecated */
   timestamp: number;
   date: string;
   value: number;
+  /** @deprecated should be calculated at the presentation level */
   valueStr: string;
 }>;
 

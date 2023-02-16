@@ -1,15 +1,20 @@
 import {run} from './utils/run';
 import {defaultContext} from '../context/context';
 import {enrichmentOperations} from '../enrichment/operations';
+import {prepareStorage} from './utils/prepareStorage';
 
 
 run(async () => {
   const context = defaultContext();
 
+  prepareStorage();
+
   const data =
     await enrichmentOperations(context).enrichCompany({ticker: 'SIGA'}, false);
 
-  console.warn(data);
+  console.warn(require('util').inspect(data, false, null));
+
+
   // await magicFormulaOperations(context)
   //   .refresh();
 
