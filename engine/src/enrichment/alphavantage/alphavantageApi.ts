@@ -1,7 +1,7 @@
 import {AppContext} from '../../context/context';
 import {BASE_ALPHAVANTAGE_URL} from '../../common/config';
 import {request} from 'undici';
-import {CompanyOverview} from './types/api';
+import {CompanyOverview, IncomeStatement} from './types/api';
 
 type Props = {
   function: string,
@@ -23,20 +23,24 @@ export const alphavantageApi = (context: AppContext) => {
     const data = await response.body.json();
 
     if (data['Error Message']) {
-      throw new Error(`Failed to make request ${query.function} to AlphaVantage: ${data['Error Message']}`)
+      throw new Error(`${query.function}: Failed to make request to AlphaVantage: ${data['Error Message']}`)
     }
 
     if (data['Note']) {
       if (typeof data['Note'] === 'string' && data['Note'].includes('frequency')) {
         // TODO: make a special class Exception ?
-        throw new Error(`Too many requests to AlphaVantage`);
+        throw new Error(`${query.function}: Too many requests to AlphaVantage`);
       }
 
-      throw new Error(`Unexpected AlphaVantage response: ${data['Note']}`);
+      throw new Error(`${query.function}: Unexpected AlphaVantage response: ${data['Note']}`);
     }
 
     if (response.statusCode !== 200) {
-      throw new Error(`Failed to make request ${query.function} to AlphaVantage: ${response.statusCode}`);
+      throw new Error(`${query.function}: Failed to make request to AlphaVantage, code: ${response.statusCode}`);
+    }
+
+    if (data.Symbol !== query.symbol && data.symbol !== query.symbol) {
+      throw new Error(`${query.function}: Data on company (ticker ${query.symbol}) not found`);
     }
 
     return data;
@@ -44,15 +48,17 @@ export const alphavantageApi = (context: AppContext) => {
 
   return {
     async getCompanyOverview(ticker: string) {
-      const data = await makeRequest<CompanyOverview>({
+      return makeRequest<CompanyOverview>({
         function: 'OVERVIEW',
         symbol: ticker
       });
-
-      if (data.Symbol !== ticker) {
-        throw new Error(`Data on company (ticker ${ticker}) not found`);
-      }
-      return data;
+    },
+    async getIncomeStatement(ticker: string) {
+      // https://www.alphavantage.co/documentation/#income-statement
+      return makeRequest<IncomeStatement>({
+        function: 'INCOME_STATEMENT',
+        symbol: ticker
+      });
     }
   };
 };

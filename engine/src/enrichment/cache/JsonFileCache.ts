@@ -7,6 +7,9 @@ export class JsonFileCache<T> implements KeyValueCache<T> {
   constructor(
     private storageDir: string
   ) {
+    // TODO: should it ensure the storageDir exists?
+    //       currently there is a prepareStorage() thingy, but there should be a better way ?
+    //       maybe it's not to bad to check the dir each time
   }
 
   private fullPath(key: string) {

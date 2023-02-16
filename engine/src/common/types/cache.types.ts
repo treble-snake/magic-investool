@@ -5,3 +5,9 @@ export interface KeyValueCache<T> {
 
   del(key: string): Promise<void>;
 }
+
+export type CachedEntity <T> = {
+  lastUpdated: string;
+
+  data: T;
+}
