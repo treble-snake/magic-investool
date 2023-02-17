@@ -18,10 +18,11 @@ export type CompanyStock = CoreCompany & {
   /**
    * Currently coming from AlphaVantage
    */
-  basics?: BasicCompanyInfo;
+  overview: BasicCompanyInfo;
 
-  lastUpdates?: {
-    alphavantageFundamentals: string;
+  lastUpdates: {
+    alphavantageOverview: string;
+    alphavantageIncome: string;
   }
 
   price: number | null;

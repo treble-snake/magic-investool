@@ -1,7 +1,6 @@
 import {existsSync} from 'fs';
 import path from 'path';
 import {STORAGE_DIR} from '../../common/config';
-import {YAHOO_CACHE_DIR} from '../../enrichment/cache/YahooCache';
 import {
   AV_OVERVIEW_CACHE_DIR
 } from '../../enrichment/alphavantage/cache/OverviewCache';
@@ -10,6 +9,8 @@ import {
 } from '../../enrichment/alphavantage/cache/IncomeCache';
 import {mkdirpSync, removeSync} from 'fs-extra';
 
+// from removed Yahoo module
+const YAHOO_CACHE_DIR = 'yahoo-cache';
 export const prepareStorage = () => {
   [
     path.join(STORAGE_DIR, AV_OVERVIEW_CACHE_DIR),

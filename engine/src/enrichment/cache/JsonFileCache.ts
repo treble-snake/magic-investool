@@ -21,7 +21,8 @@ export class JsonFileCache<T> implements KeyValueCache<T> {
       const fd = await readFile(this.fullPath(key));
       return JSON.parse(fd.toString()) as T;
     } catch (e) {
-      logger.debug(`Failed to read cache entry for ${key}`, e);
+      // TODO: use verbose or trace or something, this is unhelpful even on the debug level
+      // logger.debug(`Failed to read cache entry for ${key}`, e);
       return null;
     }
   }

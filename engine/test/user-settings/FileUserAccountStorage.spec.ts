@@ -1,17 +1,10 @@
 import {fakeFileStorage} from '../utils/fakeFileStorage';
 import {
-  fileUserAccountStorage, InternalAccountData
+  fileUserAccountStorage
 } from '../../src/user-settings/FileUserAccountStorage';
+import {FAKE_ACCOUNT_DATA} from '../utils/fakeContext';
 
-const fakeData = () => ({
-  yahooApiKeys: [{value: 'key1', lastFailedAt: 123}, {value: 'key2'}],
-  magicFormulaLogin: 'magicFormulaLogin',
-  yahooCacheThreshold: 777,
-  magicFormulaPassword: 'magicFormulaPassword',
-  priceNotificationsEnabled: false,
-  priceSchedulerIntervalMin: 60,
-  priceSchedulerEnabled: false
-} as InternalAccountData);
+const fakeData = () => FAKE_ACCOUNT_DATA;
 
 describe('FileUserAccountStorage', () => {
   it('should return account data', async () => {
@@ -19,7 +12,6 @@ describe('FileUserAccountStorage', () => {
 
     expect(await storage.getAccountData()).toEqual({
       ...fakeData(),
-      yahooApiKeys: ['key1', 'key2'],
     });
   });
 
@@ -27,38 +19,12 @@ describe('FileUserAccountStorage', () => {
     const storage = fileUserAccountStorage(fakeFileStorage(fakeData()));
     await storage.patchAccountData({
       magicFormulaLogin: 'newLogin',
-      yahooCacheThreshold: 1000
+      priceSchedulerIntervalMin: 100,
     });
     expect(await storage.getAccountData()).toEqual({
       ...fakeData(),
-      yahooApiKeys: ['key1', 'key2'],
       magicFormulaLogin: 'newLogin',
-      yahooCacheThreshold: 1000,
+      priceSchedulerIntervalMin: 100,
     });
-  });
-
-  it('should change API keys', async () => {
-    const storage = fileUserAccountStorage(fakeFileStorage(fakeData()));
-    await storage.patchAccountData({
-      yahooApiKeys: ['key3', 'key4']
-    });
-    expect(await storage.getAccountData()).toEqual({
-      ...fakeData(),
-      yahooApiKeys: ['key3', 'key4'],
-    });
-  });
-
-  it('should save the order of the existing keys', async () => {
-    const storage = fileUserAccountStorage(fakeFileStorage(fakeData()));
-
-    await storage.patchAccountData({
-      yahooApiKeys: ['key1', 'key3',  'key2']
-    });
-    expect(await storage.getAccountData()).toEqual({
-      ...fakeData(),
-      yahooApiKeys: ['key3', 'key1', 'key2'],
-    });
-
-    expect(await storage.getYahooKeys()).toEqual(['key3', 'key2', 'key1']);
   });
 });
