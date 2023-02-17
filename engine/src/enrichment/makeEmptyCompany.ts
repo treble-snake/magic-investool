@@ -13,12 +13,13 @@ export const makeEmptyCompany = <T extends EnrichableCompany>(core: T): T & Comp
   const lastYear = subYears(new Date(), 1).toISOString();
   return {
     // new
-    basics: {
+    overview: {
       marketCap: 0,
       peRatio: 0
     },
     lastUpdates: {
-      alphavantageFundamentals: lastYear
+      alphavantageOverview: lastYear,
+      alphavantageIncome: lastYear
     },
     // old, TODO: evaluate
     sector: '',
@@ -61,7 +62,7 @@ export const makeEmptyCompany = <T extends EnrichableCompany>(core: T): T & Comp
       byValuation: 0,
       total: 0
     },
-    name: core.ticker,
+    name: core.name || core.ticker,
     ...core
   };
 };

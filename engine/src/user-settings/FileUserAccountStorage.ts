@@ -6,7 +6,7 @@ const USER_SETTINGS_FILENAME = 'userAccount.json';
 const DEFAULTS: AccountData = Object.freeze({
   // TODO: tmp
   alphavantageApiKey: String(process.env.ALPHAVANTAGE_API_KEY),
-  alphavantageCacheThreshold: 24,
+  // alphavantageCacheThreshold: 24,
   magicFormulaLogin: '',
   magicFormulaPassword: '',
   priceSchedulerEnabled: false,

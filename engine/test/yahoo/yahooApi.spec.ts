@@ -28,6 +28,8 @@
 // }
 
 describe.skip('Yahoo HTTP client', () => {
+  it.skip('nothing', () => {
+  });
   // beforeEach(setupMocks);
   //
   // it('should rotate API keys', async () => {

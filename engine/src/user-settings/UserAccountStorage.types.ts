@@ -1,7 +1,7 @@
 export type AccountData = {
   alphavantageApiKey: string;
   // TODO: do we need this?
-  alphavantageCacheThreshold: number;
+  // alphavantageCacheThreshold: number;
   magicFormulaLogin: string;
   magicFormulaPassword: string;
   // TODO: re-evaluate
