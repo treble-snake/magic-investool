@@ -1,6 +1,6 @@
 // import {MockAgent, setGlobalDispatcher} from 'undici';
 // import {BASE_YAHOO_URL} from '../../src/common/config';
-// import {dummyQuoteSummary} from '../data-source/yahoo/dummyQuoteSummary';
+// import {dummyQuoteSummary} from '../data-source/yahoo-to-be-removed/dummyQuoteSummary';
 //
 // function setupMocks() {
 //   const mockAgent = new MockAgent({connections: 1});

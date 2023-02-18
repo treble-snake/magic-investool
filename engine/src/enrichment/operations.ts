@@ -2,12 +2,12 @@ import {AppContext} from '../context/context';
 import {CompanyStock} from '../common/types/companies.types';
 import {logger} from '../common/logging/logger';
 import {EnrichableCompany, makeEmptyCompany} from './makeEmptyCompany';
-import {alphavantageApi} from './alphavantage/alphavantageApi';
+import {makeAlphavantageApi} from './alphavantage/makeAlphavantageApi';
 import {processRevenue} from './alphavantage/mappers/processRevenue';
-import {makeDefaultOverviewCache} from './alphavantage/cache/OverviewCache';
-import {makeDefaultIncomeCache} from './alphavantage/cache/IncomeCache';
 import {CachedEntity, KeyValueCache} from '../common/types/cache.types';
 import {differenceInHours} from 'date-fns';
+import {makeFinnhubApi} from './finnhub/makeFinnhubApi';
+import {processRecommendation} from './finnhub/mappers/processRecommendation';
 
 const getTimestamp = (company: CompanyStock) => {
   if ('lastUpdated' in company && company.lastUpdated) {
@@ -42,7 +42,7 @@ const fetchDataWithCache = async <T>(
     const result = {data, lastUpdated: new Date().toISOString()};
     cache
       .set(ticker, result)
-      .then(() => logger.info(`${operation}: Cache updated for ${ticker}`))
+      .then(() => logger.debug(`${operation}: Cache updated for ${ticker}`))
       .catch(e => logger.warn(`${operation}: Failed to write to cache for ${ticker}`, e));
 
     return result;
@@ -67,22 +67,40 @@ export const enrichmentOperations = (context: AppContext) => ({
     }
 
     try {
-      // TODO: move cache to the context? api to the context?
-      const alphaVantageApi = alphavantageApi(context);
+      const alphavantageApi = makeAlphavantageApi(context);
       const overview = await fetchDataWithCache(
         company.ticker,
         'overview',
-        () => alphaVantageApi.getCompanyOverview(company.ticker),
-        makeDefaultOverviewCache(),
+        () => alphavantageApi.getCompanyOverview(company.ticker),
+        context.cache.alphavantageOverview,
         24,
         forceUpdate
       );
       const income = await fetchDataWithCache(
         company.ticker,
         'income',
-        () => alphaVantageApi.getIncomeStatement(company.ticker),
-        makeDefaultIncomeCache(),
+        () => alphavantageApi.getIncomeStatement(company.ticker),
+        context.cache.alphavantageIncome,
         24 * 30,
+        forceUpdate
+      );
+
+      const finnhubApi = makeFinnhubApi(context);
+      const price = await fetchDataWithCache(
+        company.ticker,
+        'price',
+        () => finnhubApi.getPrice(company.ticker),
+        context.cache.finnhubPrice,
+        1,
+        forceUpdate
+      );
+
+      const recommendation = await fetchDataWithCache(
+        company.ticker,
+        'recommendation',
+        () => finnhubApi.getRecommendationTrends(company.ticker),
+        context.cache.finnhubRecommendation,
+        24,
         forceUpdate
       );
 
@@ -100,6 +118,14 @@ export const enrichmentOperations = (context: AppContext) => ({
       if (income) {
         result.revenue = processRevenue(income.data.annualReports || []);
         result.lastUpdates.alphavantageIncome = income.lastUpdated;
+      }
+      if (price) {
+        result.price = price.data.c;
+        result.lastUpdates.finnhubPrice = price.lastUpdated;
+      }
+      if (recommendation) {
+        result.recommendation = processRecommendation(recommendation.data);
+        result.lastUpdates.finnhubRecommendation = recommendation.lastUpdated;
       }
 
       return result;

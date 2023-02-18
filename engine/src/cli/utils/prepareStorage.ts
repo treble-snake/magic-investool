@@ -8,13 +8,19 @@ import {
   AV_INCOME_CACHE_DIR
 } from '../../enrichment/alphavantage/cache/IncomeCache';
 import {mkdirpSync, removeSync} from 'fs-extra';
+import {FH_PRICE_CACHE_DIR} from '../../enrichment/finnhub/cache/PriceCache';
+import {
+  FH_RECOMMENDATION_CACHE_DIR
+} from '../../enrichment/finnhub/cache/RecommendationCache';
 
 // from removed Yahoo module
-const YAHOO_CACHE_DIR = 'yahoo-cache';
+const YAHOO_CACHE_DIR = 'yahoo-to-be-removed-cache';
 export const prepareStorage = () => {
   [
     path.join(STORAGE_DIR, AV_OVERVIEW_CACHE_DIR),
     path.join(STORAGE_DIR, AV_INCOME_CACHE_DIR),
+    path.join(STORAGE_DIR, FH_PRICE_CACHE_DIR),
+    path.join(STORAGE_DIR, FH_RECOMMENDATION_CACHE_DIR),
   ].forEach(dir => {
     if (!existsSync(dir)) {
       console.log(`Creating dir ${dir}`);

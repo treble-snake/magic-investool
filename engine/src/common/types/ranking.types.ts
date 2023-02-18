@@ -37,6 +37,7 @@ export type RecommendationData = {
     price: number;
   },
   trend: {
+    date: string;
     strongBuy: number;
     buy: number;
     hold: number;

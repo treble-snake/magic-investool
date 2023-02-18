@@ -4,6 +4,7 @@ import {
   AccountData,
   UserAccountStorage
 } from '../../src/user-settings/UserAccountStorage.types';
+import {emptyCache} from './emptyCache';
 
 export const FAKE_ACCOUNT_DATA = Object.freeze({
   alphavantageApiKey: 'alphavantageApiKey',
@@ -25,6 +26,12 @@ export const fakeContext = (override?: Partial<AppContext>): AppContext => {
     userAccountStorage: {
       getAccountData: () => Promise.resolve(FAKE_ACCOUNT_DATA)
     } as UserAccountStorage,
+    cache: {
+      alphavantageIncome: emptyCache(),
+      alphavantageOverview: emptyCache(),
+      finnhubRecommendation: emptyCache(),
+      finnhubPrice: emptyCache()
+    },
     ...override
   };
 };

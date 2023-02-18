@@ -10,7 +10,7 @@ run(async () => {
   prepareStorage();
 
   const data =
-    await enrichmentOperations(context).enrichCompany({ticker: 'SIGA'}, false);
+    await enrichmentOperations(context).enrichCompany({ticker: 'SWBI'}, false);
 
   console.warn(require('util').inspect(data, false, null));
 
