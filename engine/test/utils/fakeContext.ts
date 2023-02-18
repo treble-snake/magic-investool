@@ -8,6 +8,7 @@ import {emptyCache} from './emptyCache';
 
 export const FAKE_ACCOUNT_DATA = Object.freeze({
   alphavantageApiKey: 'alphavantageApiKey',
+  finnhubApiKey: 'finnhubApiKey',
   magicFormulaLogin: 'magicFormulaLogin',
   magicFormulaPassword: 'magicFormulaPassword',
   priceNotificationsEnabled: false,
