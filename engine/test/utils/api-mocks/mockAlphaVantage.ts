@@ -1,12 +1,10 @@
-import {MockAgent, setGlobalDispatcher} from 'undici';
+import {MockAgent} from 'undici';
 import {BASE_ALPHAVANTAGE_URL,} from '../../../src/common/config';
-import {dummyOverview} from '../../data-source/alphaVantage/dummyOverview';
+import {dummyOverview} from '../../data-source/alphavantage/dummyOverview';
+import {dummyIncome} from '../../data-source/alphavantage/dummyIncome';
 
-export const mockAlphaVantage = (...tickers: string[]) => {
-  const mockAgent = new MockAgent({connections: 1});
-  const mockClient = mockAgent.get(BASE_ALPHAVANTAGE_URL);
-  setGlobalDispatcher(mockAgent);
-  mockAgent.disableNetConnect();
+export const mockAlphaVantage = (agent: MockAgent, tickers: string[]) => {
+  const mockClient = agent.get(BASE_ALPHAVANTAGE_URL);
 
   tickers.forEach((ticker) => {
     mockClient.intercept({
@@ -17,7 +15,7 @@ export const mockAlphaVantage = (...tickers: string[]) => {
     mockClient.intercept({
       path: new RegExp(`\/query.*(?=.*symbol=${ticker})(?=.*function=INCOME_STATEMENT)`),
       method: 'GET',
-    }).reply(200, {});
+    }).reply(200, dummyIncome(ticker));
   });
 
 };
