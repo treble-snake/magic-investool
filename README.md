@@ -31,25 +31,11 @@ Detailed instructions: TBD.
 The image exposes a web server on port 3000 
 and expects a volume (to store your data) to be mounted at `/app/.investool-data/storage`.
 
-You can use any volume, but the examples and compose files are using a bind mount,
+You can use any volume, but the example and compose file are using a bind mount,
 mounting a directory from the host machine into the container.
 
-#### Pre-built image
-Image name: `ghcr.io/treble-snake/magic-investool`
+Example compose file: [docker-compose.yml](./docker-compose.yml).
 
-Example command:
-```
-docker run -it -p 3000:3000 --mount type=bind,src=<PATH_TO_STORAGE_DIR>,dst=/app/.investool-data/storage ghcr.io/treble-snake/magic-investool
-```
-
-Example compose file: [docker-compose.remote.yml](./docker-compose.remote.yml).
-
-Example compose command:
-```
-<PORT=3000> <STORAGE_DIR=.investool-data/storage> docker-compose -f docker-compose.remote.yml up
-```
-
-#### From the code
 Clone the repo. Run:
 ```
 <PORT=3000> <STORAGE_DIR=.investool-data/storage> docker-compose up
@@ -63,6 +49,8 @@ Environment variables:
 * PORT (default: 3000) - port to serve Web UI from
 
 ### From source code
+(!) OUTDATED, NEEDS REWORK (!) 
+
 **Prerequisites:**
 * Node >= 14
 * Yarn v1 or NPM
