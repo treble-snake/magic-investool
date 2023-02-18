@@ -1,8 +1,0 @@
-version: "3.9"
-services:
-  investool:
-    image: ghcr.io/treble-snake/magic-investool:latest
-    ports:
-      - "${PORT:-3000}:3000"
-    volumes:
-      - "${STORAGE_DIR:-.investool-data/storage}:/app/.investool-data/storage"
