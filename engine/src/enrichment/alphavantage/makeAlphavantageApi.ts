@@ -8,7 +8,7 @@ type Props = {
   symbol: string
 } | Record<string, string>;
 
-export const alphavantageApi = (context: AppContext) => {
+export const makeAlphavantageApi = (context: AppContext) => {
   let apiKey: string | null = null;
 
   const makeRequest = async <T>(query: Props): Promise<T> => {

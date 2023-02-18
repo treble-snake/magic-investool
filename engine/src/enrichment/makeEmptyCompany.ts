@@ -19,7 +19,9 @@ export const makeEmptyCompany = <T extends EnrichableCompany>(core: T): T & Comp
     },
     lastUpdates: {
       alphavantageOverview: lastYear,
-      alphavantageIncome: lastYear
+      alphavantageIncome: lastYear,
+      finnhubRecommendation: lastYear,
+      finnhubPrice: lastYear
     },
     // old, TODO: evaluate
     sector: '',
@@ -41,6 +43,7 @@ export const makeEmptyCompany = <T extends EnrichableCompany>(core: T): T & Comp
     recommendation: {
       data: {
         trend: {
+          date: lastYear,
           buy: 0,
           hold: 0,
           sell: 0,

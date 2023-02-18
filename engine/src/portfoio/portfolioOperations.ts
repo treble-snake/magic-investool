@@ -100,7 +100,7 @@ export const portfolioOperations = (context: AppContext) => ({
         return it;
       }
 
-      // TODO: might be only 1 yahoo request, not both (basic + insights)
+      // TODO: might be only 1 yahoo-to-be-removed request, not both (basic + insights)
       const updated = await enrichmentOps.enrichCompany(it);
       if ((updated.price ?? 0) >= alertPrice) {
         alertsTriggered.push(it.ticker);

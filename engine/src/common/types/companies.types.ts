@@ -23,6 +23,8 @@ export type CompanyStock = CoreCompany & {
   lastUpdates: {
     alphavantageOverview: string;
     alphavantageIncome: string;
+    finnhubPrice: string;
+    finnhubRecommendation: string;
   }
 
   price: number | null;
@@ -38,11 +40,11 @@ export type CompanyStock = CoreCompany & {
   /** @deprecated */
   country: string;
 
-  /** @deprecated */
+  /** @deprecated Maybe rework? */
   revenue: CompanyIndicator<RevenueData>;
   /** @deprecated */
   valuation: CompanyIndicator<ValuationData>;
-  /** @deprecated */
+  /** @deprecated make rework? */
   recommendation: CompanyIndicator<RecommendationData>;
 }
 

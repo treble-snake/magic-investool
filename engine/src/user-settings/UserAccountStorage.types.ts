@@ -1,5 +1,6 @@
 export type AccountData = {
   alphavantageApiKey: string;
+  finnhubApiKey: string;
   // TODO: do we need this?
   // alphavantageCacheThreshold: number;
   magicFormulaLogin: string;
