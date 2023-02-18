@@ -2,6 +2,7 @@ import {AppContext} from '../../context/context';
 import {BASE_FINNHUB_URL} from '../../common/config';
 import {request} from 'undici';
 import {PriceQuote, RecommendationTrends} from './types/api';
+import {logger} from '../../common/logging/logger';
 
 type Props = {
   symbol: string
