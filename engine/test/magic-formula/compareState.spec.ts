@@ -1,13 +1,13 @@
 import {compareState} from '../../src/magic-formula/utils/compareState';
-import {makeEmptyCompany} from '../../src/enrichment/makeEmptyCompany';
+import {completeCompanyData} from '../../src/enrichment/completeCompanyData';
 import {omit} from 'ramda';
 
 const OLD_STATE = [
-  makeEmptyCompany({
+  completeCompanyData({
     name: 'Old 1',
     ticker: 'OLD1',
   }),
-  makeEmptyCompany({
+  completeCompanyData({
     name: 'Old 2',
     ticker: 'OLD2',
   })
@@ -64,12 +64,12 @@ describe('compareState', () => {
 
   it('should ignore identical elements', () => {
     expect(compareState(
-      OLD_STATE.concat(makeEmptyCompany({name: 'Same 1', ticker: 'ASAME'})),
+      OLD_STATE.concat(completeCompanyData({name: 'Same 1', ticker: 'ASAME'})),
       NEW_STATE.concat({name: 'Same 1', ticker: 'ASAME'})
     )).toEqual(({
       added: NEW_STATE, removed: OLD_STATE, combined: [
         expect.objectContaining(
-          omit(['lastUpdated'], makeEmptyCompany({
+          omit(['lastUpdated'], completeCompanyData({
             name: 'Same 1',
             ticker: 'ASAME'
           }))

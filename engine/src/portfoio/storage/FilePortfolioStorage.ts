@@ -2,6 +2,7 @@ import {PortfolioCompany} from '../../common/types/companies.types';
 import {FileStorage, makeFileStorage} from '../../storage/file';
 import {PortfolioStorage} from './PortfolioStorage.types';
 import {omit} from 'ramda';
+import {completeCompanyData} from '../../enrichment/completeCompanyData';
 
 export type PortfolioData = {
   companies: PortfolioCompany[];
@@ -16,7 +17,7 @@ export const filePortfolioStorage = (
   return {
     async findAll() {
       const data = await fileStorage.read();
-      return data?.companies ?? [];
+      return (data?.companies ?? []).map(completeCompanyData);
     },
     async save(companies: PortfolioCompany[]) {
       return fileStorage.write({

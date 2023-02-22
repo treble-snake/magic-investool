@@ -1,7 +1,7 @@
 import {AppContext} from '../context/context';
 import {CompanyStock} from '../common/types/companies.types';
 import {logger} from '../common/logging/logger';
-import {EnrichableCompany, makeEmptyCompany} from './makeEmptyCompany';
+import {EnrichableCompany, completeCompanyData} from './completeCompanyData';
 import {makeAlphavantageApi} from './alphavantage/makeAlphavantageApi';
 import {processRevenue} from './alphavantage/mappers/processRevenue';
 import {CachedEntity, KeyValueCache} from '../common/types/cache.types';
@@ -104,7 +104,7 @@ export const enrichmentOperations = (context: AppContext) => ({
         forceUpdate
       );
 
-      const result = makeEmptyCompany(company);
+      const result = completeCompanyData(company);
 
       if (overview) {
         result.name = overview.data.Name;
@@ -130,11 +130,16 @@ export const enrichmentOperations = (context: AppContext) => ({
 
       return result;
     } catch (e) {
-      logger.error(`Error looking for ${company.ticker} data: ${e}`);
-      return makeEmptyCompany(company);
+      logger.error(`Error looking for ${company.ticker} data: ${e}`, e);
+      return completeCompanyData(company);
     }
 
   },
+  /**
+   * @param current list of all companies (portfolio or magic formula)
+   * @param batchSize how many companies to try to update; important since we have rate limiting in the APIs
+   * @return list of all companies with some of them updated
+   */
   async enrichOutdated(current: CompanyStock[], batchSize = 5) {
     logger.info(`Enriching max ${batchSize} outdated companies`);
 

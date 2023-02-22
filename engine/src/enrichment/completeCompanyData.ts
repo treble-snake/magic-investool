@@ -4,14 +4,15 @@ import {
   ValuationType
 } from '../common/types/ranking.types';
 import {subYears} from 'date-fns';
+import {mergeDeepLeft} from 'ramda';
 
 export type EnrichableCompany =
   Partial<CoreCompany>
   & Pick<CoreCompany, 'ticker'>;
 
-export const makeEmptyCompany = <T extends EnrichableCompany>(core: T): T & CompanyStock => {
+export const completeCompanyData = <T extends EnrichableCompany>(core: T): T & CompanyStock => {
   const lastYear = subYears(new Date(), 1).toISOString();
-  return {
+  const empty = {
     // new
     overview: {
       marketCap: 0,
@@ -66,6 +67,8 @@ export const makeEmptyCompany = <T extends EnrichableCompany>(core: T): T & Comp
       total: 0
     },
     name: core.name || core.ticker,
-    ...core
-  };
+    ticker: core.ticker
+  } as CompanyStock;
+
+  return mergeDeepLeft(core, empty) as T & CompanyStock;
 };

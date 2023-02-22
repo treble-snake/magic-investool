@@ -15,8 +15,8 @@ Limits:
 - 500 requests per day.
 
 Info:
-✅- basic info: https://www.alphavantage.co/documentation/#company-overview
-✅- revenue info: https://www.alphavantage.co/documentation/#income-statement
+- ✅basic info: https://www.alphavantage.co/documentation/#company-overview
+- ✅revenue info: https://www.alphavantage.co/documentation/#income-statement
 - (later) Balance & Cashflow info: https://www.alphavantage.co/documentation/#balance-sheet
 - (later) Earnings? https://www.alphavantage.co/documentation/#earnings
 
@@ -28,7 +28,7 @@ Limits:
 
 Info:
 - Realtime price: https://finnhub.io/docs/api/websocket-trades
-- API price https://finnhub.io/docs/api/quote
-- Buy/sell recommendations: https://finnhub.io/docs/api/recommendation-trends
+- ✅API price https://finnhub.io/docs/api/quote
+- ✅ Buy/sell recommendations: https://finnhub.io/docs/api/recommendation-trends
 - (later) Sentiment: https://finnhub.io/docs/api/insider-sentiment
 - (later) Earnings surprise: https://finnhub.io/docs/api/company-earnings

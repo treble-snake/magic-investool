@@ -7,7 +7,7 @@ import {
   filePortfolioStorage,
   PortfolioData
 } from '../../src/portfoio/storage/FilePortfolioStorage';
-import {makeEmptyCompany} from '../../src/enrichment/makeEmptyCompany';
+import {completeCompanyData} from '../../src/enrichment/completeCompanyData';
 import {
   fileHistoryStorage
 } from '../../src/portfoio/storage/FileHistoryStorage';
@@ -49,16 +49,16 @@ describe('portfolio operations', () => {
     it('should remove an existing item when selling', async () => {
       const portfolio = fakeFileStorage({
         lastUpdate: 'xxx', companies: [
-          makeEmptyCompany({
+          completeCompanyData({
             ticker: 'ABC',
             name: 'ABC Inc'
           }) as PortfolioCompany,
-          makeEmptyCompany({
+          completeCompanyData({
             ticker: 'RM',
             name: 'RM Inc',
             sharesQty: 42
           } as CoreCompany) as PortfolioCompany,
-          makeEmptyCompany({
+          completeCompanyData({
             ticker: 'BANG',
             name: 'Bang Inc'
           }) as PortfolioCompany,
@@ -92,7 +92,7 @@ describe('portfolio operations', () => {
     it('should add new portfolio entry when buying a new company', async () => {
       const portfolio = fakeFileStorage({
         lastUpdate: 'xxx', companies: [
-          makeEmptyCompany({
+          completeCompanyData({
             ticker: 'ABC',
             name: 'ABC Inc',
             sharesQty: 1
@@ -133,12 +133,12 @@ describe('portfolio operations', () => {
     it('should add shares to existing qty when buying', async () => {
       const portfolio = fakeFileStorage({
         lastUpdate: 'xxx', companies: [
-          makeEmptyCompany({
+          completeCompanyData({
             ticker: 'ABC',
             name: 'ABC Inc',
             sharesQty: 1
           } as CoreCompany) as PortfolioCompany,
-          makeEmptyCompany({
+          completeCompanyData({
             ticker: 'BANG',
             name: 'Bang Inc',
             sharesQty: 42,
@@ -177,7 +177,7 @@ describe('portfolio operations', () => {
     it('should update purchase date time for the existing item when buying', async () => {
       const portfolio = fakeFileStorage({
         lastUpdate: 'xxx', companies: [
-          makeEmptyCompany({
+          completeCompanyData({
             ticker: 'BANG',
             name: 'Bang Inc',
             purchaseDate: '2020-01-01',
@@ -206,7 +206,7 @@ describe('portfolio operations', () => {
     it('should recalculate BEP for existing item when buying', async () => {
       const portfolio = fakeFileStorage({
         lastUpdate: 'xxx', companies: [
-          makeEmptyCompany({
+          completeCompanyData({
             ticker: 'BANG',
             name: 'Bang Inc',
             sharesQty: 42,
@@ -241,12 +241,12 @@ describe('portfolio operations', () => {
       mockApis('ALERT', 'NO_ALERT');
       const portfolio = fakeFileStorage({
         lastUpdate: 'xxx', companies: [
-          makeEmptyCompany({
+          completeCompanyData({
             ticker: 'ALERT',
             price: alertPrevPrice,
             priceAlert: {price: 20}
           }),
-          makeEmptyCompany({ticker: 'NO_ALERT', price: 100}),
+          completeCompanyData({ticker: 'NO_ALERT', price: 100}),
         ] as PortfolioCompany[]
       });
 

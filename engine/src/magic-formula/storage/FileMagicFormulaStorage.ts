@@ -5,6 +5,7 @@ import {
   PortfolioCompany
 } from '../../common/types/companies.types';
 import {omit} from 'ramda';
+import {completeCompanyData} from '../../enrichment/completeCompanyData';
 
 type MagicFormulaData = {
   companies: CompanyStock[];
@@ -19,7 +20,7 @@ export const fileMagicFormulaStorage = (
   return {
     async findAll(): Promise<CompanyStock[]> {
       const data = await storage.read();
-      return data?.companies ?? [];
+      return (data?.companies ?? []).map(completeCompanyData);
     },
     save(companies: CompanyStock[]): Promise<void> {
       return storage.write({
