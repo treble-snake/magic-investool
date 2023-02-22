@@ -1,15 +1,6 @@
 import {DisplayData} from '../common/DataDisplay';
 import {AccountData} from '../../pages/api/account';
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  Select,
-  Tooltip,
-  Typography
-} from 'antd';
+import {Alert, Button, Checkbox, Form, Input, Tooltip, Typography} from 'antd';
 import React, {useState} from 'react';
 import {QuestionCircleOutlined} from '@ant-design/icons';
 import {sendSimpleRequest} from '../common/ApiButton';
@@ -17,6 +8,7 @@ import {sendSimpleRequest} from '../common/ApiButton';
 export const AccountForm = () => {
   const [loading, setLoading] = useState(false);
 
+  // TODO: use for other cache types
   const cacheTimeTooltip = <span>
     Yahoo Cache Time, hrs{' '}
     <Tooltip
@@ -76,30 +68,31 @@ export const AccountForm = () => {
           </Form.Item>
 
           <Form.Item
-            label="Yahoo Finance API keys"
-            name="yahooApiKeys"
+            label="Alpha Vantage API key"
+            name="alphavantageApiKey"
             rules={[{
               required: true,
-              message: 'Please input at least one API key'
+              message: 'Please input the API key'
             }]}
           >
-            <Select mode={'tags'} />
+            <Input />
           </Form.Item>
 
           <Form.Item
-            label={cacheTimeTooltip}
-            name="yahooCacheThreshold"
-            rules={[{required: true, message: 'Please input yahoo cache time'}]}
-            wrapperCol={{span: 2}}
+            label="Finnhub API key"
+            name="finnhubApiKey"
+            rules={[{
+              required: true,
+              message: 'Please input the API key'
+            }]}
           >
-            <Input type={'number'} />
+            <Input />
           </Form.Item>
 
           <Typography.Title level={5}>Price notifications</Typography.Title>
           <Form.Item>
             <Alert type={'warning'} showIcon
                    message={<>
-                     <div>Only available in the standalone version now.</div>
                      <div>Restart the app to apply settings after saving them.
                        Sorry 😬
                      </div>

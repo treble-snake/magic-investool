@@ -4,9 +4,9 @@ import {AccountData, UserAccountStorage} from './UserAccountStorage.types';
 const USER_SETTINGS_FILENAME = 'userAccount.json';
 
 const DEFAULTS: AccountData = Object.freeze({
-  // TODO: tmp default values
-  alphavantageApiKey: String(process.env.ALPHAVANTAGE_API_KEY),
-  finnhubApiKey: String(process.env.FINNHUB_API_KEY),
+  alphavantageApiKey: '',
+  finnhubApiKey: '',
+  // TODO: configure cache times
   // alphavantageCacheThreshold: 24,
   magicFormulaLogin: '',
   magicFormulaPassword: '',
