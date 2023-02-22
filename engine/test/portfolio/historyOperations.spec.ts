@@ -2,7 +2,7 @@ import {PortfolioCompany} from '../../src/common/types/companies.types';
 import {
   filePortfolioStorage
 } from '../../src/portfoio/storage/FilePortfolioStorage';
-import {makeEmptyCompany} from '../../src/enrichment/makeEmptyCompany';
+import {completeCompanyData} from '../../src/enrichment/completeCompanyData';
 import {
   fileHistoryStorage
 } from '../../src/portfoio/storage/FileHistoryStorage';
@@ -20,7 +20,7 @@ describe('history operations', () => {
   function createContext(companies: Partial<PortfolioCompany>[], history: Partial<HistoryRecord>[]) {
     const portfolio = fakeFileStorage({
       lastUpdate: 'xxx',
-      companies: companies.map(it => makeEmptyCompany(it as PortfolioCompany))
+      companies: companies.map(it => completeCompanyData(it as PortfolioCompany))
     });
     return {
       ...fakeContext(),

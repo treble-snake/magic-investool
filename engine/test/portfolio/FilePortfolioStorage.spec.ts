@@ -3,13 +3,14 @@ import {
   filePortfolioStorage
 } from '../../src/portfoio/storage/FilePortfolioStorage';
 import {PortfolioCompany} from '../../src';
+import {completeCompanyData} from '../../src/enrichment/completeCompanyData';
 
 describe('FilePortfolioStorage', () => {
-  const COMPANY_DATA = {
+  const COMPANY_DATA = completeCompanyData({
     ticker: 'BANG',
     price: 80,
     breakEvenPrice: 100
-  } as PortfolioCompany;
+  }) as PortfolioCompany;
   const makeStorage = () => filePortfolioStorage(fakeFileStorage({
     lastUpdate: '',
     companies: [COMPANY_DATA]
