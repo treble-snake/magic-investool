@@ -90,7 +90,7 @@ export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
       </Item>
       <Item contentStyle={{textAlign: 'center'}}>
         <Statistic
-          title={valuationType}
+          title={'Price'}
           prefix={ValuationIcon}
           valueStyle={{color: valuationColor}}
           valueRender={() => (<>
@@ -114,30 +114,31 @@ export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
       </Item>
 
       <Item>
-        <Timeline mode={'left'} style={{width: '100%'}}>
-          {
-            Object.entries(omit(['period'], company.recommendation.data.trend))
-              .map(([key, value]) => (
-                <Timeline.Item label={key} key={key}>
-                  {value}
-                </Timeline.Item>)
-              )
-          }
-        </Timeline>
+        <Timeline mode={'left'} style={{width: '100%'}}
+                  items={
+                    Object.entries(omit(['period', 'date'], company.recommendation.data.trend))
+                      .map(([key, value]) => ({
+                        key,
+                        label: key,
+                        children: value
+                      }))
+                  }
+        />
       </Item>
 
 
       <Item label={'Rank'}>
-        <Timeline mode={'left'} style={{width: '100%'}}>
-          {
-            Object.entries(company.rank)
-              .map(([key, value]) => (
-                <Timeline.Item label={key.replace(/^by/, '')} key={key}>
-                  {value}
-                </Timeline.Item>)
-              )
-          }
-        </Timeline>
+        <Timeline mode={'left'} style={{width: '100%'}}
+                  items={
+                    Object.entries(company.rank)
+                      .map(([key, value]) => (
+                        {
+                          key,
+                          label: key.replace(/^by/, ''),
+                          children: value
+                        }
+                      ))
+                  } />
       </Item>
     </Descriptions>
   </Card>;

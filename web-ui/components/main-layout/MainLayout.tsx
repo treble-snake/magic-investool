@@ -42,31 +42,43 @@ export const MainLayout = ({children}: any) => {
     </Head>
     <Layout>
       <Layout.Header>
-        <Menu theme="dark" mode="horizontal" selectedKeys={[router.asPath]}>
-          <Menu.Item key="/">
-            <Link href={'/'}>Dashboard</Link>
-          </Menu.Item>
-          <Menu.Item key="/portfolio">
-            <Link href={'/portfolio'}>Portfolio</Link>
-            {getProfitLossIcon(portfolio)}
-          </Menu.Item>
-          <Menu.Item key="/magic-formula">
-            <Link href={'/magic-formula'}>Magic Formula</Link>
-          </Menu.Item>
-          <Menu.Item key="/magic-formula/changelog">
-            <Link href={'/magic-formula/changelog'}>
-              MF Changelog
-            </Link>
-            <Badge dot count={unseen?.length || 0}>
-              <span style={{color: 'transparent'}}>.</span>
-            </Badge>
-          </Menu.Item>
-          <Menu.Item key="/history">
-            <Link href={'/history'}>History</Link>
-          </Menu.Item>
-          <Menu.Item key="/settings">
-            <Link href={'/settings'}>Settings</Link>
-          </Menu.Item>
+        <Menu theme="dark" mode="horizontal" selectedKeys={[router.asPath]}
+              items={[
+                {
+                  key: '/',
+                  label: <Link href={'/'}>Dashboard</Link>,
+                },
+                {
+                  key: '/portfolio',
+                  label: <>
+                    <Link href={'/portfolio'}>Portfolio</Link>
+                    {getProfitLossIcon(portfolio)}
+                  </>
+                },
+                {
+                  key: '/magic-formula',
+                  label: <Link href={'/magic-formula'}>Magic Formula</Link>
+                },
+                {
+                  key: '/magic-formula/changelog',
+                  label: <>
+                    <Link href={'/magic-formula/changelog'}>
+                      MF Changelog
+                    </Link>
+                    <Badge dot count={unseen?.length || 0}>
+                      <span style={{color: 'transparent'}}>.</span>
+                    </Badge>
+                  </>
+                },
+                {
+                  key: '/history',
+                  label: <Link href={'/history'}>History</Link>
+                },
+                {
+                  key: '/settings',
+                  label: <Link href={'/settings'}>Settings</Link>
+                }
+              ]}>
         </Menu>
       </Layout.Header>
       <Layout.Content className={styles.content}>
