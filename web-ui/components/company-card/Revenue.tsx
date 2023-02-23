@@ -21,17 +21,15 @@ const getColor = (current: number, prev?: number) => {
 
 export const Revenue = ({data}: Props) => {
   // TODO: figure out style 100%
-  return <Timeline mode={'left'} style={{width: '100%'}}>
-    {
-      data
-        .sort(comparator((a, b) => a.date < b.date))
-        .map((it, index, all) => <Timeline.Item
-          key={it.date}
-          label={moment(it.date).format('YYYY/MM')}
-          color={getColor(it.value, all[index - 1]?.value)}
-        >
-          {it.valueStr}
-        </Timeline.Item>)
-    }
-  </Timeline>;
+  return <Timeline mode={'left'} style={{width: '100%'}}
+                   items={
+                     data.sort(comparator((a, b) => a.date < b.date))
+                       .map((it, index, all) => ({
+                         key: it.date,
+                         label: moment(it.date).format('YYYY/MM'),
+                         color: getColor(it.value, all[index - 1]?.value),
+                         children: it.valueStr
+                       }))
+                   }
+  />;
 };

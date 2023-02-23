@@ -36,9 +36,9 @@ type ApiButtonProps = ButtonProps & {
 // Maybe: use `children` instead of `name`
 
 export function ApiButton(props: ApiButtonProps) {
-  const {url, onSuccess, text, method, ...rest} = props;
+  const {url, onSuccess, text, method, confirm: needsConfirm, ...rest} = props;
   const [loading, setLoading] = useState(false);
-  const sendRequest = props.confirm ?
+  const sendRequest = needsConfirm ?
     () => confirm({
       title: 'Are you sure?',
       okText: 'Yes',

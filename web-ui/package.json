@@ -11,9 +11,9 @@
     "export": "next export"
   },
   "dependencies": {
-    "@ant-design/icons": "^4.7.0",
+    "@ant-design/icons": "^5.0.1",
     "@investool/engine": "file:../engine",
-    "antd": "^4.18.5",
+    "antd": "^5.2.2",
     "moment": "^2.29.4",
     "next": "^12.0.10",
     "ramda": "^0.28.0",
@@ -22,7 +22,7 @@
     "swr": "^1.2.1"
   },
   "devDependencies": {
-    "@types/node": "18.14.0",
+    "@types/node": "18.14.1",
     "@types/ramda": "^0.27.64",
     "@types/react": "^17.0.38",
     "eslint": "^8.34.0",

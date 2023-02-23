@@ -73,7 +73,7 @@ export const TransactionModal = (props: Props) => {
   return <>
     {props.children({onClick: () => setIsModalVisible(true)})}
 
-    <Modal title={props.title} visible={isModalVisible}
+    <Modal title={props.title} open={isModalVisible}
            onOk={handle}
            confirmLoading={loading}
            onCancel={close}>
