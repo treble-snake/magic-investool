@@ -17,6 +17,11 @@ const getTimestamp = (company: CompanyStock) => {
   return 0;
 };
 
+const capitalizeWords = (name: string) => name
+  .split(' ')
+  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(' ');
+
 const fetchDataWithCache = async <T>(
   ticker: string,
   operation: string,
@@ -47,7 +52,7 @@ const fetchDataWithCache = async <T>(
 
     return result;
   } catch (e) {
-    logger.warn(`${operation}: Couldn't fetch data for ${ticker}, fallback to cache`, e)
+    logger.warn(`${operation}: Couldn't fetch data for ${ticker}, fallback to cache`, e);
     return cache.get(ticker);
   }
 };
@@ -108,7 +113,7 @@ export const enrichmentOperations = (context: AppContext) => ({
 
       if (overview) {
         result.name = overview.data.Name;
-        result.sector = overview.data.Sector;
+        result.sector = capitalizeWords(overview.data.Sector);
         result.overview = {
           peRatio: Number.parseFloat(overview.data.PERatio),
           marketCap: Number.parseInt(overview.data.MarketCapitalization),
