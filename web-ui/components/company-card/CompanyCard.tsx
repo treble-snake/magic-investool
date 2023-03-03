@@ -1,4 +1,4 @@
-import {Card, Descriptions, Timeline} from 'antd';
+import {Card, Descriptions, Tag, Timeline} from 'antd';
 import {omit} from 'ramda';
 import {SectorTag} from '../sector/SectorTag';
 import {LastUpdated} from '../LastUpdated';
@@ -13,6 +13,7 @@ import {UiPortfolioCompany} from '../../libs/cross-platform/types';
 import moment from 'moment';
 import {PriceBlock} from './PriceBlock';
 import {ProfitLossTag} from '../company/ProfitLossTag';
+import {millify} from 'millify';
 
 type Props = {
   company: UiCompanyStock | UiPortfolioCompany,
@@ -60,11 +61,23 @@ export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
         <div style={{marginTop: 5}}>
           <ProfitLossTag company={company} prefixed />
         </div>
+        <div style={{marginTop: 5}}>
+          <Tag>M. Cap: {
+            company.overview.marketCap ?
+              `\$${millify(company.overview.marketCap)}` :
+              '-'
+          }</Tag>
+        </div>
+        <div style={{marginTop: 5}}>
+          <Tag>P/E: {company.overview.peRatio || '-'}</Tag>
+        </div>
+
       </Item>
       <Item contentStyle={{display: 'block'}} label={'Price'}>
         <PriceBlock company={company} />
       </Item>
-      <Item contentStyle={{display: 'block', textAlign: 'right'}} label={'Updates'}>
+      <Item contentStyle={{display: 'block', textAlign: 'right'}}
+            label={'Updates'}>
         <div>
           Basics: <LastUpdated date={company.lastUpdates.alphavantageOverview}
                                showDiff />
