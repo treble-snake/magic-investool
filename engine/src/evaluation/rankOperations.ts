@@ -25,7 +25,7 @@ export const rankOperations = (context: AppContext) => ({
       const scored = {...it};
       scored.sectorScore = scoreSector(it.sector, sectorPercentage);
       scored.revenue.score = scoreRevenue(it.revenue.data);
-      scored.valuation.score = scoreValuation(it.valuation.data);
+      scored.valuation.score = scoreValuation(it);
       scored.recommendation.score = scoreRecommendation(it.recommendation.data);
 
       return scored;
