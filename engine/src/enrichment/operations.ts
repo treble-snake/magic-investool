@@ -19,7 +19,7 @@ const getTimestamp = (company: CompanyStock) => {
 
 const capitalizeWords = (name: string) => name
   .split(' ')
-  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+  .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
   .join(' ');
 
 const fetchDataWithCache = async <T>(
@@ -115,8 +115,9 @@ export const enrichmentOperations = (context: AppContext) => ({
         result.name = overview.data.Name;
         result.sector = capitalizeWords(overview.data.Sector);
         result.overview = {
-          peRatio: Number.parseFloat(overview.data.PERatio),
-          marketCap: Number.parseInt(overview.data.MarketCapitalization),
+          peRatio: Number.parseFloat(overview.data.PERatio) || 0,
+          marketCap: Number.parseInt(overview.data.MarketCapitalization) || 0,
+          analystTargetPrice: Number.parseFloat(overview.data.AnalystTargetPrice) || 0
         };
         result.lastUpdates.alphavantageOverview = overview.lastUpdated;
       }

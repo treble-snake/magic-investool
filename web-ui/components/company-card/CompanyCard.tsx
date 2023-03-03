@@ -1,14 +1,4 @@
-import {
-  InsightRecommendationType,
-  ValuationType
-} from '@investool/engine/dist/types';
-import {
-  ArrowDownOutlined,
-  ArrowUpOutlined,
-  QuestionOutlined,
-  VerticalAlignMiddleOutlined
-} from '@ant-design/icons';
-import {Card, Descriptions, Statistic, Timeline} from 'antd';
+import {Card, Descriptions, Timeline} from 'antd';
 import {omit} from 'ramda';
 import {SectorTag} from '../sector/SectorTag';
 import {LastUpdated} from '../LastUpdated';
@@ -19,9 +9,10 @@ import {TickerTag} from '../company/TickerTag';
 import {UiCompanyStock} from '../../pages/api/magic-formula';
 import {RefreshCompanyButton} from '../company-actions/RefreshCompanyButton';
 import React from 'react';
-import {PurchasePerformance} from './PurchasePerformance';
-import {formatMoney} from '../../libs/utils/formatMoney';
 import {UiPortfolioCompany} from '../../libs/cross-platform/types';
+import moment from 'moment';
+import {PriceBlock} from './PriceBlock';
+import {ProfitLossTag} from '../company/ProfitLossTag';
 
 type Props = {
   company: UiCompanyStock | UiPortfolioCompany,
@@ -31,34 +22,15 @@ type Props = {
 
 const {Item} = Descriptions;
 
-const ValuationIcons = Object.freeze({
-  [ValuationType.Overvalued]: <ArrowUpOutlined />,
-  [ValuationType.Undervalued]: <ArrowDownOutlined />,
-  [ValuationType.NearFair]: <VerticalAlignMiddleOutlined />,
-  [ValuationType.Unknown]: <QuestionOutlined />,
-});
+// const ValuationColors = Object.freeze({
+//   [ValuationType.Overvalued]: '#3f8600',
+//   [ValuationType.Undervalued]: '#cf1322',
+//   [ValuationType.NearFair]: '#1a3a8d',
+//   [ValuationType.Unknown]: '#6c6c6c',
+// });
 
-const ValuationColors = Object.freeze({
-  [ValuationType.Overvalued]: '#3f8600',
-  [ValuationType.Undervalued]: '#cf1322',
-  [ValuationType.NearFair]: '#1a3a8d',
-  [ValuationType.Unknown]: '#6c6c6c',
-});
-
-const InsightColors = Object.freeze({
-  [InsightRecommendationType.Buy]: '#3f8600',
-  [InsightRecommendationType.Sell]: '#cf1322',
-  [InsightRecommendationType.Hold]: '#1a3a8d',
-  [InsightRecommendationType.Unknown]: '#6c6c6c',
-});
 
 export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
-  const valuationType = company.valuation.data.type || ValuationType.Unknown;
-  const ValuationIcon = ValuationIcons[company.valuation.data.type];
-  const valuationColor = ValuationColors[company.valuation.data.type];
-
-  const insightType = company.recommendation.data.insight.type || InsightRecommendationType.Unknown;
-  const insightColor = InsightColors[insightType];
   const withActions = (prop: any) => showActions ? prop : undefined;
 
   const title = withActions(<>
@@ -69,7 +41,6 @@ export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
   </>);
 
   const extra = withActions(<>
-    <LastUpdated date={company.lastUpdated} showDiff />
     <RefreshCompanyButton company={company}
                           callback={actionsCallback} />
   </>);
@@ -84,36 +55,41 @@ export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
                ])}
   >
     <Descriptions size={'small'} layout={'vertical'}>
-      <Item contentStyle={{display: 'block'}}>
+      <Item contentStyle={{display: 'block'}} label={'Basics'}>
         <SectorTag sector={company.sector} showQty={false} />
-        <PurchasePerformance company={company} />
+        <div style={{marginTop: 5}}>
+          <ProfitLossTag company={company} prefixed />
+        </div>
       </Item>
-      <Item contentStyle={{textAlign: 'center'}}>
-        <Statistic
-          title={'Price'}
-          prefix={ValuationIcon}
-          valueStyle={{color: valuationColor}}
-          valueRender={() => (<>
-            {Math.round(company.valuation.data.percentage * 100)}%
-            <br />
-            ${company.price ? formatMoney(company.price) : '-'}
-          </>)}
-        />
+      <Item contentStyle={{display: 'block'}} label={'Price'}>
+        <PriceBlock company={company} />
       </Item>
-      <Item>
-        <Statistic
-          title={insightType}
-          value={company.recommendation.data.insight.price || '-'}
-          valueStyle={{color: insightColor}}
-          prefix={'$'}
-        />
+      <Item contentStyle={{display: 'block', textAlign: 'right'}} label={'Updates'}>
+        <div>
+          Basics: <LastUpdated date={company.lastUpdates.alphavantageOverview}
+                               showDiff />
+        </div>
+        <div style={{marginTop: 5}}>
+          Price: <LastUpdated date={company.lastUpdates.finnhubPrice}
+                              showDiff />
+        </div>
+        <div style={{marginTop: 5}}>
+          Revenue: <LastUpdated date={company.lastUpdates.alphavantageIncome}
+                                showDiff />
+        </div>
+        <div style={{marginTop: 5}}>
+          Trends: <LastUpdated date={company.lastUpdates.finnhubRecommendation}
+                               showDiff />
+        </div>
       </Item>
 
-      <Item>
+      <Item
+        label={`Revenue (${moment(company.lastUpdates.alphavantageIncome).format('YYYY/MM')})`}>
         <Revenue data={company.revenue.data} />
       </Item>
 
-      <Item>
+      <Item
+        label={`Trends (${moment(company.recommendation.data.trend.date).format('YYYY/MM')})`}>
         <Timeline mode={'left'} style={{width: '100%'}}
                   items={
                     Object.entries(omit(['period', 'date'], company.recommendation.data.trend))

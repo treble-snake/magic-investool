@@ -1,13 +1,18 @@
 import {Tag} from 'antd';
 import React from 'react';
 import {UiPortfolioCompany} from '../../libs/cross-platform/types';
+import {UiCompanyStock} from '../../pages/api/magic-formula';
 
 type Props = {
-  company: UiPortfolioCompany,
+  company: UiPortfolioCompany | UiCompanyStock,
   prefixed?: boolean
 };
 
 export function ProfitLossTag({company, prefixed = false}: Props) {
+  if (!('breakEvenPrice' in company)) {
+    return null;
+  }
+
   const {
     price,
     breakEvenPrice: bep,
