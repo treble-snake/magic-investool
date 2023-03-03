@@ -16,7 +16,8 @@ export const completeCompanyData = <T extends EnrichableCompany>(core: T): T & C
     // new
     overview: {
       marketCap: 0,
-      peRatio: 0
+      peRatio: 0,
+      analystTargetPrice: 0
     },
     lastUpdates: {
       alphavantageOverview: lastYear,

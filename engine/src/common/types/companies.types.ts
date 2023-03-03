@@ -52,8 +52,8 @@ export type CompanyStock = CoreCompany & {
 export type BasicCompanyInfo = {
   peRatio: number;
   marketCap: number;
-  // /** Prediction of the price in the future */
-  // analystTargetPrice: number;
+  /** Prediction of the price in the future */
+  analystTargetPrice: number;
   // highestPrice52Weeks: number;
   // lowestPrice52Weeks: number,
   // avgPrice50Days: number;

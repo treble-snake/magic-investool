@@ -8,5 +8,6 @@
     "start": "echo 'Deprecated, use Docker or Standalone' && exit 1"
   },
   "author": "Cap <treble.snake@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {}
 }

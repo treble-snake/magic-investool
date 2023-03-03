@@ -16,9 +16,6 @@ export function PurchasePerformance({company}: Props) {
   const {breakEvenPrice: bep} = company;
   return <>
     <div style={{marginTop: 5}}>
-      <ProfitLossTag company={company} prefixed />
-    </div>
-    <div style={{marginTop: 5}}>
       <Tag>BEP: ${bep ? formatMoney(bep) : '?'}</Tag>
     </div>
   </>;

@@ -8,8 +8,6 @@ export type RevenueData = Array<{
   timestamp: number;
   date: string;
   value: number;
-  /** @deprecated should be calculated at the presentation level */
-  valueStr: string;
 }>;
 
 export enum ValuationType {
