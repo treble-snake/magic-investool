@@ -57,6 +57,17 @@ const fetchDataWithCache = async <T>(
   }
 };
 
+export enum DataBlocks {
+  Overview = 'Overview',
+  Price = 'Price',
+  Revenue = 'Revenue',
+  Trends = 'Trends'
+}
+
+type Options = {
+  type?: DataBlocks
+}
+
 export const enrichmentOperations = (context: AppContext) => ({
   /**
    * Best effort update, should not throw
@@ -65,7 +76,8 @@ export const enrichmentOperations = (context: AppContext) => ({
    */
   async enrichCompany<T extends EnrichableCompany>(
     company: T,
-    forceUpdate = false
+    forceUpdate = false,
+    options: Options = {}
   ) {
     if (!company.ticker) {
       throw new Error(`Given company (${company.name}) does not have a ticker`);
@@ -73,41 +85,50 @@ export const enrichmentOperations = (context: AppContext) => ({
 
     try {
       const alphavantageApi = makeAlphavantageApi(context);
-      const overview = await fetchDataWithCache(
-        company.ticker,
-        'overview',
-        () => alphavantageApi.getCompanyOverview(company.ticker),
-        context.cache.alphavantageOverview,
-        24,
-        forceUpdate
-      );
-      const income = await fetchDataWithCache(
-        company.ticker,
-        'income',
-        () => alphavantageApi.getIncomeStatement(company.ticker),
-        context.cache.alphavantageIncome,
-        24 * 30,
-        forceUpdate
-      );
+      const overview = options.type && options.type !== DataBlocks.Overview ?
+        null :
+        await fetchDataWithCache(
+          company.ticker,
+          'overview',
+          () => alphavantageApi.getCompanyOverview(company.ticker),
+          context.cache.alphavantageOverview,
+          24,
+          forceUpdate
+        );
+
+      const income = options.type && options.type !== DataBlocks.Revenue ?
+        null :
+        await fetchDataWithCache(
+          company.ticker,
+          'income',
+          () => alphavantageApi.getIncomeStatement(company.ticker),
+          context.cache.alphavantageIncome,
+          24 * 30,
+          forceUpdate
+        );
 
       const finnhubApi = makeFinnhubApi(context);
-      const price = await fetchDataWithCache(
-        company.ticker,
-        'price',
-        () => finnhubApi.getPrice(company.ticker),
-        context.cache.finnhubPrice,
-        1,
-        forceUpdate
-      );
+      const price = options.type && options.type !== DataBlocks.Price ?
+        null :
+        await fetchDataWithCache(
+          company.ticker,
+          'price',
+          () => finnhubApi.getPrice(company.ticker),
+          context.cache.finnhubPrice,
+          1,
+          forceUpdate
+        );
 
-      const recommendation = await fetchDataWithCache(
-        company.ticker,
-        'recommendation',
-        () => finnhubApi.getRecommendationTrends(company.ticker),
-        context.cache.finnhubRecommendation,
-        24,
-        forceUpdate
-      );
+      const recommendation = options.type && options.type !== DataBlocks.Trends ?
+        null :
+        await fetchDataWithCache(
+          company.ticker,
+          'recommendation',
+          () => finnhubApi.getRecommendationTrends(company.ticker),
+          context.cache.finnhubRecommendation,
+          24,
+          forceUpdate
+        );
 
       const result = completeCompanyData(company);
 
