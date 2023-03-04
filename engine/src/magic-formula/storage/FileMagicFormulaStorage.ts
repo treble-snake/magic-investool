@@ -38,5 +38,9 @@ export const fileMagicFormulaStorage = (
       await this.save(all);
       return existing;
     },
+    async findByTicker(ticker: string): Promise<CompanyStock | null> {
+      const all = await this.findAll();
+      return all.find(it => it.ticker === ticker) || null;
+    },
   };
 };

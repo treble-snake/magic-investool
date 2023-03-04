@@ -1,11 +1,13 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
-import {defaultContext} from '@investool/engine';
 import {
+  DataParts,
+  defaultContext,
   enrichmentOperations
-} from '@investool/engine/dist/enrichment/operations';
+} from '@investool/engine';
 
 type Query = {
   ticker: string,
+  part?: DataParts
 };
 
 export default async function handler(
@@ -13,14 +15,11 @@ export default async function handler(
   res: NextApiResponse<void>
 ) {
   const context = defaultContext();
-  const {ticker} = req.query as Query;
-  const freshData = await enrichmentOperations(context)
-    .enrichCompany({ticker}, true);
+  const {ticker, part} = req.query as Query;
+  const options = part ? {parts: [part]} : {};
 
-  await Promise.all([
-    context.portfolioStorage.updateOne(ticker, freshData),
-    context.mfStorage.updateOne(ticker, freshData)
-  ]);
+  await enrichmentOperations(context)
+    .enrichTicker(ticker, true, options);
 
   res.status(204).json();
 }

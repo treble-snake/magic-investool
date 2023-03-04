@@ -3,7 +3,7 @@ import {
   InsightRecommendationType,
   ValuationType
 } from '../common/types/ranking.types';
-import {subYears} from 'date-fns';
+import {setMilliseconds, subYears} from 'date-fns';
 import {mergeDeepLeft} from 'ramda';
 
 export type EnrichableCompany =
@@ -11,7 +11,7 @@ export type EnrichableCompany =
   & Pick<CoreCompany, 'ticker'>;
 
 export const completeCompanyData = <T extends EnrichableCompany>(core: T): T & CompanyStock => {
-  const lastYear = subYears(new Date(), 1).toISOString();
+  const lastYear = setMilliseconds(subYears(new Date(), 1), 0).toISOString();
   const empty = {
     // new
     overview: {

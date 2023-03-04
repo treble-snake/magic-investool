@@ -57,7 +57,7 @@ const fetchDataWithCache = async <T>(
   }
 };
 
-export enum DataBlocks {
+export enum DataParts {
   Overview = 'Overview',
   Price = 'Price',
   Revenue = 'Revenue',
@@ -65,14 +65,15 @@ export enum DataBlocks {
 }
 
 type Options = {
-  type?: DataBlocks
+  parts?: DataParts[]
 }
 
 export const enrichmentOperations = (context: AppContext) => ({
   /**
    * Best effort update, should not throw
    * @param company - at least ticker should be defined
-   * @param forceUpdate - tries to get frmo cache first if false, skips cache check if true
+   * @param forceUpdate - tries to get from cache first if false, skips cache check if true
+   * @param options - additional options
    */
   async enrichCompany<T extends EnrichableCompany>(
     company: T,
@@ -84,10 +85,13 @@ export const enrichmentOperations = (context: AppContext) => ({
     }
 
     try {
+      const result = completeCompanyData(company);
+
       const alphavantageApi = makeAlphavantageApi(context);
-      const overview = options.type && options.type !== DataBlocks.Overview ?
-        null :
-        await fetchDataWithCache(
+
+      if (!options.parts || options.parts.includes(DataParts.Overview)) {
+        logger.debug(`Fetching ${DataParts.Overview} for ${company.ticker}`);
+        const overview = await fetchDataWithCache(
           company.ticker,
           'overview',
           () => alphavantageApi.getCompanyOverview(company.ticker),
@@ -96,9 +100,22 @@ export const enrichmentOperations = (context: AppContext) => ({
           forceUpdate
         );
 
-      const income = options.type && options.type !== DataBlocks.Revenue ?
-        null :
-        await fetchDataWithCache(
+        if (overview) {
+          logger.debug(`Found ${DataParts.Overview} for ${company.ticker}`);
+          result.name = overview.data.Name;
+          result.sector = capitalizeWords(overview.data.Sector);
+          result.overview = {
+            peRatio: Number.parseFloat(overview.data.PERatio) || 0,
+            marketCap: Number.parseInt(overview.data.MarketCapitalization) || 0,
+            analystTargetPrice: Number.parseFloat(overview.data.AnalystTargetPrice) || 0
+          };
+          result.lastUpdates.alphavantageOverview = overview.lastUpdated;
+        }
+      }
+
+      if (!options.parts || options.parts.includes(DataParts.Revenue)) {
+        logger.debug(`Fetching ${DataParts.Revenue} for ${company.ticker}`);
+        const income = await fetchDataWithCache(
           company.ticker,
           'income',
           () => alphavantageApi.getIncomeStatement(company.ticker),
@@ -107,10 +124,18 @@ export const enrichmentOperations = (context: AppContext) => ({
           forceUpdate
         );
 
+        if (income) {
+          logger.debug(`Found ${DataParts.Revenue} for ${company.ticker}`);
+          result.revenue = processRevenue(income.data.annualReports || []);
+          result.lastUpdates.alphavantageIncome = income.lastUpdated;
+        }
+      }
+
       const finnhubApi = makeFinnhubApi(context);
-      const price = options.type && options.type !== DataBlocks.Price ?
-        null :
-        await fetchDataWithCache(
+
+      if (!options.parts || options.parts.includes(DataParts.Price)) {
+        logger.debug(`Fetching ${DataParts.Price} for ${company.ticker}`);
+        const price = await fetchDataWithCache(
           company.ticker,
           'price',
           () => finnhubApi.getPrice(company.ticker),
@@ -119,9 +144,16 @@ export const enrichmentOperations = (context: AppContext) => ({
           forceUpdate
         );
 
-      const recommendation = options.type && options.type !== DataBlocks.Trends ?
-        null :
-        await fetchDataWithCache(
+        if (price) {
+          logger.debug(`Found ${DataParts.Price} for ${company.ticker}`);
+          result.price = price.data.c;
+          result.lastUpdates.finnhubPrice = price.lastUpdated;
+        }
+      }
+
+      if (!options.parts || options.parts.includes(DataParts.Trends)) {
+        logger.debug(`Fetching ${DataParts.Trends} for ${company.ticker}`);
+        const recommendation = await fetchDataWithCache(
           company.ticker,
           'recommendation',
           () => finnhubApi.getRecommendationTrends(company.ticker),
@@ -130,29 +162,11 @@ export const enrichmentOperations = (context: AppContext) => ({
           forceUpdate
         );
 
-      const result = completeCompanyData(company);
-
-      if (overview) {
-        result.name = overview.data.Name;
-        result.sector = capitalizeWords(overview.data.Sector);
-        result.overview = {
-          peRatio: Number.parseFloat(overview.data.PERatio) || 0,
-          marketCap: Number.parseInt(overview.data.MarketCapitalization) || 0,
-          analystTargetPrice: Number.parseFloat(overview.data.AnalystTargetPrice) || 0
-        };
-        result.lastUpdates.alphavantageOverview = overview.lastUpdated;
-      }
-      if (income) {
-        result.revenue = processRevenue(income.data.annualReports || []);
-        result.lastUpdates.alphavantageIncome = income.lastUpdated;
-      }
-      if (price) {
-        result.price = price.data.c;
-        result.lastUpdates.finnhubPrice = price.lastUpdated;
-      }
-      if (recommendation) {
-        result.recommendation = processRecommendation(recommendation.data);
-        result.lastUpdates.finnhubRecommendation = recommendation.lastUpdated;
+        if (recommendation) {
+          logger.debug(`Found ${DataParts.Trends} for ${company.ticker}`);
+          result.recommendation = processRecommendation(recommendation.data);
+          result.lastUpdates.finnhubRecommendation = recommendation.lastUpdated;
+        }
       }
 
       return result;
@@ -183,5 +197,33 @@ export const enrichmentOperations = (context: AppContext) => ({
 
       return this.enrichCompany(company);
     }));
+  },
+  async enrichTicker(ticker: string, forceUpdate = false, options: Options = {}) {
+    const {portfolioStorage, mfStorage} = context;
+    const [portfolioItem, mfItem] = await Promise.all([
+      portfolioStorage.findByTicker(ticker),
+      mfStorage.findByTicker(ticker)
+    ]);
+
+    // todo: this is kinda weird and inefficient.
+    let useForce = forceUpdate;
+    const savePromises = [];
+    if (portfolioItem) {
+      savePromises.push(portfolioStorage.updateOne(
+        ticker,
+        await this.enrichCompany(portfolioItem, useForce, options)
+      ));
+      // just read from the cache now
+      useForce = false;
+    }
+
+    if (mfItem) {
+      savePromises.push(mfStorage.updateOne(
+        ticker,
+        await this.enrichCompany(mfItem, useForce, options)
+      ));
+    }
+
+    await Promise.all(savePromises);
   }
 });
