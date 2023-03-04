@@ -1,7 +1,6 @@
 import {Card, Descriptions, Tag, Timeline} from 'antd';
 import {omit} from 'ramda';
 import {SectorTag} from '../sector/SectorTag';
-import {LastUpdated} from '../LastUpdated';
 import {Revenue} from './Revenue';
 import {CompanyActions} from '../company-actions/CompanyActions';
 import {DetailsLink} from '../DetailsLink';
@@ -14,6 +13,7 @@ import moment from 'moment';
 import {PriceBlock} from './PriceBlock';
 import {ProfitLossTag} from '../company/ProfitLossTag';
 import {millify} from 'millify';
+import {UpdatesBlock} from './UpdatesBlock';
 
 type Props = {
   company: UiCompanyStock | UiPortfolioCompany,
@@ -73,27 +73,13 @@ export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
         </div>
 
       </Item>
+
       <Item contentStyle={{display: 'block'}} label={'Price'}>
         <PriceBlock company={company} />
       </Item>
-      <Item contentStyle={{display: 'block', textAlign: 'right'}}
-            label={'Updates'}>
-        <div>
-          Basics: <LastUpdated date={company.lastUpdates.alphavantageOverview}
-                               showDiff />
-        </div>
-        <div style={{marginTop: 5}}>
-          Price: <LastUpdated date={company.lastUpdates.finnhubPrice}
-                              showDiff />
-        </div>
-        <div style={{marginTop: 5}}>
-          Revenue: <LastUpdated date={company.lastUpdates.alphavantageIncome}
-                                showDiff />
-        </div>
-        <div style={{marginTop: 5}}>
-          Trends: <LastUpdated date={company.lastUpdates.finnhubRecommendation}
-                               showDiff />
-        </div>
+
+      <Item contentStyle={{display: 'block'}} label={'Updates'}>
+        <UpdatesBlock dates={company.lastUpdates} />
       </Item>
 
       <Item
