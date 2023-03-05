@@ -10,30 +10,7 @@ export type RevenueData = Array<{
   value: number;
 }>;
 
-export enum ValuationType {
-  Undervalued = 'Undervalued',
-  Overvalued = 'Overvalued',
-  NearFair = 'Near Fair Value',
-  Unknown = 'UNKNOWN'
-}
-
-export type ValuationData = {
-  type: ValuationType;
-  percentage: number;
-}
-
-export enum InsightRecommendationType {
-  Buy = 'BUY',
-  Hold = 'HOLD',
-  Sell = 'SELL',
-  Unknown = 'UNKNOWN',
-}
-
 export type RecommendationData = {
-  insight: {
-    type: InsightRecommendationType;
-    price: number;
-  },
   trend: {
     date: string;
     strongBuy: number;
@@ -48,6 +25,6 @@ export type Rank = {
   bySector: number,
   byRevenue: number,
   byRecommendation: number,
-  byValuation: number,
+  byPrice: number,
   total: number;
 }

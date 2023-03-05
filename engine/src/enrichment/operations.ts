@@ -109,6 +109,7 @@ export const enrichmentOperations = (context: AppContext) => ({
             marketCap: Number.parseInt(overview.data.MarketCapitalization) || 0,
             analystTargetPrice: Number.parseFloat(overview.data.AnalystTargetPrice) || 0
           };
+          result.prices.data.target = Number.parseFloat(overview.data.AnalystTargetPrice) || 0;
           result.lastUpdates.alphavantageOverview = overview.lastUpdated;
         }
       }
@@ -147,6 +148,7 @@ export const enrichmentOperations = (context: AppContext) => ({
         if (price) {
           logger.debug(`Found ${DataParts.Price} for ${company.ticker}`);
           result.price = price.data.c;
+          result.prices.data.current = price.data.c;
           result.lastUpdates.finnhubPrice = price.lastUpdated;
         }
       }

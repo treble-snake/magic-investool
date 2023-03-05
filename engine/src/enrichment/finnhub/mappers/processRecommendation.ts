@@ -1,13 +1,11 @@
 import {
   CompanyIndicator,
-  InsightRecommendationType,
   RecommendationData
 } from '../../../common/types/ranking.types';
 import {RecommendationTrends} from '../types/api';
 
 export const processRecommendation = (trends: RecommendationTrends): CompanyIndicator<RecommendationData> => {
   const data: RecommendationData = {
-    insight: {type: InsightRecommendationType.Unknown, price: 0},
     trend: {
       date: '',
       strongBuy: 0,

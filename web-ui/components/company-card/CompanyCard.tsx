@@ -24,14 +24,6 @@ type Props = {
 
 const {Item} = Descriptions;
 
-// const ValuationColors = Object.freeze({
-//   [ValuationType.Overvalued]: '#3f8600',
-//   [ValuationType.Undervalued]: '#cf1322',
-//   [ValuationType.NearFair]: '#1a3a8d',
-//   [ValuationType.Unknown]: '#6c6c6c',
-// });
-
-
 export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
   const withActions = (prop: any) => showActions ? prop : undefined;
 

@@ -2,8 +2,7 @@ import {
   CompanyIndicator,
   Rank,
   RecommendationData,
-  RevenueData,
-  ValuationData
+  RevenueData
 } from './ranking.types';
 
 export type CoreCompany = {
@@ -12,13 +11,19 @@ export type CoreCompany = {
 }
 
 export type CompanyStock = CoreCompany & {
-
   sector: string;
+  sectorScore: number;
 
-  /**
-   * Currently coming from AlphaVantage
-   */
   overview: BasicCompanyInfo;
+
+  /** @deprecated moved to PriceData */
+  price: number;
+
+  prices: CompanyIndicator<PriceData>;
+  revenue: CompanyIndicator<RevenueData>;
+  recommendation: CompanyIndicator<RecommendationData>;
+
+  rank: Rank;
 
   lastUpdates: {
     alphavantageOverview: string;
@@ -27,32 +32,21 @@ export type CompanyStock = CoreCompany & {
     finnhubRecommendation: string;
   }
 
-  price: number | null;
-
-  rank: Rank;
-
   /** @deprecated */
   lastUpdated: string;
-  /** @deprecated */
-  industry: string;
-  /** @deprecated */
-  sectorScore: number;
-  /** @deprecated */
-  country: string;
+}
 
-  /** @deprecated Maybe rework? */
-  revenue: CompanyIndicator<RevenueData>;
-  /** @deprecated */
-  valuation: CompanyIndicator<ValuationData>;
-  /** @deprecated make rework? */
-  recommendation: CompanyIndicator<RecommendationData>;
+export type PriceData = {
+  current: number | null;
+  /** Prediction of the price in the future */
+  target: number;
 }
 
 // From alphavantage
 export type BasicCompanyInfo = {
   peRatio: number;
   marketCap: number;
-  /** Prediction of the price in the future */
+  /** @deprecated moved to PriceData */
   analystTargetPrice: number;
   // highestPrice52Weeks: number;
   // lowestPrice52Weeks: number,

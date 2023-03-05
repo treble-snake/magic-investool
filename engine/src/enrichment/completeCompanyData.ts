@@ -1,8 +1,4 @@
 import {CompanyStock, CoreCompany} from '../common/types/companies.types';
-import {
-  InsightRecommendationType,
-  ValuationType
-} from '../common/types/ranking.types';
 import {setMilliseconds, subYears} from 'date-fns';
 import {mergeDeepLeft} from 'ramda';
 
@@ -25,21 +21,18 @@ export const completeCompanyData = <T extends EnrichableCompany>(core: T): T & C
       finnhubRecommendation: lastYear,
       finnhubPrice: lastYear
     },
-    // old, TODO: evaluate
     sector: '',
     sectorScore: 0,
-    price: null,
-    industry: '',
-    country: '',
-    revenue: {
-      data: [],
+    price: 0,
+    prices: {
+      data: {
+        current: 0,
+        target: 0
+      },
       score: 0
     },
-    valuation: {
-      data: {
-        type: ValuationType.Unknown,
-        percentage: 0
-      },
+    revenue: {
+      data: [],
       score: 0
     },
     recommendation: {
@@ -52,10 +45,6 @@ export const completeCompanyData = <T extends EnrichableCompany>(core: T): T & C
           strongBuy: 0,
           strongSell: 0,
         },
-        insight: {
-          type: InsightRecommendationType.Unknown,
-          price: 0
-        }
       },
       score: 0
     },
@@ -64,7 +53,7 @@ export const completeCompanyData = <T extends EnrichableCompany>(core: T): T & C
       byRecommendation: 0,
       byRevenue: 0,
       bySector: 0,
-      byValuation: 0,
+      byPrice: 0,
       total: 0
     },
     name: core.name || core.ticker,

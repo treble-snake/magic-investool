@@ -2,7 +2,7 @@ import {AppContext} from '../context/context';
 import {CompanyStock} from '../common/types/companies.types';
 import {scoreSector} from './scores/scoreSector';
 import {scoreRevenue} from './scores/scoreRevenue';
-import {scoreValuation} from './scores/scoreValuation';
+import {scorePrice} from './scores/scorePrice';
 import {scoreRecommendation} from './scores/scoreRecommendation';
 import {portfolioOperations, SectorQty} from '../portfoio/portfolioOperations';
 import {comparator, indexBy, mapObjIndexed, prop, sum} from 'ramda';
@@ -25,7 +25,7 @@ export const rankOperations = (context: AppContext) => ({
       const scored = {...it};
       scored.sectorScore = scoreSector(it.sector, sectorPercentage);
       scored.revenue.score = scoreRevenue(it.revenue.data);
-      scored.valuation.score = scoreValuation(it);
+      scored.prices.score = scorePrice(it);
       scored.recommendation.score = scoreRecommendation(it.recommendation.data);
 
       return scored;

@@ -17,7 +17,7 @@ export const rankCompanies =<T extends CompanyStock> (companies: T[]): T[] => {
   const bySector = indexByScore(companies, it => it.sectorScore);
   const byRevenue = indexByScore(companies, it => it.revenue.score);
   const byRecommendation = indexByScore(companies, it => it.recommendation.score);
-  const byValuation = indexByScore(companies, it => it.valuation.score);
+  const byPrice = indexByScore(companies, it => it.prices.score);
 
   // the smaller the rank is the better
   return companies.map(it => {
@@ -27,8 +27,8 @@ export const rankCompanies =<T extends CompanyStock> (companies: T[]): T[] => {
         bySector: bySector[it.ticker],
         byRevenue: byRevenue[it.ticker],
         byRecommendation: byRecommendation[it.ticker],
-        byValuation: byValuation[it.ticker],
-        total: bySector[it.ticker] + byRevenue[it.ticker] + byRecommendation[it.ticker] + byValuation[it.ticker]
+        byPrice: byPrice[it.ticker],
+        total: bySector[it.ticker] + byRevenue[it.ticker] + byRecommendation[it.ticker] + byPrice[it.ticker]
       }
     };
   });
