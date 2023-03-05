@@ -16,7 +16,7 @@ run(async () => {
     // TODO: no need to rank here probably - UI concern
     await rankOperations(context).scoreAndRank(
       // TODO: update info for portfolio for ones we have there as well
-      await enrichmentOperations(context).enrichOutdated(state, 10)
+      await enrichmentOperations(context).enrichOutdated(state)
     )
   );
 });
