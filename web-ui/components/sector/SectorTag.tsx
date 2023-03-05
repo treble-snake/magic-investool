@@ -32,7 +32,7 @@ export const SectorTag = ({sector, showQty = true}: Props) => {
 
   const maxSector = getMax(sectors);
   const avgSector = getAvg(sectors);
-  const qty = sectors.find((it: any) => it.name === sector)?.qty || 0;
+  const qty = sectors.find(it => it.name === sector)?.qty || 0;
 
   const text = showQty ? `${sector} x${qty}` : sector;
   return <Tag color={getColor(maxSector, avgSector, qty)}>{text}</Tag>;
