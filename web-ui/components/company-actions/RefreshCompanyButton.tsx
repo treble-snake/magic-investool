@@ -46,6 +46,6 @@ export const RefreshCompanyButton = ({company, callback}: Props) => {
                             rightButton,
                           ]}
   >
-    {reloadIcon}
+    {loading ? null : reloadIcon}
   </Dropdown.Button>;
 };
