@@ -12,9 +12,11 @@ export default async function handler(
   }
 
   const isHidden = await userSettingsStorage.isHidden(ticker);
-  await isHidden ?
-    userSettingsStorage.showTicker(ticker) :
-    userSettingsStorage.hideTicker(ticker);
+  await (
+    isHidden ?
+      userSettingsStorage.showTicker(ticker) :
+      userSettingsStorage.hideTicker(ticker)
+  );
 
   return res.status(204).send();
 }
