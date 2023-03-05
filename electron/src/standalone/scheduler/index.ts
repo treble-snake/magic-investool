@@ -17,9 +17,11 @@ export const setupScheduledJobs = async () => {
 
   if (priceSchedulerEnabled && priceSchedulerIntervalMin && priceSchedulerIntervalMin > 0) {
     console.debug(`Setting up periodic price checks (every ${priceSchedulerIntervalMin} min)`);
-    scheduler.addSimpleIntervalJob(new SimpleIntervalJob(
-      {minutes: priceSchedulerIntervalMin},
-      new AsyncTask('PriceChecker', priceAlertJob, errorHandler))
+    scheduler.addSimpleIntervalJob(
+      new SimpleIntervalJob(
+        {minutes: priceSchedulerIntervalMin},
+        new AsyncTask('PriceChecker', priceAlertJob, errorHandler)
+      )
     );
   }
 };
