@@ -1,6 +1,8 @@
+export const DUMMY_PRICE = 777.69;
+
 export const dummyPriceQuote = () => {
   return {
-    "c": 261.74,
+    "c": DUMMY_PRICE,
     "h": 263.31,
     "l": 260.68,
     "o": 261.07,

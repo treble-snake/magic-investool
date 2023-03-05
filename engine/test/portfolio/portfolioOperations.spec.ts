@@ -16,9 +16,7 @@ import {fakeContext} from '../utils/fakeContext';
 import {FileStorage} from '../../src/storage/file';
 import {HistoryRecord} from '../../src/portfoio/storage/HistoryStorage.types';
 import {mockApis} from '../utils/api-mocks/mockApis';
-
-/** @deprecated temp placeholder */
-const DUMMY_PRICE = 777
+import {DUMMY_PRICE} from '../data-source/finnhub/dummyPriceQuote';
 
 function getOperations(
   portfolio: FileStorage<PortfolioData>,
@@ -235,8 +233,7 @@ describe('portfolio operations', () => {
     });
   });
 
-  // TODO: update tests
-  describe.skip('checkPrices', function () {
+  describe('checkPrices', function () {
     function prepareContext(alertPrevPrice = 10) {
       mockApis('ALERT', 'NO_ALERT');
       const portfolio = fakeFileStorage({
@@ -256,7 +253,7 @@ describe('portfolio operations', () => {
       };
     }
 
-    it.skip('should update only alerted companies', async () => {
+    it('should update only alerted companies', async () => {
       const context = prepareContext();
       await portfolioOperations(context).checkPrices();
 
@@ -267,12 +264,12 @@ describe('portfolio operations', () => {
       expect(noAlert?.price).toEqual(100);
     });
 
-    it.skip('should return tickers for triggered alerts', async () => {
+    it('should return tickers for triggered alerts', async () => {
       const triggered = await portfolioOperations(prepareContext()).checkPrices();
       expect(triggered).toEqual(['ALERT']);
     });
 
-    it.skip('should not trigger alerts if the price is already higher', async () => {
+    it('should not trigger alerts if the price is already higher', async () => {
       const triggered = await portfolioOperations(prepareContext(50)).checkPrices();
       expect(triggered).toEqual([]);
     });

@@ -14,7 +14,7 @@ import {
 } from '../../enrichment/finnhub/cache/RecommendationCache';
 
 // from removed Yahoo module
-const YAHOO_CACHE_DIR = 'yahoo-to-be-removed-cache';
+const YAHOO_CACHE_DIR = 'yahoo-cache';
 export const prepareStorage = () => {
   [
     path.join(STORAGE_DIR, AV_OVERVIEW_CACHE_DIR),
