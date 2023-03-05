@@ -1,6 +1,6 @@
 import {ActionType, HistoryRecord} from './storage/HistoryStorage.types';
 import {AppContext} from '../context/context';
-import {enrichmentOperations} from '../enrichment/operations';
+import {DataParts, enrichmentOperations} from '../enrichment/operations';
 import {countBy} from 'ramda';
 import {CompanyStock} from '../common/types/companies.types';
 import {logger} from '../common/logging/logger';
@@ -100,8 +100,7 @@ export const portfolioOperations = (context: AppContext) => ({
         return it;
       }
 
-      // TODO: might be only 1 yahoo-to-be-removed request, not both (basic + insights)
-      const updated = await enrichmentOps.enrichCompany(it);
+      const updated = await enrichmentOps.enrichCompany(it, true, {parts: [DataParts.Price]});
       if ((updated.price ?? 0) >= alertPrice) {
         alertsTriggered.push(it.ticker);
       }
