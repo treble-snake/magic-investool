@@ -14,6 +14,7 @@ import {PriceBlock} from './PriceBlock';
 import {ProfitLossTag} from '../company/ProfitLossTag';
 import {millify} from 'millify';
 import {UpdatesBlock} from './UpdatesBlock';
+import {TrendsBlock} from './TrendsBlock';
 
 type Props = {
   company: UiCompanyStock | UiPortfolioCompany,
@@ -48,13 +49,13 @@ export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
 
   return (
     <Card title={title}
-                 extra={extra}
-                 style={withActions({marginBottom: 15})}
-                 size={'small'}
-                 actions={withActions([
-                   <CompanyActions key={'actions'} company={company}
-                                   callback={actionsCallback} />
-                 ])}
+          extra={extra}
+          style={withActions({marginBottom: 15})}
+          size={'small'}
+          actions={withActions([
+            <CompanyActions key={'actions'} company={company}
+                            callback={actionsCallback} />
+          ])}
     >
       <Descriptions size={'small'} layout={'vertical'}>
         <Item contentStyle={{display: 'block'}} label={'Basics'}>
@@ -90,18 +91,8 @@ export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
 
         <Item
           label={`Trends (${moment(company.recommendation.data.trend.date).format('YYYY/MM')})`}>
-          <Timeline mode={'left'} style={{width: '100%'}}
-                    items={
-                      Object.entries(omit(['period', 'date'], company.recommendation.data.trend))
-                        .map(([key, value]) => ({
-                          key,
-                          label: key,
-                          children: value
-                        }))
-                    }
-          />
+          <TrendsBlock trends={company.recommendation.data.trend} />
         </Item>
-
 
         <Item label={'Rank'}>
           <Timeline mode={'left'} style={{width: '100%'}}
