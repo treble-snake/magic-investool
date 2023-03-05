@@ -169,6 +169,10 @@ export const enrichmentOperations = (context: AppContext) => ({
         }
       }
 
+      if (!options.parts || options.parts.length === 0) {
+        result.lastUpdated = new Date().toISOString();
+      }
+
       return result;
     } catch (e) {
       logger.error(`Error looking for ${company.ticker} data: ${e}`, e);
@@ -181,7 +185,7 @@ export const enrichmentOperations = (context: AppContext) => ({
    * @param batchSize how many companies to try to update; important since we have rate limiting in the APIs
    * @return list of all companies with some of them updated
    */
-  async enrichOutdated(current: CompanyStock[], batchSize = 5) {
+  async enrichOutdated(current: CompanyStock[], batchSize = 2) {
     logger.info(`Enriching max ${batchSize} outdated companies`);
 
     const toEnrich = [...current]
