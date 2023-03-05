@@ -46,75 +46,77 @@ export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
                           callback={actionsCallback} />
   </>);
 
-  return <Card title={title}
-               extra={extra}
-               style={withActions({marginBottom: 15})}
-               size={'small'}
-               actions={withActions([
-                 <CompanyActions key={'actions'} company={company}
-                                 callback={actionsCallback} />
-               ])}
-  >
-    <Descriptions size={'small'} layout={'vertical'}>
-      <Item contentStyle={{display: 'block'}} label={'Basics'}>
-        <SectorTag sector={company.sector} showQty={false} />
-        <div style={{marginTop: 5}}>
-          <ProfitLossTag company={company} prefixed />
-        </div>
-        <div style={{marginTop: 5}}>
-          <Tag>M. Cap: {
-            company.overview.marketCap ?
-              `\$${millify(company.overview.marketCap)}` :
-              '-'
-          }</Tag>
-        </div>
-        <div style={{marginTop: 5}}>
-          <Tag>P/E: {company.overview.peRatio || '-'}</Tag>
-        </div>
+  return (
+    <Card title={title}
+                 extra={extra}
+                 style={withActions({marginBottom: 15})}
+                 size={'small'}
+                 actions={withActions([
+                   <CompanyActions key={'actions'} company={company}
+                                   callback={actionsCallback} />
+                 ])}
+    >
+      <Descriptions size={'small'} layout={'vertical'}>
+        <Item contentStyle={{display: 'block'}} label={'Basics'}>
+          <SectorTag sector={company.sector} showQty={false} />
+          <div style={{marginTop: 5}}>
+            <ProfitLossTag company={company} prefixed />
+          </div>
+          <div style={{marginTop: 5}}>
+            <Tag>M. Cap: {
+              company.overview.marketCap ?
+                `\$${millify(company.overview.marketCap)}` :
+                '-'
+            }</Tag>
+          </div>
+          <div style={{marginTop: 5}}>
+            <Tag>P/E: {company.overview.peRatio || '-'}</Tag>
+          </div>
 
-      </Item>
+        </Item>
 
-      <Item contentStyle={{display: 'block'}} label={'Price'}>
-        <PriceBlock company={company} />
-      </Item>
+        <Item contentStyle={{display: 'block'}} label={'Price'}>
+          <PriceBlock company={company} />
+        </Item>
 
-      <Item contentStyle={{display: 'block'}} label={'Updates'}>
-        <UpdatesBlock dates={company.lastUpdates} />
-      </Item>
+        <Item contentStyle={{display: 'block'}} label={'Updates'}>
+          <UpdatesBlock dates={company.lastUpdates} />
+        </Item>
 
-      <Item
-        label={`Revenue (${moment(company.lastUpdates.alphavantageIncome).format('YYYY/MM')})`}>
-        <Revenue data={company.revenue.data} />
-      </Item>
+        <Item
+          label={`Revenue (${moment(company.lastUpdates.alphavantageIncome).format('YYYY/MM')})`}>
+          <Revenue data={company.revenue.data} />
+        </Item>
 
-      <Item
-        label={`Trends (${moment(company.recommendation.data.trend.date).format('YYYY/MM')})`}>
-        <Timeline mode={'left'} style={{width: '100%'}}
-                  items={
-                    Object.entries(omit(['period', 'date'], company.recommendation.data.trend))
-                      .map(([key, value]) => ({
-                        key,
-                        label: key,
-                        children: value
-                      }))
-                  }
-        />
-      </Item>
-
-
-      <Item label={'Rank'}>
-        <Timeline mode={'left'} style={{width: '100%'}}
-                  items={
-                    Object.entries(company.rank)
-                      .map(([key, value]) => (
-                        {
+        <Item
+          label={`Trends (${moment(company.recommendation.data.trend.date).format('YYYY/MM')})`}>
+          <Timeline mode={'left'} style={{width: '100%'}}
+                    items={
+                      Object.entries(omit(['period', 'date'], company.recommendation.data.trend))
+                        .map(([key, value]) => ({
                           key,
-                          label: key.replace(/^by/, ''),
+                          label: key,
                           children: value
-                        }
-                      ))
-                  } />
-      </Item>
-    </Descriptions>
-  </Card>;
+                        }))
+                    }
+          />
+        </Item>
+
+
+        <Item label={'Rank'}>
+          <Timeline mode={'left'} style={{width: '100%'}}
+                    items={
+                      Object.entries(company.rank)
+                        .map(([key, value]) => (
+                          {
+                            key,
+                            label: key.replace(/^by/, ''),
+                            children: value
+                          }
+                        ))
+                    } />
+        </Item>
+      </Descriptions>
+    </Card>
+  );
 };
