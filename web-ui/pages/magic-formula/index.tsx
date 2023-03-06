@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 import {objectComparator} from '../../libs/objectComparator';
 import {SectorTag} from '../../components/sector/SectorTag';
-import {LastUpdated} from '../../components/LastUpdated';
+import {LastUpdated} from '../../components/company/data-age/LastUpdated';
 import {CompanyCard} from '../../components/company-card/CompanyCard';
 import {CompanyActions} from '../../components/company-actions/CompanyActions';
 import {TickerTag} from '../../components/company/TickerTag';

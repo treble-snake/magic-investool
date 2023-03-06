@@ -1,5 +1,4 @@
 import {Card, Descriptions, Tag, Timeline} from 'antd';
-import {omit} from 'ramda';
 import {SectorTag} from '../sector/SectorTag';
 import {Revenue} from './Revenue';
 import {CompanyActions} from '../company-actions/CompanyActions';
@@ -13,7 +12,7 @@ import moment from 'moment';
 import {PriceBlock} from './PriceBlock';
 import {ProfitLossTag} from '../company/ProfitLossTag';
 import {millify} from 'millify';
-import {UpdatesBlock} from './UpdatesBlock';
+import {DataAgeBlock} from './data-age-block/DataAgeBlock';
 import {TrendsBlock} from './TrendsBlock';
 
 type Props = {
@@ -73,7 +72,7 @@ export const CompanyCard = ({company, actionsCallback, showActions}: Props) => {
         </Item>
 
         <Item contentStyle={{display: 'block'}} label={'Updates'}>
-          <UpdatesBlock dates={company.lastUpdates} />
+          <DataAgeBlock dates={company.lastUpdates} />
         </Item>
 
         <Item
