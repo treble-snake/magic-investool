@@ -20,8 +20,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<DashboardData>
 ) {
-  const customDate = req.query.nextMonth === 'true' ?
-    moment().add(1, 'month').format('YYYY-MM-DD') :
+  const addMonths = Number.parseInt(String(req.query.addMonths ?? '')) || 0;
+  const customDate = addMonths > 0 ?
+    moment().add(addMonths, 'month').format('YYYY-MM-DD') :
     undefined;
 
   const context = defaultContext();

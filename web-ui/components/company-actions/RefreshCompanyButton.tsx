@@ -6,10 +6,8 @@ import {LastUpdated} from '../company/data-age/LastUpdated';
 import {UiCompanyStock} from '../../pages/api/magic-formula';
 import {UiPortfolioCompany} from '../../libs/cross-platform/types';
 import {last, prop, sortBy} from 'ramda';
-import {
-  getDataAge
-} from '../company/data-age/DataAgeHelpers';
-import {DataParts, DataPartConfig} from '../company/DataParts';
+import {getDataAge} from '../company/data-age/DataAgeHelpers';
+import {DataPartConfig} from '../company/DataParts';
 
 type Props = {
   company: UiCompanyStock | UiPortfolioCompany,

@@ -31,12 +31,12 @@ const filterSellOffers = (items: UiPortfolioCompany[], filter: SellFilter) => {
 
 // TODO: separate Title + Suggestion list components
 const Dashboard: NextPage = () => {
-  const [nextMonth, setNextMonth] = useState(false);
   const [isHiddenShown, setShowHidden] = useState(false);
   const [sellFilter, setSellFilter] = useState(SellFilter.all);
+  const [addMonths, setAddMonths] = useState(0);
 
   return <DisplayData<DashboardData>
-    apiUrl={'/api/dashboard?nextMonth=' + nextMonth}>
+    apiUrl={'/api/dashboard?addMonths=' + addMonths}>
     {({data, mutate}) => {
       if (data.isMagicFormulaEmpty) {
         return <Empty
@@ -56,14 +56,15 @@ const Dashboard: NextPage = () => {
       return (
         <>
           <Space style={{marginBottom: 15, marginTop: 15}}>
-            <Button size={'large'} type={nextMonth ? 'default' : 'primary'}
-                    onClick={() => setNextMonth(false)}>
-              This month
-            </Button>
-            <Button size={'large'} type={nextMonth ? 'primary' : 'dashed'}
-                    onClick={() => setNextMonth(true)}>
-              Next month
-            </Button>
+            {
+              ['This month', 'Next month', '+2', '+3'].map((label, index) => (
+                <Button size={'large'} key={index}
+                        type={addMonths === index ? 'primary' : 'default'}
+                        onClick={() => setAddMonths(index)}>
+                  {label}
+                </Button>
+              ))
+            }
             <HiddenTickersSwitch list={allItems} state={isHiddenShown}
                                  setState={setShowHidden} />
           </Space>
