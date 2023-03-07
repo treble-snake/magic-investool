@@ -6,7 +6,7 @@
   "scripts": {
     "install": "cd ../engine && yarn && yarn build",
     "postinstall": "electron-builder install-app-deps",
-    "start": "yarn compile && DEBUG=true electron -r dotenv/config .",
+    "start": "yarn compile && DEBUG=true electron -r dotenv/config ",
     "test": "jest --maxWorkers=1",
     "compile": "rm -rf server-dist/ && tsc",
     "app:clean": "rm -rf dist/",
