@@ -7,9 +7,11 @@ import {HideCompanyButton} from './HideCompanyButton';
 import moment from 'moment';
 import {RemoveAlertButton} from './price-alert/RemoveAlertButton';
 import {SetAlertButton} from './price-alert/SetAlertButton';
+import {UiCompanyStock} from '../../pages/api/magic-formula';
+import {UiPortfolioCompany} from '../../libs/cross-platform/types';
 
 type Props = {
-  company: CompanyStock | PortfolioCompany,
+  company: UiCompanyStock | UiPortfolioCompany,
   callback: Function
 }
 
