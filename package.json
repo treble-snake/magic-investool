@@ -4,5 +4,9 @@
   "scripts": {},
   "author": "Cap <treble.snake@gmail.com>",
   "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "private": true,
   "dependencies": {}
 }
