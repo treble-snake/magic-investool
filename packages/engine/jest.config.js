@@ -6,6 +6,7 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   setupFiles: ['./test/jest.setup.js'],
+  coverageReporters: ['text'],
   collectCoverageFrom: [
     'src/**/*.{ts,js}',
     '!src/**/*.d.ts',
