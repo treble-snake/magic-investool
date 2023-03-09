@@ -4,31 +4,82 @@
   "description": "Magic Investool as a standalone app",
   "main": "server-dist/main.js",
   "scripts": {
-    "install": "cd ../engine && yarn && yarn build",
     "postinstall": "electron-builder install-app-deps",
-    "start": "yarn compile && DEBUG=true electron -r dotenv/config ",
+    "start": "DEBUG=true electron -r dotenv/config .",
     "test": "jest --maxWorkers=1",
-    "compile": "rm -rf server-dist/ && tsc",
+    "test:cov": "jest --maxWorkers=1 --coverage",
     "app:clean": "rm -rf dist/",
     "app:pack": "electron-builder --dir",
     "app:dist": "electron-builder",
     "app:publish": "electron-builder --publish always",
-    "build:engine": "cd ../engine && yarn && yarn build",
-    "build:server": "yarn upgrade @investool/engine && rm -rf src/routes/api && rm -rf src/libs/cross-platform && cp -r ../web-ui/pages/api src/routes/api && cp -r ../web-ui/libs/cross-platform src/libs/cross-platform && yarn compile",
-    "build:ui": "cd ../web-ui && yarn && yarn build && yarn export && rm -rf ../electron/static && cp -r ./out ../electron/static",
-    "build": "yarn build:server && yarn build:ui",
-    "build:all": "yarn build:engine && yarn build:server && yarn build:ui && yarn app:dist"
+    "copy:api": "rimraf src/routes/api && cp -r ../web-ui/pages/api src/routes/api",
+    "copy:libs": "rimraf src/libs/cross-platform && cp -r ../web-ui/libs/cross-platform src/libs/cross-platform",
+    "copy:static": "rimraf static && cp -r ../web-ui/out static",
+    "copy": "run-p copy:*",
+    "build": "rimraf server-dist/ && tsc"
+  },
+  "nx": {
+    "namedInputs": {
+      "build": [
+        "{projectRoot}/**/*",
+        "!{projectRoot}/static/**/*",
+        "!{projectRoot}/server-dist/**/*",
+        "!{projectRoot}/test/**/*",
+        "!{projectRoot}/dist/**/*"
+      ]
+    },
+    "targets": {
+      "copy": {
+        "dependsOn": [
+          "^export"
+        ],
+        "inputs": [
+          "build",
+          "^build"
+        ],
+        "outputs": [
+          "static",
+          "src/libs/cross-platform",
+          "src/routes/api"
+        ]
+      },
+      "build": {
+        "dependsOn": [
+          "copy",
+          "^build"
+        ],
+        "inputs": [
+          "build",
+          "^build"
+        ],
+        "outputs": [
+          "server-dist"
+        ]
+      },
+      "app:dist": {
+        "dependsOn": [
+          "build",
+          "app:clean"
+        ]
+      },
+      "start": {
+        "dependsOn": [
+          "build"
+        ]
+      }
+    }
   },
   "author": "Cap <treble.snake@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@investool/engine": "file:../engine",
+    "@investool/engine": "*",
     "cors": "^2.8.5",
     "electron-serve": "^1.1.0",
     "express": "^4.17.2",
     "moment": "^2.29.1",
     "ramda": "^0.28.0",
-    "toad-scheduler": "^2.2.0"
+    "toad-scheduler": "^2.2.0",
+    "web-ui": "*"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
@@ -40,6 +91,7 @@
     "electron-builder": "^23.6.0",
     "jest": "^29.4.3",
     "next": "^13.2.3",
+    "npm-run-all": "^4.1.5",
     "rimraf": "^4.3.0",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.4.0",

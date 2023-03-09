@@ -4,9 +4,17 @@
   "scripts": {},
   "author": "Cap <treble.snake@gmail.com>",
   "license": "MIT",
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/electron"
+    ]
+  },
   "private": true,
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "nx": "15.8.5"
+  }
 }
