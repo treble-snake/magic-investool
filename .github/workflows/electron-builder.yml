@@ -1,8 +1,8 @@
 name: Build Standalone app
 
-on: push
-#  push:
-#    branches: [ master ]
+on: #push
+  push:
+    branches: [ master ]
 #    tags: [ 'v*.*.*' ]
 #
 #   Allows you to run this workflow manually from the Actions tab

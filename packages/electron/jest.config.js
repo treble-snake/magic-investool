@@ -6,8 +6,11 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   setupFiles: ['./test/jest.setup.js'],
+  coverageReporters: ['text'],
   collectCoverageFrom: [
-    'src/**/*.{ts,js}',
+    // TODO: CI fails on more coverage; figure this out
+    //      https://github.com/facebook/jest/issues/9324
+    'src/*.ts',
     '!src/libs/**',
     '!src/routes/**'
   ]

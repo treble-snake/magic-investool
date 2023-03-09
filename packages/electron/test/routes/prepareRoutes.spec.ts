@@ -2,7 +2,7 @@ import {prepareRoutes} from '../../src/prepareRoutes';
 import * as path from 'path';
 
 describe('prepareRoutes', () => {
-  it('should do it', async () => {
+  it('should make API routes out of folder structure', async () => {
     const routeMap = await prepareRoutes(path.resolve(__dirname, 'fixtures'));
 
     expect(routeMap).toEqual({
