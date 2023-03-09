@@ -2,7 +2,7 @@
   "name": "@investool/root",
   "version": "0.11.2",
   "scripts": {},
-  "author": "Cap <treble.snake@gmail.com>",
+  "author": "Cap",
   "license": "MIT",
   "workspaces": {
     "packages": [

@@ -15,13 +15,12 @@
     "test:cov": "jest --maxWorkers=1 --coverage",
     "test:watch": "jest --maxWorkers=25% --watch"
   },
-  "author": "Cap <treble.snake@gmail.com>",
+  "author": "Cap",
   "license": "MIT",
   "nx": {
     "namedInputs": {
       "build": [
         "{projectRoot}/**/*",
-        "!{projectRoot}/dist/**/*",
         "!{projectRoot}/test/**/*",
         "!{projectRoot}/**/*.md"
       ]
