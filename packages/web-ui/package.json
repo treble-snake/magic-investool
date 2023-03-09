@@ -15,7 +15,8 @@
       "build": [
         "{projectRoot}/**/*",
         "!{projectRoot}/out/**/*",
-        "!{projectRoot}/.next/**/*"
+        "!{projectRoot}/.next/**/*",
+        "!{projectRoot}/*.md"
       ]
     },
     "targets": {
@@ -30,12 +31,12 @@
       },
       "dev": {
         "dependsOn": [
-          "^build"
+          "build"
         ]
       },
       "debug": {
         "dependsOn": [
-          "^build"
+          "build"
         ]
       },
       "start": {

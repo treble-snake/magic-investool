@@ -16,7 +16,8 @@
     "copy:libs": "rimraf src/libs/cross-platform && cp -r ../web-ui/libs/cross-platform src/libs/cross-platform",
     "copy:static": "rimraf static && cp -r ../web-ui/out static",
     "copy": "run-p copy:*",
-    "build": "rimraf server-dist/ && tsc"
+    "build": "rimraf server-dist/ && tsc",
+    "build:ci": "nx build"
   },
   "nx": {
     "namedInputs": {
@@ -69,7 +70,7 @@
       }
     }
   },
-  "author": "Cap <treble.snake@gmail.com>",
+  "author": "Cap",
   "license": "MIT",
   "dependencies": {
     "@investool/engine": "*",
