@@ -1,5 +1,3 @@
-import {CompanyStock} from '@investool/engine/dist/types';
-import {PortfolioCompany} from '@investool/engine';
 import {PortfolioOperation} from './transaction/PortfolioOperation';
 import {RefreshCompanyButton} from './RefreshCompanyButton';
 import {Space} from 'antd';

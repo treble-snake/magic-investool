@@ -1,0 +1,25 @@
+{
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": [
+          "test",
+          "test:cov",
+          "build",
+          "lint",
+          "export",
+          "copy"
+        ]
+      }
+    }
+  },
+  "targetDefaults": {
+    "test:cov": {
+      "outputs": [
+        "{projectRoot}/coverage"
+      ]
+    }
+  },
+  "defaultBase": "master"
+}

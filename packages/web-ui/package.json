@@ -10,9 +10,53 @@
     "lint": "next lint",
     "export": "next export"
   },
+  "nx": {
+    "namedInputs": {
+      "build": [
+        "{projectRoot}/**/*",
+        "!{projectRoot}/out/**/*",
+        "!{projectRoot}/.next/**/*"
+      ]
+    },
+    "targets": {
+      "build": {
+        "dependsOn": [
+          "^build"
+        ],
+        "inputs": [
+          "build",
+          "^build"
+        ]
+      },
+      "dev": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "debug": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "start": {
+        "dependsOn": [
+          "build"
+        ]
+      },
+      "export": {
+        "dependsOn": [
+          "build"
+        ],
+        "inputs": [
+          "build",
+          "^build"
+        ]
+      }
+    }
+  },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
-    "@investool/engine": "file:../engine",
+    "@investool/engine": "*",
     "antd": "^5.2.3",
     "millify": "^5.0.1",
     "moment": "^2.29.4",
