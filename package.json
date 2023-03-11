@@ -1,6 +1,6 @@
 {
   "name": "@investool/root",
-  "version": "0.11.2",
+  "version": "0.11.3",
   "scripts": {},
   "author": "Cap",
   "license": "MIT",
@@ -9,7 +9,8 @@
       "packages/*"
     ],
     "nohoist": [
-      "**/electron"
+      "**/electron",
+      "**/electron-builder"
     ]
   },
   "private": true,

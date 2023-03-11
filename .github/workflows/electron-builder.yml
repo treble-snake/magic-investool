@@ -1,26 +1,12 @@
 name: Build Standalone app
 
-on: #push
-  push:
-    branches: [ master ]
+on: push
+#  push:
+#    branches: [ master ]
 #    tags: [ 'v*.*.*' ]
 #
 #   Allows you to run this workflow manually from the Actions tab
 #  workflow_dispatch:
-
-#uses: actions/cache@v3
-#with:
-#  # See here for caching with `yarn`
-#  # https://github.com/actions/cache/blob/main/examples.md#node---yarn
-#  # or you can leverage caching with actions/setup-node https://github.com/actions/setup-node
-#  path: |
-#    ~/.npm
-#    ${{ github.workspace }}/.next/cache
-#  # Generate a new cache whenever packages or source files change.
-#  key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
-#  # If source files changed but packages didn't, rebuild from a prior cache.
-#  restore-keys: |
-#    ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
 jobs:
   release:
@@ -32,18 +18,28 @@ jobs:
         os: [macos-latest, windows-latest]
 
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Install Node.js, NPM and Yarn
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'yarn'
           cache-dependency-path: '**/yarn.lock'
 
-      - name: Build/release Electron app
-#        uses: samuelmeuli/action-electron-builder@v1 - unmaintained, using a fork
+      # configure Next.js cache
+      - uses: actions/cache@v3
+        name: Cache Next.js bits
+        with:
+          path: ${{ github.workspace }}/packages/web-ui/.next/cache
+          # Generate a new cache whenever packages or source files change.
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('packages/web-ui/yarn.lock', 'packages/engine/yarn.lock') }}-${{ hashFiles('packages/engine/src/**/*.ts', 'packages/web-ui/**/*.[tj]sx?') }}
+          # If source files changed but packages didn't, rebuild from a prior cache.
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('packages/web-ui/yarn.lock', 'packages/engine/yarn.lock') }}-
+
+      - run: yarn
+      - name: Build & Release Electron app
+        # uses: samuelmeuli/action-electron-builder@v1 - unmaintained, using a fork
         uses: coparse-inc/action-electron-builder@v1.0.0
         with:
           package_root: packages/electron
