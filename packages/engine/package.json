@@ -1,6 +1,6 @@
 {
   "name": "@investool/engine",
-  "version": "2.1.0",
+  "version": "0.11.3",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,7 +13,8 @@
     "build": "rimraf dist/ && tsc -p tsconfig-build.json --declaration",
     "test": "jest --maxWorkers=1",
     "test:cov": "jest --maxWorkers=1 --coverage",
-    "test:watch": "jest --maxWorkers=25% --watch"
+    "test:watch": "jest --maxWorkers=25% --watch",
+    "bump-version": "yarn version"
   },
   "author": "Cap",
   "license": "MIT",
