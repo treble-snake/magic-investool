@@ -17,7 +17,8 @@
     "copy:static": "rimraf static && cp -r ../web-ui/out static",
     "copy": "run-p copy:*",
     "build": "rimraf server-dist/ && tsc",
-    "build:ci": "nx build"
+    "build:ci": "nx build",
+    "bump-version": "yarn version"
   },
   "nx": {
     "namedInputs": {
@@ -74,13 +75,13 @@
   "license": "MIT",
   "dependencies": {
     "@investool/engine": "*",
+    "@investool/web-ui": "*",
     "cors": "^2.8.5",
     "electron-serve": "^1.1.0",
     "express": "^4.17.2",
     "moment": "^2.29.1",
     "ramda": "^0.28.0",
-    "toad-scheduler": "^2.2.0",
-    "web-ui": "*"
+    "toad-scheduler": "^2.2.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
@@ -98,5 +99,6 @@
     "ts-node": "^10.4.0",
     "typescript": "^4.5.5"
   },
-  "repository": "https://github.com/treble-snake/magic-investool"
+  "repository": "https://github.com/treble-snake/magic-investool",
+  "homepage": "https://github.com/treble-snake/magic-investool"
 }
