@@ -182,6 +182,12 @@ export const enrichmentOperations = (context: AppContext) => ({
     }
 
   },
+  getOutdatedTickers(current: CompanyStock[], batchSize = 2) {
+    return [...current]
+      .sort((a, b) => getTimestamp(a) - getTimestamp(b))
+      .slice(0, batchSize)
+      .map(it => it.ticker);
+  },
   /**
    * @param current list of all companies (portfolio or magic formula)
    * @param batchSize how many companies to try to update; important since we have rate limiting in the APIs
@@ -190,10 +196,7 @@ export const enrichmentOperations = (context: AppContext) => ({
   async enrichOutdated(current: CompanyStock[], batchSize = 2) {
     logger.info(`Enriching max ${batchSize} outdated companies`);
 
-    const toEnrich = [...current]
-      .sort((a, b) => getTimestamp(a) - getTimestamp(b))
-      .slice(0, batchSize)
-      .map(it => it.ticker);
+    const toEnrich = this.getOutdatedTickers(current, batchSize);
     logger.debug(`To enrich: ${toEnrich}`);
 
     return Promise.all(current.map((company) => {

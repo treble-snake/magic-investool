@@ -1,17 +1,19 @@
 import {app, BrowserWindow} from 'electron';
-import {startServer} from './server';
+import {startServer} from './web-server/server';
 import {createTrayIcon} from './standalone/tray';
 import {createMainWindow} from './standalone/mainWindow';
 import {ensureStorage} from './standalone/storage';
+import {EventEmitter} from 'node:events';
 
 let tray = null;
 
 export let backendPort: string | number;
+export const apiEvents = new EventEmitter();
 
 ensureStorage();
 
 app.whenReady()
-  .then(() => startServer('app://-'))
+  .then(() => startServer('app://-', apiEvents))
   .then(async (port) => {
     backendPort = port;
     tray = createTrayIcon();
@@ -21,7 +23,7 @@ app.whenReady()
     // before we import engine parts that require STORAGE_DIR to be set
     // Not ideal
     const {setupScheduledJobs} = await import('./standalone/scheduler');
-    setupScheduledJobs().catch(e => console.error('Failed to setup jobs', e));
+    setupScheduledJobs(apiEvents).catch(e => console.error('Failed to setup jobs', e));
 
     app.on('activate', () => {
       app.dock?.show();
