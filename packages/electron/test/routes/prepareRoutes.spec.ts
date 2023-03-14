@@ -1,4 +1,4 @@
-import {prepareRoutes} from '../../src/prepareRoutes';
+import {prepareRoutes} from '../../src/web-server/prepareRoutes';
 import * as path from 'path';
 
 describe('prepareRoutes', () => {

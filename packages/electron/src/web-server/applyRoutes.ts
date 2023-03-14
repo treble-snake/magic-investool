@@ -1,10 +1,25 @@
 import express, {Request, Response} from 'express';
 import {RouteMapNode} from './prepareRoutes';
+import {EventEmitter} from 'node:events';
+import {ApiEvent} from './types';
 
-const getHandler = async (file: string) => {
+const getHandler = async (
+  file: string,
+  apiEvents: EventEmitter,
+) => {
   const handle = (await import(file)).default;
   // Next.js adapter
   return (req: Request, res: Response) => {
+    const {query, url, path, params, body, method} = req;
+    apiEvents.emit('request', {
+      query,
+      url,
+      path,
+      params,
+      body,
+      method
+    } as ApiEvent);
+    // Next.js adaptation
     req.query = {...req.query, ...req.params};
     return handle(req, res);
   };
@@ -17,12 +32,12 @@ const isNode = (obj: RouteMapNode | string | undefined): obj is RouteMapNode => 
 export const applyRoutes = (
   routes: RouteMapNode,
   server: express.Express,
-  handlerBuilder = getHandler
+  apiEvents: EventEmitter
 ) => {
   const applyRoute = async (node: RouteMapNode, path: string = '/'): Promise<any> => {
     const {__handler, ...children} = node;
     if (node.__handler) {
-      server.all(path, await getHandler(node.__handler));
+      server.all(path, await getHandler(node.__handler, apiEvents));
     }
 
     // making sure dynamic routes applied last

@@ -8,20 +8,10 @@ import {sendSimpleRequest} from '../common/ApiButton';
 export const AccountForm = () => {
   const [loading, setLoading] = useState(false);
 
-  // TODO: use for other cache types
-  const cacheTimeTooltip = <span>
-    Yahoo Cache Time, hrs{' '}
-    <Tooltip
-      title={'Since you have limited API calls with Yahoo, it\'s recommended to cache the data.\n' +
-        'Set for how many hours you are comfortable with.'}>
-    <QuestionCircleOutlined />
-  </Tooltip>
-  </span>;
-
   const priceCheckIntervalTooltip = <span>
     Price check interval, minutes{' '}
     <Tooltip
-      title={'Keep in mind it\'ll use up Yahoo API key daily quota'}>
+      title={'Keep in mind it\'ll use up API key daily quota'}>
     <QuestionCircleOutlined />
   </Tooltip>
   </span>;
@@ -90,16 +80,6 @@ export const AccountForm = () => {
           </Form.Item>
 
           <Typography.Title level={5}>Price notifications</Typography.Title>
-          <Form.Item>
-            <Alert type={'warning'} showIcon
-                   message={<>
-                     <div>Restart the app to apply settings after saving them.
-                       Sorry 😬
-                     </div>
-                   </>}
-            />
-          </Form.Item>
-
           <Form.Item
             valuePropName="checked"
             label={'Enable periodic price checks'}

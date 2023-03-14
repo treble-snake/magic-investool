@@ -11,12 +11,20 @@ run(async () => {
   await magicFormulaOperations(context).refresh();
 
   // Refresh MF data
-  const state = await context.mfStorage.findAll();
-  return context.mfStorage.save(
-    // TODO: no need to rank here probably - UI concern
-    await rankOperations(context).scoreAndRank(
-      // TODO: update info for portfolio for ones we have there as well
-      await enrichmentOperations(context).enrichOutdated(state)
-    )
-  );
+  const mf = await context.mfStorage.findAll();
+  const portfolio = await context.portfolioStorage.findAll();
+
+  const enrichmentOps = enrichmentOperations(context);
+  const [mfOldTicker] = enrichmentOps.getOutdatedTickers(mf, 1);
+  const [ownOldTicker] = enrichmentOps.getOutdatedTickers(portfolio, 1);
+
+  await enrichmentOps.enrichTicker(mfOldTicker);
+  await enrichmentOps.enrichTicker(ownOldTicker);
+
+  // return context.mfStorage.save(
+  //   await rankOperations(context).scoreAndRank(
+  //     // TODO: update info for portfolio for ones we have there as well
+  //     await enrichmentOperations(context).enrichOutdated(state)
+  //   )
+  // );
 });

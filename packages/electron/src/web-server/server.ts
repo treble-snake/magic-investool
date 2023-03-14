@@ -3,15 +3,20 @@ import {prepareRoutes} from './prepareRoutes';
 import * as path from 'path';
 import {applyRoutes} from './applyRoutes';
 import cors from 'cors';
+import {EventEmitter} from 'node:events';
 
-export const startServer = async (origin: string) => {
+export const startServer = async (origin: string, apiEvents: EventEmitter) => {
   console.log('Starting Next.js server process');
 
   const server = express();
   server.use(express.json());
   server.use(cors({origin}));
 
-  await applyRoutes(await prepareRoutes(path.resolve(__dirname, 'routes')), server);
+  await applyRoutes(
+    await prepareRoutes(path.resolve(__dirname, '../routes')),
+    server,
+    apiEvents
+  );
 
   server.use(async (req, res, next) => {
     console.warn('Got unhandled request on:', req.url);

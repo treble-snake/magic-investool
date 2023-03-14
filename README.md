@@ -63,4 +63,3 @@ Clone the repo. Run (you can use npm instead of yarn):
 Environment variables (you can utilise `.env` files):
 * STORAGE_DIR (required) - folder to store data in JSON format
 * PORT (default: 3000) - port to serve Web UI from
-* BASE_YAHOO_URL (default: https://yfapi.net) - Yahoo Finance API origin
