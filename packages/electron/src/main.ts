@@ -8,7 +8,7 @@ import {EventEmitter} from 'node:events';
 let tray = null;
 
 export let backendPort: string | number;
-export const apiEvents = new EventEmitter();
+export const apiEvents = new EventEmitter({captureRejections: true});
 
 ensureStorage();
 
@@ -22,7 +22,7 @@ app.whenReady()
     // Have to use dynamic imports so ensureStorage() could kick in
     // before we import engine parts that require STORAGE_DIR to be set
     // Not ideal
-    const {setupScheduledJobs} = await import('./standalone/scheduler');
+    const {setupScheduledJobs} = await import('./standalone/scheduler/scheduler');
     setupScheduledJobs(apiEvents).catch(e => console.error('Failed to setup jobs', e));
 
     app.on('activate', () => {
