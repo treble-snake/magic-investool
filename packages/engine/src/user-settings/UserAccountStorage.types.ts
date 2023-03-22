@@ -1,10 +1,10 @@
 export type AccountData = {
   alphavantageApiKey: string;
   finnhubApiKey: string;
-  // TODO: do we need this?
-  // alphavantageCacheThreshold: number;
   magicFormulaLogin: string;
   magicFormulaPassword: string;
+  stockUpdatesEnabled?: boolean;
+  stockUpdatesIntervalMin?: number;
   // TODO: re-evaluate
   priceSchedulerEnabled?: boolean;
   priceSchedulerIntervalMin?: number;

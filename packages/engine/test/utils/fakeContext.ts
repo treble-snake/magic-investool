@@ -13,7 +13,9 @@ export const FAKE_ACCOUNT_DATA = Object.freeze({
   magicFormulaPassword: 'magicFormulaPassword',
   priceNotificationsEnabled: false,
   priceSchedulerIntervalMin: 60,
-  priceSchedulerEnabled: false
+  priceSchedulerEnabled: false,
+  stockUpdatesEnabled: true,
+  stockUpdatesIntervalMin: 15
 }) as AccountData;
 
 export const fakeContext = (override?: Partial<AppContext>): AppContext => {

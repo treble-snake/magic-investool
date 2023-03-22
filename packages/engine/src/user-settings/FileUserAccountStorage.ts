@@ -6,13 +6,13 @@ const USER_SETTINGS_FILENAME = 'userAccount.json';
 const DEFAULTS: AccountData = Object.freeze({
   alphavantageApiKey: '',
   finnhubApiKey: '',
-  // TODO: configure cache times
-  // alphavantageCacheThreshold: 24,
   magicFormulaLogin: '',
   magicFormulaPassword: '',
   priceSchedulerEnabled: false,
-  priceSchedulerIntervalMin: 120,
-  priceNotificationsEnabled: false
+  priceSchedulerIntervalMin: 5,
+  priceNotificationsEnabled: false,
+  stockUpdatesEnabled: true,
+  stockUpdatesIntervalMin: 15
 });
 
 export const fileUserAccountStorage = (

@@ -1,6 +1,6 @@
 import {DisplayData} from '../common/DataDisplay';
 import {AccountData} from '../../pages/api/account';
-import {Alert, Button, Checkbox, Form, Input, Tooltip, Typography} from 'antd';
+import {Button, Checkbox, Form, Input, Tooltip, Typography} from 'antd';
 import React, {useState} from 'react';
 import {QuestionCircleOutlined} from '@ant-design/icons';
 import {sendSimpleRequest} from '../common/ApiButton';
@@ -77,6 +77,29 @@ export const AccountForm = () => {
             }]}
           >
             <Input />
+          </Form.Item>
+
+          <Typography.Title level={5}>Date Updates</Typography.Title>
+          <Typography.Paragraph>
+            Automatically update Magic Formula list and company data in the background.
+            Each time tries to update one portfolio and one Magic Formula company.
+            Keep in mind it uses up API quotas.
+          </Typography.Paragraph>
+
+          <Form.Item
+            valuePropName="checked"
+            label={'Enable companies auto update'}
+            name={'stockUpdatesEnabled'}
+          >
+            <Checkbox />
+          </Form.Item>
+
+          <Form.Item
+            name="stockUpdatesIntervalMin"
+            label={'Companies auto update interval, min'}
+            wrapperCol={{span: 2}}
+          >
+            <Input type={'number'} />
           </Form.Item>
 
           <Typography.Title level={5}>Price notifications</Typography.Title>

@@ -3,10 +3,10 @@
   "version": "0.11.3",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "start": "next dev",
     "debug": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
-    "start": "next start",
+    "serve": "next start",
     "lint": "next lint",
     "export": "next export",
     "bump-version": "yarn version"
@@ -30,17 +30,17 @@
           "^build"
         ]
       },
-      "dev": {
+      "start": {
         "dependsOn": [
-          "build"
+          "^build"
         ]
       },
       "debug": {
         "dependsOn": [
-          "build"
+          "^build"
         ]
       },
-      "start": {
+      "serve": {
         "dependsOn": [
           "build"
         ]
