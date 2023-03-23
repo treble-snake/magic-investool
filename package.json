@@ -1,6 +1,6 @@
 {
   "name": "@investool/root",
-  "version": "0.11.3",
+  "version": "0.12.0",
   "scripts": {
     "bump-version": "yarn version --${TYPE:-patch} && nx run-many --target=bump-version --${TYPE:-patch}"
   },
