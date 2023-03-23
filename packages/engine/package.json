@@ -1,6 +1,6 @@
 {
   "name": "@investool/engine",
-  "version": "0.11.3",
+  "version": "0.12.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
